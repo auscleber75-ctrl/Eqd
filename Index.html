@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meu Painel Pessoal</title>
+    <link rel="stylesheet" href="style.css"> 
+</head>
+<body>
+
+    <header class="dashboard-header">
+        <div class="info-card">
+            <p class="rotulo">Total Lançado</p>
+            <span id="total-lancado" class="valor valor-lancado">R$ 0,00</span>
+        </div>
+        
+        <div class="progress-area">
+            <p class="rotulo"></p>
+            <div class="progress-area-content">
+                </div>
+        </div>
+        
+        <div class="info-card">
+            <p class="rotulo">Total Dívidas</p>
+            <span id="total-dividas" class="valor valor-dividas">R$ 0,00</span>
+        </div>
+    </header>
+    
+    <main class="container">
+        
+        <h2>Transações</h2>
+        
+        <button id="abrir-cadastro" class="btn-principal"> + Nova Transação</button>
+
+        <div class="transacoes-container">
+            <table class="tabela-transacoes">
+                <thead>
+                    <tr>
+                        <th>Descrição</th>
+                        <th>Valor</th>
+                        <th>Data</th>
+                        <th>Tipo</th>
+                        <th>Ação</th>
+                    </tr>
+                </thead>
+                <tbody id="lista-transacoes">
+                    </tbody>
+            </table>
+        </div>
+
+        <div class="area-resumos">
+            <h3>Recursos, Pagamentos, Sugestões, etc.</h3>
+            <p>Este espaço pode ser usado para textos de resumo, links rápidos ou outras ferramentas de visualização.</p>
+        </div>
+        
+    </main>
+
+
+    <div id="modal-principal" class="modal">
+        <div class="modal-content">
+            <span class="fechar-modal" id="fechar-modal">&times;</span>
+            
+            <div id="passo-tipo">
+                <h3>Selecione o Tipo de Lançamento</h3>
+                <div class="selecao-tipo">
+                    <button class="btn-caixa" data-tipo="CAIXA">CAIXA (Receita)</button>
+                    <button class="btn-divida" data-tipo="DIVIDA">DÍVIDA (Despesa)</button>
+                </div>
+            </div>
+
+            <div id="passo-dados" style="display: none;">
+                <h3 id="titulo-dados">Cadastrar...</h3>
+                
+                <label for="valor-input">VALOR (R$)</label>
+                <input type="number" id="valor-input" placeholder="0.00">
+                
+                <label for="descricao-input">DESCRIÇÃO</label>
+                <input type="text" id="descricao-input" placeholder="Ex: Aluguel, Salário">
+                
+                <label for="data-input">DATA</label>
+                <input type="date" id="data-input">
+                
+                <button class="btn-ok" id="btn-cadastrar">OK</button>
+            </div>
+
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
