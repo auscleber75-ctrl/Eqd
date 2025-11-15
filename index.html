@@ -4,7 +4,363 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Meu Painel Pessoal</title>
-    <link rel="stylesheet" href="style.css"> 
+    
+    <style>
+        /* RESET BÁSICO */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #24292e; /* Fundo escuro sutil */
+            color: #f1f1f1; /* Texto claro */
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 20px auto; /* Centraliza o conteúdo principal */
+            padding: 0 20px;
+        }
+
+        h2 {
+            border-bottom: 2px solid #555;
+            padding-bottom: 5px;
+            margin-bottom: 15px;
+            color: #4CAF50;
+        }
+
+        /* 1. CABEÇALHO / DASHBOARD SUPERIOR */
+        .dashboard-header {
+            display: flex; /* Habilita o layout de linha */
+            justify-content: space-between; 
+            gap: 20px;
+            background-color: #1f2428;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        .info-card {
+            flex-basis: 30%; 
+            text-align: center;
+            padding: 15px;
+            border: 1px solid #333;
+            border-radius: 8px;
+            background-color: #2e3338;
+        }
+
+        .rotulo {
+            font-size: 0.85em;
+            color: #aaa;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+
+        .valor {
+            font-size: 2em;
+            font-weight: 700;
+        }
+
+        .progress-area {
+            flex-basis: 40%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .progress-area-content {
+            width: 90%;
+        }
+
+        /* Elementos de Meta Dinâmica */
+        .meta-concluida {
+            color: #4CAF50; /* Verde */
+            font-weight: bold;
+        }
+        .meta-pendente {
+            color: #ffc107; /* Amarelo */
+            font-weight: bold;
+        }
+        .aviso-meta {
+            font-size: 0.9em;
+            color: #ffc107;
+            margin-bottom: 5px;
+        }
+        .btn-editar, .btn-ok-meta {
+            background-color: #007bff;
+            color: white;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+        }
+        .input-meta {
+            width: 65%;
+            padding: 5px;
+            margin-right: 5px;
+            border: 1px solid #555;
+            background-color: #333;
+            color: #fff;
+            border-radius: 4px;
+            display: inline-block;
+        }
+
+        .barra-progresso-fundo {
+            width: 100%; /* Mudado para 100% da área de conteúdo */
+            height: 12px;
+            background-color: #444;
+            border-radius: 6px;
+            margin-top: 5px;
+            overflow: hidden;
+        }
+
+        .progresso {
+            height: 100%;
+            background-color: #007bff; /* Azul de progresso */
+            border-radius: 6px;
+            transition: width 0.5s ease-in-out;
+        }
+
+        /* 2. TABELA DE TRANSAÇÕES */
+        .transacoes-container {
+            margin-top: 20px;
+            background-color: #1f2428;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            overflow-x: auto; 
+        }
+
+        .tabela-transacoes {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .tabela-transacoes th, .tabela-transacoes td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #333;
+        }
+
+        .tabela-transacoes th {
+            background-color: #333;
+            color: #fff;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.8em;
+        }
+
+        .tabela-transacoes tr:hover {
+            background-color: #2e3338;
+        }
+
+        .caixa {
+            color: #4CAF50; /* Verde */
+            font-weight: bold;
+        }
+
+        .divida {
+            color: #f44336; /* Vermelho */
+            font-weight: bold;
+        }
+
+        .area-resumos {
+            margin-top: 30px;
+            padding: 20px;
+            border: 1px solid #333;
+            border-radius: 8px;
+            background-color: #2e3338;
+        }
+
+        /* 3. BOTÕES E INPUTS */
+        .btn-principal {
+            background-color: #4CAF50; /* Verde de destaque */
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .btn-principal:hover {
+            background-color: #45a049;
+        }
+
+        label {
+            display: block;
+            margin-top: 10px;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #aaa;
+        }
+
+        input[type="number"], input[type="text"], input[type="date"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #555;
+            background-color: #333;
+            color: #fff;
+            border-radius: 4px;
+        }
+
+        /* 4. POPUP/MODAL */
+        .modal {
+            display: none; 
+            position: fixed;
+            z-index: 100; 
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.8); 
+        }
+
+        .modal-content {
+            background-color: #2e3338;
+            margin: 10% auto; 
+            padding: 30px;
+            border: none;
+            width: 80%;
+            max-width: 400px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            position: relative;
+        }
+
+        .fechar-modal {
+            color: #aaa;
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            font-size: 30px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .fechar-modal:hover,
+        .fechar-modal:focus {
+            color: #fff;
+        }
+
+        .selecao-tipo {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+        }
+
+        .selecao-tipo button {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: transform 0.2s;
+        }
+
+        .selecao-tipo button:hover {
+            transform: scale(1.05);
+        }
+
+        .btn-caixa {
+            background-color: #4CAF50; /* Verde */
+            color: white;
+        }
+
+        .btn-divida {
+            background-color: #f44336; /* Vermelho */
+            color: white;
+        }
+
+        .btn-ok {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            float: right;
+            margin-top: 20px;
+        }
+
+        .btn-deletar {
+            background-color: #333;
+            color: #fff;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 0.8em;
+            transition: background-color 0.3s;
+        }
+
+        .btn-deletar:hover {
+            background-color: #cc0000;
+        }
+
+
+        /* --- REGRA DE RESPONSIVIDADE (MOBILE) --- */
+        @media (max-width: 768px) {
+            
+            /* 1. Dashboard Superior: Empilha Verticalmente */
+            .dashboard-header {
+                flex-direction: column; /* Altera a direção para coluna no mobile */
+                gap: 15px;
+                padding: 15px;
+            }
+
+            .info-card {
+                flex-basis: 100%; /* Faz com que cada card ocupe toda a largura */
+                padding: 10px;
+            }
+
+            .valor {
+                font-size: 1.5em; /* Reduz o tamanho da fonte para caber melhor */
+            }
+
+            .progress-area {
+                flex-basis: 100%;
+            }
+
+            /* 2. Conteúdo Principal e Botões */
+            .container {
+                padding: 0 10px; /* Reduz o padding lateral do conteúdo */
+            }
+
+            .btn-principal {
+                width: 100%; /* Faz o botão de nova transação ocupar a largura total */
+                padding: 12px;
+            }
+
+            /* 3. Modal/Popup */
+            .modal-content {
+                width: 95%; /* Aumenta a largura do modal para preencher a tela */
+                margin: 5% auto;
+            }
+
+            /* 4. Inputs de Meta (dentro do progress-area) */
+            .input-meta {
+                width: 60%; 
+                font-size: 1em;
+            }
+
+            .btn-ok-meta {
+                padding: 5px 10px;
+            }
+        }
+    </style>
 </head>
 <body>
 
@@ -32,6 +388,7 @@
         
         <button id="abrir-cadastro" class="btn-principal"> + Nova Transação</button>
 
+        <h3>💰 Entradas (Receitas)</h3>
         <div class="transacoes-container">
             <table class="tabela-transacoes">
                 <thead>
@@ -39,14 +396,30 @@
                         <th>Descrição</th>
                         <th>Valor</th>
                         <th>Data</th>
-                        <th>Tipo</th>
                         <th>Ação</th>
                     </tr>
                 </thead>
-                <tbody id="lista-transacoes">
+                <tbody id="lista-entradas">
                     </tbody>
             </table>
         </div>
+
+        <h3 style="margin-top: 30px;">💸 Dívidas (Despesas)</h3>
+        <div class="transacoes-container">
+            <table class="tabela-transacoes">
+                <thead>
+                    <tr>
+                        <th>Descrição</th>
+                        <th>Valor</th>
+                        <th>Data</th>
+                        <th>Ação</th>
+                    </tr>
+                </thead>
+                <tbody id="lista-dividas">
+                    </tbody>
+            </table>
+        </div>
+
 
         <div class="area-resumos">
             <h3>Recursos, Pagamentos, Sugestões, etc.</h3>
@@ -86,6 +459,277 @@
         </div>
     </div>
     
-    <script src="script.js"></script>
+    <script>
+        // VARIÁVEIS GLOBAIS
+        const modal = document.getElementById('modal-principal');
+        const abrirCadastroBtn = document.getElementById('abrir-cadastro');
+        const fecharModalBtn = document.getElementById('fechar-modal');
+        const passoTipo = document.getElementById('passo-tipo');
+        const passoDados = document.getElementById('passo-dados');
+        const tituloDados = document.getElementById('titulo-dados');
+        const btnCadastrar = document.getElementById('btn-cadastrar');
+
+        const valorInput = document.getElementById('valor-input');
+        const descricaoInput = document.getElementById('descricao-input');
+        const dataInput = document.getElementById('data-input');
+
+        // IDs para as tabelas separadas
+        const listaEntradasBody = document.getElementById('lista-entradas');
+        const listaDividasBody = document.getElementById('lista-dividas');
+
+        const progressAreaEl = document.querySelector('.progress-area');
+        let tipoLancamentoAtual = '';
+
+        // Carrega a meta salva ou define 5000 como padrão
+        let META_FINANCEIRA = parseFloat(localStorage.getItem('metaFinanceira')) || 5000;
+
+        // Variáveis para Totais
+        const totalLancadoEl = document.getElementById('total-lancado');
+        const totalDividasEl = document.getElementById('total-dividas');
+
+        // ------------------------------------------
+        // FUNÇÕES DE UTILIDADE (LOCAL STORAGE)
+        // ------------------------------------------
+
+        const carregarTransacoes = () => {
+            const transacoes = localStorage.getItem('transacoes');
+            return transacoes ? JSON.parse(transacoes) : [];
+        };
+
+        const salvarTransacoes = (transacoes) => {
+            localStorage.setItem('transacoes', JSON.stringify(transacoes));
+        };
+
+        const formatarMoeda = (valor) => {
+            return parseFloat(valor).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+        };
+
+        // ------------------------------------------
+        // LÓGICA DA META DINÂMICA
+        // ------------------------------------------
+
+        const atualizarBarraProgresso = (totalLancado, meta) => {
+            const progressoBar = document.getElementById('progresso-bar');
+            if (progressoBar) {
+                // Garante que o progresso não passe de 100%
+                const progressoPercentual = Math.min(100, (totalLancado / meta) * 100);
+                progressoBar.style.width = `${progressoPercentual}%`;
+            }
+        }
+
+        const renderizarMeta = () => {
+            const transacoes = carregarTransacoes();
+            let totalLancado = 0;
+            transacoes.forEach(t => {
+                if (t.tipo === 'CAIXA') {
+                    totalLancado += parseFloat(t.valor);
+                }
+            });
+            
+            const metaConcluida = totalLancado >= META_FINANCEIRA;
+
+            progressAreaEl.querySelector('.rotulo').innerHTML = `
+                Meta Atual: <span id="meta-valor">${formatarMoeda(META_FINANCEIRA)}</span>
+                <span class="${metaConcluida ? 'meta-concluida' : 'meta-pendente'}">
+                    (${metaConcluida ? 'CONCLUÍDA' : 'Pendente'})
+                </span>
+            `;
+
+            if (metaConcluida) {
+                progressAreaEl.querySelector('.progress-area-content').innerHTML = `
+                    <button id="btn-editar-meta" class="btn-editar">Definir Nova Meta</button>
+                    <div class="barra-progresso-fundo">
+                        <div id="progresso-bar" class="progresso" style="width: 100%;"></div>
+                    </div>
+                `;
+                document.getElementById('btn-editar-meta').addEventListener('click', iniciarEdicaoMeta);
+            } else {
+                progressAreaEl.querySelector('.progress-area-content').innerHTML = `
+                    <p class="aviso-meta">Conclua a meta atual para definir uma nova.</p>
+                    <div class="barra-progresso-fundo">
+                        <div id="progresso-bar" class="progresso"></div>
+                    </div>
+                `;
+            }
+            
+            atualizarBarraProgresso(totalLancado, META_FINANCEIRA);
+        };
+
+        const iniciarEdicaoMeta = () => {
+            const oldMeta = META_FINANCEIRA;
+            
+            progressAreaEl.querySelector('.progress-area-content').innerHTML = `
+                <input type="number" id="input-nova-meta" value="${oldMeta.toFixed(2)}" class="input-meta">
+                <button id="btn-salvar-meta" class="btn-ok-meta">OK</button>
+            `;
+            
+            const inputNovaMeta = document.getElementById('input-nova-meta');
+            inputNovaMeta.select();
+
+            document.getElementById('btn-salvar-meta').addEventListener('click', salvarNovaMeta);
+        };
+
+        const salvarNovaMeta = () => {
+            const inputNovaMeta = document.getElementById('input-nova-meta');
+            const novaMeta = parseFloat(inputNovaMeta.value);
+            
+            if (isNaN(novaMeta) || novaMeta <= 0) {
+                alert("Por favor, insira um valor de meta válido.");
+                return;
+            }
+            
+            // 1. Atualiza a meta global e no storage
+            META_FINANCEIRA = novaMeta;
+            localStorage.setItem('metaFinanceira', novaMeta);
+            
+            // 2. Re-renderiza o dashboard com a nova meta
+            renderizarMeta();
+        };
+
+
+        // ------------------------------------------
+        // FUNÇÕES DE ATUALIZAÇÃO DO DASHBOARD
+        // ------------------------------------------
+
+        const atualizarTotais = (transacoes) => {
+            let totalLancado = 0;
+            let totalDividas = 0;
+
+            transacoes.forEach(t => {
+                const valor = parseFloat(t.valor);
+                if (t.tipo === 'CAIXA') {
+                    totalLancado += valor;
+                } else if (t.tipo === 'DIVIDA') {
+                    totalDividas += valor;
+                }
+            });
+
+            totalLancadoEl.textContent = formatarMoeda(totalLancado);
+            totalDividasEl.textContent = formatarMoeda(totalDividas);
+            
+            renderizarMeta();
+        };
+
+
+        // ------------------------------------------
+        // FUNÇÕES DE RENDERIZAÇÃO E REGISTRO
+        // ------------------------------------------
+
+        const renderizarTransacoes = (transacoes) => {
+            // Limpa ambas as tabelas
+            listaEntradasBody.innerHTML = '';
+            listaDividasBody.innerHTML = '';
+
+            transacoes.forEach((t, index) => {
+                // Determina onde a linha será inserida
+                const targetBody = t.tipo === 'CAIXA' ? listaEntradasBody : listaDividasBody;
+                const tipoClass = t.tipo.toLowerCase(); 
+                
+                const row = targetBody.insertRow();
+
+                // O HTML da linha não precisa mais do campo "Tipo"
+                row.innerHTML = `
+                    <td>${t.descricao}</td>
+                    <td class="${tipoClass}">${formatarMoeda(t.valor)}</td>
+                    <td>${t.data}</td>
+                    <td><button class="btn-deletar" data-index="${index}">Deletar</button></td>
+                `;
+            });
+            
+            atualizarTotais(transacoes);
+        };
+
+        // Usa delegação de eventos para o botão deletar em ambas as tabelas
+        document.addEventListener('click', (e) => {
+            if (e.target.classList.contains('btn-deletar')) {
+                const index = e.target.getAttribute('data-index');
+                deletarTransacao(parseInt(index));
+            }
+        });
+
+        const deletarTransacao = (index) => {
+            let transacoes = carregarTransacoes();
+            transacoes.splice(index, 1); 
+            salvarTransacoes(transacoes);
+            renderizarTransacoes(transacoes);
+        };
+
+        const adicionarTransacao = () => {
+            const valor = parseFloat(valorInput.value);
+            const descricao = descricaoInput.value.trim();
+            const data = dataInput.value;
+
+            if (isNaN(valor) || valor <= 0 || descricao === "" || data === "") {
+                alert("Por favor, preencha todos os campos com valores válidos.");
+                return;
+            }
+
+            const novaTransacao = {
+                tipo: tipoLancamentoAtual,
+                valor: valor.toFixed(2), 
+                descricao: descricao,
+                data: data
+            };
+
+            let transacoes = carregarTransacoes();
+            transacoes.push(novaTransacao);
+            salvarTransacoes(transacoes);
+            renderizarTransacoes(transacoes);
+
+            fecharModal();
+        };
+
+        // ------------------------------------------
+        // FUNÇÕES DO MODAL (POP-UP)
+        // ------------------------------------------
+
+        const abrirModal = () => {
+            // Resetar o modal
+            passoTipo.style.display = 'block';
+            passoDados.style.display = 'none';
+            valorInput.value = '';
+            descricaoInput.value = '';
+            dataInput.value = new Date().toISOString().slice(0, 10); 
+
+            modal.style.display = 'block';
+        };
+
+        const fecharModal = () => {
+            modal.style.display = 'none';
+        };
+
+        const irParaDados = (tipo) => {
+            tipoLancamentoAtual = tipo;
+            tituloDados.textContent = `Cadastrar ${tipo === 'CAIXA' ? 'Receita' : 'Despesa'} | Valor, Descrição e Data`;
+            passoTipo.style.display = 'none';
+            passoDados.style.display = 'block';
+        };
+
+
+        // ------------------------------------------
+        // INICIALIZAÇÃO E EVENT LISTENERS
+        // ------------------------------------------
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderizarTransacoes(carregarTransacoes());
+        });
+
+        abrirCadastroBtn.addEventListener('click', abrirModal);
+        fecharModalBtn.addEventListener('click', fecharModal);
+
+        window.addEventListener('click', (event) => {
+            if (event.target === modal) {
+                fecharModal();
+            }
+        });
+
+        document.querySelectorAll('.selecao-tipo button').forEach(button => {
+            button.addEventListener('click', (e) => {
+                irParaDados(e.target.getAttribute('data-tipo'));
+            });
+        });
+
+        btnCadastrar.addEventListener('click', adicionarTransacao);
+    </script>
 </body>
 </html>
