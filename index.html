@@ -315,7 +315,29 @@
              border-radius: 8px;
              margin-top: 30px;
              border: 1px solid var(--cor-borda);
+             position: relative; /* Para a notificação */
         }
+        /* Notificação de Meta Batida (Contas Fixas) */
+        .contas-fixas-container.meta-batida::before {
+             content: '✅ Meta de Contas Fixas do Mês Batida!';
+             position: absolute;
+             top: 0;
+             left: 0;
+             right: 0;
+             background-color: var(--cor-verde);
+             color: white;
+             padding: 5px 15px;
+             border-top-left-radius: 8px;
+             border-top-right-radius: 8px;
+             font-size: 0.9em;
+             font-weight: bold;
+             text-align: center;
+        }
+        .contas-fixas-container.meta-batida {
+             padding-top: 40px; /* Ajusta o padding para a notificação */
+        }
+
+
         .contas-fixas-container h3, .plano-quitacao h3 {
              color: var(--cor-roxo);
              font-weight: 500;
@@ -379,6 +401,35 @@
             background-color: #e6a100 !important;
         }
         
+        #resultado-plano-ia strong {
+             color: var(--cor-roxo);
+        }
+        
+        /* Dicas de Quitação */
+        #dicas-quitacao {
+             background-color: #262626;
+             padding: 15px;
+             border-radius: 6px;
+             margin-top: 15px;
+             border: 1px dashed var(--cor-amarelo);
+        }
+        #dicas-quitacao h4 {
+             color: var(--cor-amarelo);
+             margin-bottom: 10px;
+             font-weight: 500;
+             border-bottom: 1px solid #383838;
+             padding-bottom: 5px;
+        }
+        #dicas-quitacao ul {
+             list-style: decimal inside;
+             padding-left: 0;
+        }
+        #dicas-quitacao li {
+             margin-bottom: 5px;
+             font-size: 0.95em;
+        }
+
+
         /* =================================== */
         /* 6. MODAIS                           */
         /* =================================== */
@@ -497,9 +548,9 @@
         </div>
         
         <div class="progress-area" id="meta-area">
-            <p class="rotulo"><i class="fas fa-bullseye"></i> Progresso da Meta Total</p>
-            <p style="margin-bottom: 5px;">Total a Quitar: <span class="meta-valor-fixo">R$ 25.701,64</span></p>
-            <p>Faltam: <span id="valor-faltante" style="font-weight: bold; color: var(--cor-vermelho);">R$ 25.701,64</span></p>
+            <p class="rotulo"><i class="fas fa-bullseye"></i> Progresso Total de Dívidas</p>
+            <p style="margin-bottom: 5px;">Total a Quitar (Dívidas): <span id="total-dividas-pendentes" class="meta-valor-fixo">R$ 0,00</span></p>
+            <p>Faltam para Quitar com Receitas: <span id="valor-faltante" style="font-weight: bold; color: var(--cor-vermelho);">R$ 0,00</span></p>
             
             <div class="progresso-bar-container">
                 <div id="progresso-bar" class="progresso" style="width: 0%;"></div>
@@ -542,7 +593,7 @@
             </div>
         </div>
         
-        <div class="contas-fixas-container">
+        <div id="contas-fixas-card" class="contas-fixas-container">
              <h3><i class="fas fa-calendar-check"></i> Contas Fixas Mensais</h3>
              <ul id="lista-contas-fixas">
                  </ul>
@@ -589,6 +640,9 @@
                     Plano gerado automaticamente na abertura. Clique em "Gerar Plano" para simular um prazo diferente.
                 </p>
                 </div>
+            
+            <div id="dicas-quitacao">
+                 </div>
         </div>
         
     </main>
@@ -645,9 +699,9 @@
         const DIAS_UTEIS_MES = 22; 
         const META_DIARIA_FIXAS = SOMA_CONTAS_FIXAS / DIAS_UTEIS_MES; 
 
-        const SOMA_DIVIDAS_INICIAIS = 22681.64;
-        const META_FIXA = SOMA_DIVIDAS_INICIAIS + SOMA_CONTAS_FIXAS; 
-
+        // NOTA: SOMA_DIVIDAS_INICIAIS é usada apenas como referência para a lista inicial
+        const SOMA_DIVIDAS_INICIAIS = 22681.64; 
+        
         // DÍVIDAS INICIAIS (para inicializar localStorage se estiver vazio)
         const DEBT_LIST_INITIAL = [
             { id: 1, credor: "Bruno Carro", valorInicial: 400.00, valorAtual: 400.00 },
@@ -680,7 +734,12 @@
         const metaDiariaTotalEl = document.getElementById('meta-diaria-total-el');
         const metaDiariaIncentivoEl = document.getElementById('meta-diaria-incentivo');
         const saldoPendenteTotalEl = document.getElementById('saldo-pendente-total');
+        const totalDividasPendentesEl = document.getElementById('total-dividas-pendentes'); // NOVO ELEMENTO
+        const valorFaltanteEl = document.getElementById('valor-faltante'); // NOVO ELEMENTO
 
+        // Elementos DOM para Contas Fixas
+        const contasFixasCard = document.getElementById('contas-fixas-card');
+        
         // Elementos DOM para Modais
         const modalReceita = document.getElementById('modal-receita');
         const btnCadastrarReceita = document.getElementById('btn-cadastrar-receita');
@@ -727,7 +786,7 @@
         };
 
         const formatarData = (dataString) => {
-            if (!dataString) return 'Sem Data'; // Adicionado para receitas simplificadas
+            if (!dataString) return 'Sem Data';
             const [year, month, day] = dataString.split('-');
             return `${day}/${month}/${year}`;
         }
@@ -743,12 +802,13 @@
             let totalDividasPendentes = 0;
             dividas.filter(d => d.valorAtual > 0).forEach(d => totalDividasPendentes += parseFloat(d.valorAtual));
             
+            // Saldo Pendente Total: Valor de Dívidas - Receitas Acumuladas
             const saldoPendenteTotal = Math.max(0, totalDividasPendentes - totalReceitas);
 
             return { totalReceitas, totalDividasPendentes, saldoPendenteTotal };
         }
         
-        // NOVO: Calcula se a Meta Diária foi atingida HOJE
+        // Calcula se a Meta Diária foi atingida HOJE
         const getMetaDiariaAtingidaHoje = (transacoes) => {
             // 1. Calcula a Meta Diária Total
             const metaQuitacao = gerarPlanoQuitacaoIA(true); 
@@ -766,13 +826,18 @@
                 recebidoHoje: receitasHoje
             };
         }
+        
+        // NOVO: Verifica se a meta de Contas Fixas foi atingida
+        const getMetaContasFixasAtingida = (totalReceitas) => {
+             return totalReceitas >= SOMA_CONTAS_FIXAS;
+        }
 
 
         // 3. ATUALIZAÇÃO DO DASHBOARD E RENDERIZAÇÃO
         // -------------------------------------------------------
 
         const atualizarDashboard = (transacoes, dividas) => {
-            const { totalReceitas, saldoPendenteTotal } = getTotais(transacoes, dividas);
+            const { totalReceitas, totalDividasPendentes, saldoPendenteTotal } = getTotais(transacoes, dividas);
 
             // Card 1: Saldo Acumulado (Entradas)
             document.getElementById('total-lancado').textContent = formatarMoeda(totalReceitas);
@@ -780,17 +845,25 @@
             // Card 3: Saldo Pendente Total
             saldoPendenteTotalEl.textContent = formatarMoeda(saldoPendenteTotal);
             
-            // Card 2: Meta de Quitação
-            const valorFaltante = META_FIXA - totalReceitas;
-            document.getElementById('valor-faltante').textContent = formatarMoeda(Math.max(0, valorFaltante));
+            // Card 2: Progresso da Meta Total (CORREÇÃO DE LÓGICA)
+            totalDividasPendentesEl.textContent = formatarMoeda(totalDividasPendentes);
+            const valorFaltante = totalDividasPendentes - totalReceitas;
+            valorFaltanteEl.textContent = formatarMoeda(Math.max(0, valorFaltante));
 
-            // Barra de Progresso
+            // Barra de Progresso (Progresso das Receitas em Relação às Dívidas Pendentes)
             const progressoBar = document.getElementById('progresso-bar');
-            const progressoPercentual = Math.min(100, (totalReceitas / META_FIXA) * 100);
-            progressoBar.style.width = `${progressoPercentual}%`;
+            const progressoPercentual = totalDividasPendentes > 0 ? (totalReceitas / totalDividasPendentes) * 100 : 0;
+            progressoBar.style.width = `${Math.min(100, progressoPercentual)}%`;
+            
+            // Notificação de Meta de Contas Fixas
+            if (getMetaContasFixasAtingida(totalReceitas)) {
+                contasFixasCard.classList.add('meta-batida');
+            } else {
+                 contasFixasCard.classList.remove('meta-batida');
+            }
         };
         
-        // NOVO: Renderiza o card da Meta Diária
+        // Renderiza o card da Meta Diária
         const renderizarMetaDiaria = (transacoes) => {
             const { metaTotal, atingido } = getMetaDiariaAtingidaHoje(transacoes);
 
@@ -812,6 +885,7 @@
             
             let html = `
                 <li>Meta Diária Fixas (22 dias úteis): <span class="diaria-fixa-destaque">${formatarMoeda(META_DIARIA_FIXAS)}</span></li>
+                <li>Total Contas Fixas Mês: <span>${formatarMoeda(SOMA_CONTAS_FIXAS)}</span></li>
             `;
             
             DADOS_CONTAS_FIXAS.forEach(conta => {
@@ -870,6 +944,67 @@
         // 4. LÓGICA DE AÇÃO
         // -------------------------------------------------------
         
+        // 4.5. Lógica do Plano IA (Retorna Meta Diária de Quitação)
+        const gerarPlanoQuitacaoIA = (isInit = false) => {
+            const meses = parseInt(document.getElementById('meses-plano').value) || 5;
+            const dividas = carregarDividas();
+            const { totalDividasPendentes } = getTotais(carregarTransacoes(), dividas);
+            
+            if (totalDividasPendentes <= 0) {
+                if (!isInit) {
+                     document.getElementById('resultado-plano-ia').innerHTML = '<p style="color: var(--cor-verde); font-weight: bold;">Todas as dívidas foram quitadas! Não é necessário plano.</p>';
+                }
+                return 0;
+            }
+
+            const valorMensalNecessario = totalDividasPendentes / meses;
+            const valorDiarioNecessario = valorMensalNecessario / 30; 
+            const valorSemanalNecessario = valorDiarioNecessario * 7;
+
+            if (!isInit) {
+                 let html = `
+                    <p style="margin-bottom: 5px;">Seu plano de **${meses} meses** requer:</p>
+                    <p>Meta Mensal: **${formatarMoeda(valorMensalNecessario)}**</p>
+                    <p>Meta Semanal: **${formatarMoeda(valorSemanalNecessario)}**</p>
+                    <p>Meta Diária (Aporte): **${formatarMoeda(valorDiarioNecessario)}**</p>
+                 `;
+                 document.getElementById('resultado-plano-ia').innerHTML = html;
+            }
+            
+            return valorDiarioNecessario; 
+        };
+        
+        // NOVO: Geração de Dicas de Quitação (Bola de Neve)
+        const renderizarDicasQuitacao = (dividas) => {
+             const dividasAtivas = dividas.filter(d => d.valorAtual > 0).sort((a, b) => a.valorAtual - b.valorAtual);
+             const dicasEl = document.getElementById('dicas-quitacao');
+             
+             if (dividasAtivas.length === 0) {
+                 dicasEl.innerHTML = '<h4>Estratégia de Quitação</h4><p style="color: var(--cor-verde);">Nenhuma dívida para priorizar. Mantenha o foco em economizar!</p>';
+                 return;
+             }
+             
+             let html = `
+                 <h4>Estratégia de Quitação (Bola de Neve - Foco em Motivação)</h4>
+                 <p style="font-size: 0.9em; margin-bottom: 10px; color: var(--cor-cinza-claro);">
+                    Para ganhar impulso e motivação, a sugestão é focar nas dívidas de menor valor primeiro.
+                 </p>
+                 <ul>
+             `;
+             
+             dividasAtivas.slice(0, 3).forEach((d, index) => {
+                 html += `<li>**Prioridade ${index + 1}:** ${d.credor} (Saldo: ${formatarMoeda(d.valorAtual)})</li>`;
+             });
+             
+             html += `
+                 </ul>
+                 <p style="font-size: 0.85em; margin-top: 10px;">
+                    *Seus próximos passos devem ser concentrar o máximo de receitas nessas dívidas menores.*
+                 </p>
+             `;
+             dicasEl.innerHTML = html;
+        }
+
         // 4.1. Adicionar Receita (SIMPLIFICADO)
         const adicionarReceita = () => {
             const valor = parseFloat(valorInputReceita.value);
@@ -883,7 +1018,7 @@
                 tipo: 'CAIXA',
                 valor: valor.toFixed(2), 
                 descricao: 'Lançamento Rápido',
-                data: getHojeString() // Garante que a data é a de hoje
+                data: getHojeString()
             };
 
             let transacoes = carregarTransacoes();
@@ -954,28 +1089,6 @@
             initDashboard(); 
         };
 
-        // 4.5. Lógica do Plano IA (Retorna Meta Diária de Quitação)
-        const gerarPlanoQuitacaoIA = (isInit = false) => {
-            const meses = parseInt(document.getElementById('meses-plano').value);
-            
-            if (isNaN(meses) || meses <= 0) return 0;
-
-            const dividas = carregarDividas();
-            const { totalDividasPendentes } = getTotais(carregarTransacoes(), dividas);
-            
-            if (totalDividasPendentes <= 0) return 0;
-
-            const valorMensalNecessario = totalDividasPendentes / meses;
-            const valorDiarioNecessario = valorMensalNecessario / 30; 
-
-            if (!isInit) {
-                 let html = `<p style="color: var(--cor-azul);">Plano de ${meses} meses gerado. Aporte mensal de **${formatarMoeda(valorMensalNecessario)}**.</p>`;
-                 document.getElementById('resultado-plano-ia').innerHTML = html;
-            }
-            
-            return valorDiarioNecessario; 
-        };
-        
 
         // 5. SEÇÕES OCULTÁVEIS E GERAIS
         // -----------------------------------------
@@ -1009,8 +1122,11 @@
             renderizarTabelas(transacoes, dividas);
             
             // Inicia o plano e renderiza a Meta Diária Total com status de conclusão
-            gerarPlanoQuitacaoIA(true); 
-            renderizarMetaDiaria(transacoes); 
+            gerarPlanoQuitacaoIA(false); // Mantém o false para renderizar o plano detalhado no init
+            renderizarMetaDiaria(transacoes);
+            
+            // Renderiza as dicas de quitação
+            renderizarDicasQuitacao(dividas); 
         };
 
         // LISTENERS
