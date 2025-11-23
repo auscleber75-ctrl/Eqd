@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>PROJECT TITAN | CORE FINANCIAL [V3.8 - UX/Visual]</title>
+    <title>PROJECT TITAN | CORE FINANCIAL [V4.0 - Layout Padronizado]</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -116,9 +116,9 @@
         /* 3. DASHBOARD E CARTÕES */
         /* =================================== */
         
-        /* NOVO: Centralização e Estilo Base para o Target Diário */
+        /* Target Diário (Centralização e Estilo Base) */
         .meta-diaria-total {
-            text-align: center; /* Centraliza todo o conteúdo do card */
+            text-align: center;
             padding: 20px;
             border-radius: 10px;
             margin-bottom: 25px;
@@ -128,7 +128,7 @@
         .meta-diaria-total > div {
             display: flex;
             flex-direction: column;
-            align-items: center; /* Centraliza os itens internos */
+            align-items: center;
         }
         #meta-diaria-total-el {
             font-size: 2.2em;
@@ -144,7 +144,7 @@
             font-family: var(--fonte-titulo);
         }
 
-        /* NOVO: Efeito Glow para Meta Batida */
+        /* Efeito Glow para Meta Batida */
         .meta-batida {
             border: 3px solid var(--cor-sucesso) !important;
             box-shadow: 0 0 15px rgba(16, 185, 129, 0.7), 0 0 30px rgba(16, 185, 129, 0.5);
@@ -163,9 +163,9 @@
 
         .progresso {
             height: 100%;
-            background: linear-gradient(90deg, #444444 0%, var(--cor-sucesso) 100%); /* Gradiente para dar profundidade */
+            background: linear-gradient(90deg, #444444 0%, var(--cor-sucesso) 100%); 
             border-radius: 5px;
-            transition: width 0.6s ease-out; /* Transição suave */
+            transition: width 0.6s ease-out; 
         }
 
         .dashboard-header {
@@ -204,8 +204,7 @@
             border-left: 5px solid var(--cor-sucesso);
         }
 
-        /* ... (O restante dos estilos permanecem como estavam para garantir a funcionalidade) ... */
-
+        
         /* =================================== */
         /* 4. SEÇÕES E TOGGLES */
         /* =================================== */
@@ -261,113 +260,45 @@
             padding-top: 15px;
             padding-bottom: 15px;
         }
-
-        /* Contas Fixas & Dívidas (Padrão de Card Lista) */
-        .lista-cartoes-container ul {
-            list-style: none;
-            padding-left: 0;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 20px;
-        }
-        .lista-cartoes-container li {
-            background-color: #1A212E;
-            padding: 18px;
-            border-radius: 8px;
-            display: flex;
-            flex-direction: column; 
-            justify-content: space-between;
-            align-items: flex-start; 
-            border-left: 5px solid var(--cor-fixa); 
-            font-size: 1em;
-            font-family: var(--fonte-dados);
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        
+        .alerta-nota {
+             background-color: #1A212E;
+             padding: 12px;
+             border-radius: 6px;
+             border-left: 5px solid var(--cor-alerta);
+             color: var(--cor-alerta);
+             font-size: 0.9em;
+             margin-bottom: 15px;
         }
         
-        .lista-dividas li {
-            border-left: 5px solid var(--cor-divida); 
-        }
-        
-        .lista-cartoes-item-info {
-             display: flex;
-             flex-direction: column;
-             margin-bottom: 10px;
-             width: 100%;
-        }
-        .lista-cartoes-item-info strong {
-             font-weight: 700;
-             font-size: 1.1em;
-        }
-
-        .diaria-fixa-destaque {
-            background-color: var(--cor-fixa);
-            color: var(--cor-fundo-principal) !important;
-            font-weight: bold;
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 0.9em;
-        }
-        
-        .btn-pagar-fixa, .btn-acao-divida {
-            background-color: var(--cor-fixa);
-            color: var(--cor-fundo-principal);
-            padding: 8px 15px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 0.9em;
-            font-weight: 700;
-            transition: all var(--transicao-rapida);
-            margin-top: 10px; 
-            width: 100%; 
-            text-align: center;
-        }
-        
-        .btn-acao-divida {
-             background-color: var(--cor-divida);
-        }
-        .btn-acao-divida.inativo {
-             background-color: var(--cor-borda);
-             cursor: not-allowed;
-             opacity: 0.4;
-        }
-
-        .btn-pagar-fixa:hover {
-             background-color: #00FFC6;
-             box-shadow: 0 0 10px var(--cor-fixa);
-        }
-        .btn-pagar-fixa.pago {
-             background-color: var(--cor-sucesso);
-             cursor: not-allowed;
-             opacity: 1; 
-        }
-        .btn-pagar-fixa.inativo {
-             background-color: var(--cor-borda);
-             cursor: not-allowed;
-             opacity: 0.4;
-        }
 
         /* =================================== */
-        /* 5. TABELAS E BOTÕES DE AÇÃO */
+        /* 5. TABELAS E BOTÕES DE AÇÃO (LOG, FIXAS E DÍVIDAS) */
         /* =================================== */
 
         .tabela-wrapper {
              overflow-x: auto; 
              width: 100%;
         }
-        
-        .tabela-transacoes-log {
+
+        /* Estilo Base da Tabela (Compartilhado) */
+        .tabela-transacoes-log, .tabela-fixas-log, .tabela-dividas-log {
              min-width: 400px; 
              width: 100%; 
              border-collapse: collapse;
              font-family: var(--fonte-dados);
+             border: 1px solid var(--cor-borda);
+             border-radius: 8px;
+             overflow: hidden;
         }
-        .tabela-transacoes-log th, .tabela-transacoes-log td {
+        .tabela-transacoes-log th, .tabela-transacoes-log td,
+        .tabela-fixas-log th, .tabela-fixas-log td,
+        .tabela-dividas-log th, .tabela-dividas-log td {
             padding: 12px 8px; 
             text-align: left;
             border-bottom: 1px solid var(--cor-borda);
         }
-        .tabela-transacoes-log th {
+        .tabela-transacoes-log th, .tabela-fixas-log th, .tabela-dividas-log th {
             background-color: #1A212E;
             color: var(--cor-primario);
             text-transform: uppercase;
@@ -375,22 +306,79 @@
             font-size: 0.9em;
             white-space: nowrap;
         }
-        /* Largura das colunas do LOG: DESCRIÇÃO, VALOR(R$), AÇÃO (Ajustado: Data removida) */
-        .tabela-transacoes-log th:nth-child(1), .tabela-transacoes-log td:nth-child(1) { width: 55%; } /* Aumento da Descrição */
-        .tabela-transacoes-log th:nth-child(2), .tabela-transacoes-log td:nth-child(2) { width: 30%; }
-        .tabela-transacoes-log th:nth-child(3), .tabela-transacoes-log td:nth-child(3) { width: 15%; text-align: center; } 
 
+        /* LOG DE RECEITAS: Cores Dinâmicas */
+        .log-receita-descricao {
+            color: var(--cor-sucesso); /* Descrição em Verde */
+            font-weight: 600;
+        }
+        .log-receita-valor {
+            color: var(--cor-sucesso) !important; /* Valor em Verde */
+            font-weight: 700;
+        }
         .btn-acao-tabela {
             background: none;
             border: none;
-            color: var(--cor-divida);
             cursor: pointer;
             padding: 5px;
             font-size: 1.1em;
             transition: color var(--transicao-rapida);
         }
-        .btn-acao-tabela:hover {
+        .btn-acao-tabela.deletar-log {
+            color: var(--cor-divida); /* Botão de exclusão em Vermelho */
+        }
+        .btn-acao-tabela.deletar-log:hover {
             color: var(--cor-alerta);
+        }
+
+        /* BOTÃO DE AÇÃO DA TABELA FIXAS (PAGAR) */
+        .btn-acao-tabela.pagar-fixa {
+            background-color: var(--cor-fixa);
+            color: var(--cor-fundo-principal);
+            padding: 6px 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8em;
+            font-weight: 700;
+            transition: all var(--transicao-rapida);
+            white-space: nowrap;
+        }
+        .btn-acao-tabela.pagar-fixa:hover {
+            background-color: #00FFC6;
+            box-shadow: 0 0 5px var(--cor-fixa);
+        }
+        .btn-acao-tabela.pago {
+            background-color: var(--cor-sucesso);
+            cursor: not-allowed;
+            opacity: 1;
+        }
+        .btn-acao-tabela.inativo {
+            background-color: var(--cor-borda);
+            cursor: not-allowed;
+            opacity: 0.4;
+        }
+
+        /* BOTÃO DE AÇÃO DA TABELA DÍVIDAS (QUITAÇÃO) */
+        .btn-acao-tabela.quitar-divida {
+             background-color: var(--cor-divida);
+             color: var(--cor-fundo-principal);
+             padding: 6px 10px;
+             border: none;
+             border-radius: 4px;
+             cursor: pointer;
+             font-size: 0.8em;
+             font-weight: 700;
+             transition: all var(--transicao-rapida);
+             white-space: nowrap;
+        }
+        .btn-acao-tabela.quitar-divida.inativo {
+             background-color: var(--cor-borda);
+             cursor: not-allowed;
+             opacity: 0.4;
+        }
+        .btn-acao-tabela.quitar-divida:hover:not(.inativo) {
+             background-color: #FF7777;
         }
         
         /* ... (Módulos e outros estilos) ... */
@@ -404,15 +392,6 @@
             color: var(--cor-texto-secundario);
             margin-bottom: 25px;
             border: 1px solid var(--cor-borda);
-        }
-        .alerta-nota {
-             background-color: #1A212E;
-             padding: 12px;
-             border-radius: 6px;
-             border-left: 5px solid var(--cor-alerta);
-             color: var(--cor-alerta);
-             font-size: 0.9em;
-             margin-bottom: 15px;
         }
         
         .plano-quitacao {
@@ -482,26 +461,28 @@
                  max-width: 90% !important;
             }
             
-            /* Log de Transações (Tabela) */
-            .tabela-transacoes-log {
+            /* Tabelas em Mobile: Redução de Padding e Fontes */
+            .tabela-transacoes-log, .tabela-fixas-log, .tabela-dividas-log {
                  font-size: 0.8em;
+                 min-width: 100%;
             }
-            .tabela-transacoes-log th, .tabela-transacoes-log td {
-                 padding: 6px;
+            .tabela-transacoes-log th, .tabela-transacoes-log td,
+            .tabela-fixas-log th, .tabela-fixas-log td,
+            .tabela-dividas-log th, .tabela-dividas-log td {
+                padding: 8px 5px;
             }
-            
-            /* Contas Fixas & Dívidas (Cards) */
-            .lista-cartoes-container ul {
-                grid-template-columns: 1fr; 
-                gap: 15px;
-            }
-            .lista-cartoes-container li {
-                padding: 15px;
-            }
-            .lista-cartoes-item-info {
-                word-wrap: break-word; 
-                overflow: hidden;
-            }
+            /* Ajuste de largura das colunas do LOG */
+            .tabela-transacoes-log th:nth-child(1), .tabela-transacoes-log td:nth-child(1) { width: 50%; }
+            .tabela-transacoes-log th:nth-child(2), .tabela-transacoes-log td:nth-child(2) { width: 30%; }
+            .tabela-transacoes-log th:nth-child(3), .tabela-transacoes-log td:nth-child(3) { width: 20%; text-align: center; } 
+
+            /* Ajuste de largura das colunas de Contas Fixas e Dívidas */
+            .tabela-fixas-log th:nth-child(1), .tabela-fixas-log td:nth-child(1),
+            .tabela-dividas-log th:nth-child(1), .tabela-dividas-log td:nth-child(1) { width: 45%; }
+            .tabela-fixas-log th:nth-child(2), .tabela-fixas-log td:nth-child(2),
+            .tabela-dividas-log th:nth-child(2), .tabela-dividas-log td:nth-child(2) { width: 35%; }
+            .tabela-fixas-log th:nth-child(3), .tabela-fixas-log td:nth-child(3),
+            .tabela-dividas-log th:nth-child(3), .tabela-dividas-log td:nth-child(3) { width: 20%; text-align: center; } 
             
             /* Plano IA */
             .ia-input-group {
@@ -646,9 +627,18 @@
                      <p class="alerta-nota">
                         <i class="fas fa-exclamation-triangle"></i> NOTA: Ao clicar em 'PAGAR', o valor será deduzido imediatamente do Capital Acumulado.
                      </p>
-                     <div id="contas-fixas-card" class="lista-cartoes-container">
-                         <ul id="lista-contas-fixas">
-                         </ul>
+                     <div class="tabela-wrapper">
+                         <table class="tabela-fixas-log">
+                             <thead>
+                                 <tr>
+                                     <th>CONTA</th>
+                                     <th>VALOR (R$)</th>
+                                     <th>AÇÃO</th>
+                                 </tr>
+                             </thead>
+                             <tbody id="lista-contas-fixas-tabela">
+                                 </tbody>
+                         </table>
                     </div>
                 </div>
             </div>
@@ -665,9 +655,18 @@
                     <p class="alerta-nota">
                         <i class="fas fa-exclamation-triangle"></i> NOTA: O botão "PAGAR" só é ativado quando o Capital Acumulado é $\ge$ Saldo da Dívida.
                      </p>
-                     <div class="lista-cartoes-container lista-dividas">
-                        <ul id="lista-dividas-quitar">
-                        </ul>
+                     <div class="tabela-wrapper">
+                         <table class="tabela-dividas-log">
+                             <thead>
+                                 <tr>
+                                     <th>CREDOR</th>
+                                     <th>SALDO ATUAL (R$)</th>
+                                     <th>AÇÃO</th>
+                                 </tr>
+                             </thead>
+                             <tbody id="lista-dividas-quitar-tabela">
+                                 </tbody>
+                         </table>
                     </div>
                 </div>
             </div>
@@ -725,7 +724,7 @@
     
     <script>
         // ===========================================
-        // JAVASCRIPT: LÓGICA DE NEGÓCIO E CONEXÃO V3.8 (UX/Visual Otimizada)
+        // JAVASCRIPT: LÓGICA DE NEGÓCIO E CONEXÃO V4.0 (Layout Padronizado)
         // ===========================================
 
         const DIAS_UTEIS_MES = 22; 
@@ -842,9 +841,182 @@
             return { totalReceitas, totalDividasIniciais, totalDividasPendentes, progressoCapital, saldoPendenteTotal };
         }
         
-        // ... (Funções de Sessão e Segurança mantidas) ...
+        // --- Funções de Sessão e Segurança ---
         
-        // ... (Funções de Contas Fixas mantidas) ...
+        const resetSession = () => {
+             localStorage.removeItem('loggedIn');
+             document.getElementById('login-screen').style.display = 'flex';
+             document.getElementById('main-content').style.display = 'none';
+             if (sessionTimer) clearTimeout(sessionTimer);
+             alert('Sessão expirada. Faça login novamente.');
+        };
+        
+        const startSessionTimer = () => {
+             if (sessionTimer) clearTimeout(sessionTimer);
+             sessionTimer = setTimeout(resetSession, SESSION_TIMEOUT_MS);
+        };
+
+        // --- Funções de Contas Fixas ---
+        
+        const isHojePassouDiaQuinze = () => new Date().getDate() > 15;
+
+        const checkAndResetContasFixas = () => {
+            let fixas = carregarContasFixas();
+            
+            if (fixas.length === 0) {
+                 fixas = CONTAS_FIXAS_INITIAL;
+                 salvarContasFixas(fixas);
+                 return fixas;
+            }
+            
+            if (isHojePassouDiaQuinze() && localStorage.getItem('fixasResetadas') !== getHojeString()) {
+                fixas = CONTAS_FIXAS_INITIAL.map(fixa => ({...fixa, pago: false}));
+                salvarContasFixas(fixas);
+                localStorage.setItem('fixasResetadas', getHojeString());
+            }
+            return fixas;
+        }
+
+        const pagarContaFixa = (id) => {
+            let fixas = carregarContasFixas();
+            const transacoes = carregarTransacoes();
+            const dividas = carregarDividas();
+            
+            const fixa = fixas.find(f => f.id === id);
+            
+            if (fixa && !fixa.pago) {
+                const { totalReceitas } = getTotais(transacoes, dividas);
+                if (totalReceitas >= fixa.valor) {
+                    fixa.pago = true;
+                    salvarContasFixas(fixas);
+                    
+                    // Deduz o valor da receita (cria uma transação negativa)
+                    const novaTransacao = {
+                        data: getHojeString(),
+                        valor: (-fixa.valor).toFixed(2), 
+                        descricao: `Pagamento de Conta Fixa: ${fixa.nome}`
+                    };
+                    transacoes.push(novaTransacao);
+                    salvarTransacoes(transacoes);
+                    
+                    initDashboard(); // Atualiza tudo
+                } else {
+                    alert(`Capital insuficiente (${formatarMoeda(totalReceitas)}) para pagar ${fixa.nome} (${formatarMoeda(fixa.valor)})`);
+                }
+            }
+        }
+        
+        const verificarEstadoContasFixas = (fixas) => {
+            const todasPagas = fixas.every(f => f.pago);
+            const feedbackEl = document.getElementById('feedback-fixas-quitadas');
+            
+            if (todasPagas) {
+                feedbackEl.style.display = 'block';
+            } else {
+                feedbackEl.style.display = 'none';
+            }
+        }
+
+        // --- Funções de Transação ---
+        
+        const cadastrarReceita = () => {
+            const valorInput = document.getElementById('valor-input-receita');
+            const valor = parseFloat(valorInput.value);
+            
+            if (isNaN(valor) || valor <= 0) {
+                 alert('Por favor, insira um valor positivo válido.');
+                 return;
+            }
+            
+            const transacoes = carregarTransacoes();
+            const novaTransacao = {
+                data: getHojeString(),
+                valor: valor.toFixed(2), 
+                descricao: 'Saldo Adicionado (Receita)'
+            };
+            
+            transacoes.push(novaTransacao);
+            salvarTransacoes(transacoes);
+            
+            valorInput.value = '';
+            document.getElementById('modal-receita').style.display = 'none';
+            initDashboard();
+        }
+
+        const deletarTransacao = (index) => {
+            let transacoes = carregarTransacoes();
+            
+            // Filtra e ordena transações de entrada para achar o índice real
+            const transacoesEntrada = transacoes.filter(t => parseFloat(t.valor) > 0).map((t, i) => ({...t, displayIndex: i}));
+            const transacoesOrdenadas = transacoesEntrada.sort((a, b) => new Date(b.data) - new Date(a.data));
+            
+            const transacaoToDelete = transacoesOrdenadas.find(t => t.displayIndex === index);
+            
+            if (transacaoToDelete) {
+                // Remove a transação do array original
+                const indexToRemove = transacoes.findIndex(t => t.data === transacaoToDelete.data && parseFloat(t.valor).toFixed(2) === parseFloat(transacaoToDelete.valor).toFixed(2));
+                
+                if (indexToRemove !== -1) {
+                    transacoes.splice(indexToRemove, 1);
+                    salvarTransacoes(transacoes);
+                    initDashboard();
+                }
+            } else {
+                 alert('Transação não encontrada.');
+            }
+        }
+        
+        // --- Funções de Quitação de Dívida ---
+
+        const realizarPagamentoDivida = () => {
+             const valorInput = document.getElementById('valor-pagamento');
+             let valorPagamento = parseFloat(valorInput.value);
+             
+             if (isNaN(valorPagamento) || valorPagamento <= 0) {
+                 alert('Por favor, insira um valor de pagamento positivo válido.');
+                 return;
+             }
+             
+             let dividas = carregarDividas();
+             let transacoes = carregarTransacoes();
+             
+             const dividaIndex = dividas.findIndex(d => d.id === idDebtQuitting);
+             const divida = dividas[dividaIndex];
+             
+             if (!divida) {
+                  alert('Erro: Dívida não encontrada.');
+                  return;
+             }
+             
+             const { totalReceitas } = getTotais(transacoes, dividas);
+             
+             // O valor de pagamento não pode exceder o Capital Acumulado ou o Saldo da Dívida
+             valorPagamento = Math.min(valorPagamento, divida.valorAtual, totalReceitas);
+
+             if (valorPagamento <= 0) {
+                 alert('Capital acumulado ou saldo da dívida insuficiente para o pagamento.');
+                 return;
+             }
+             
+             // 1. Atualiza a dívida
+             divida.valorAtual = divida.valorAtual - valorPagamento;
+             divida.valorAtual = Math.max(0, divida.valorAtual); // Garante que não fique negativo
+             salvarDividas(dividas);
+
+             // 2. Registra o débito na transação
+             const novaTransacao = {
+                 data: getHojeString(),
+                 valor: (-valorPagamento).toFixed(2), 
+                 descricao: `Quitação de Dívida: ${divida.credor}`
+             };
+             transacoes.push(novaTransacao);
+             salvarTransacoes(transacoes);
+             
+             valorInput.value = '';
+             document.getElementById('modal-quitacao').style.display = 'none';
+             idDebtQuitting = null;
+             initDashboard();
+        }
 
         // ===========================================
         // LÓGICA DE NEGÓCIO: QUITAÇÃO E DASHBOARD
@@ -921,15 +1093,73 @@
         // ===========================================
         // FUNÇÕES DE RENDERIZAÇÃO
         // ===========================================
-        
-        // ... (renderizarContasFixas mantida) ...
 
-        // ... (renderizarDívidas mantida) ...
+        const renderizarContasFixas = (fixas) => {
+            const container = document.getElementById('lista-contas-fixas-tabela');
+            if (!container) return; 
+
+            container.innerHTML = ''; 
+            
+            fixas.forEach((fixa) => {
+                const isPago = fixa.pago;
+                const btnClass = isPago ? 'pago' : 'pagar-fixa';
+                const btnText = isPago ? '<i class="fas fa-check"></i> PAGO' : 'PAGAR';
+                
+                const row = container.insertRow();
+                
+                if (isPago) {
+                    row.style.opacity = '0.6';
+                }
+                
+                row.innerHTML = `
+                    <td><span style="color: var(--cor-texto-principal);">${fixa.nome}</span></td>
+                    <td><span style="color: var(--cor-fixa); font-weight: 700;">${formatarMoeda(fixa.valor)}</span></td>
+                    <td style="text-align: center;">
+                        <button class="btn-acao-tabela ${btnClass}" data-id="${fixa.id}" ${isPago ? 'disabled' : ''}>
+                            ${btnText}
+                        </button>
+                    </td>
+                `;
+            });
+        };
+
+
+        const renderizarDívidas = (dividas) => {
+            const container = document.getElementById('lista-dividas-quitar-tabela');
+            const { totalReceitas } = getTotais(carregarTransacoes(), dividas);
+            
+            if (!container) return;
+            
+            container.innerHTML = '';
+            
+            const dividasPendentes = dividas.filter(d => d.valorAtual > 0.01);
+            
+            if (dividasPendentes.length === 0) {
+                container.innerHTML = '<tr><td colspan="3" style="text-align: center; color: var(--cor-sucesso); font-weight: bold;">Todas as dívidas únicas foram liquidadas!</td></tr>';
+                return;
+            }
+
+            dividasPendentes.forEach((divida) => {
+                const podeQuitar = totalReceitas >= divida.valorAtual - 0.009; // Margem para float
+                const btnClass = podeQuitar ? 'quitar-divida' : 'quitar-divida inativo';
+                const btnText = podeQuitar ? 'QUITAÇÃO' : 'APORTE NECESSÁRIO';
+                
+                const row = container.insertRow();
+                row.innerHTML = `
+                    <td><span style="color: var(--cor-texto-principal); font-weight: 600;">${divida.credor}</span></td>
+                    <td><span style="color: var(--cor-divida); font-weight: 700;">${formatarMoeda(divida.valorAtual)}</span></td>
+                    <td style="text-align: center;">
+                        <button class="btn-acao-tabela ${btnClass}" data-id="${divida.id}" data-credor="${divida.credor}" data-valor="${divida.valorAtual}" ${!podeQuitar ? 'disabled' : ''}>
+                            ${btnText}
+                        </button>
+                    </td>
+                `;
+            });
+        };
 
         const renderizarLogReceitas = (transacoes) => {
             const listaEntradasBody = document.getElementById('lista-entradas');
             
-            // Filtra e ordena apenas transações de ENTRADA
             const transacoesEntrada = transacoes.filter(t => parseFloat(t.valor) > 0);
             const transacoesOrdenadas = transacoesEntrada.map((t, index) => ({...t, displayIndex: index}))
                                                         .sort((a, b) => new Date(b.data) - new Date(a.data));
@@ -940,17 +1170,21 @@
             } else {
                 transacoesOrdenadas.forEach((t) => {
                     const row = listaEntradasBody.insertRow();
+                    // Aplica as classes CSS para o verde e o vermelho
                     row.innerHTML = `
-                        <td><span class="sucesso-adicionado">SALDO ADICIONADO</span></td>
-                        <td class="valor-caixa">${formatarMoeda(t.valor)}</td>
-                        <td style="text-align: center;"><button class="btn-acao-tabela deletar" data-index="${t.displayIndex}"><i class="fas fa-trash"></i></button></td>
+                        <td><span class="log-receita-descricao">SALDO ADICIONADO</span></td>
+                        <td class="log-receita-valor">${formatarMoeda(t.valor)}</td>
+                        <td style="text-align: center;">
+                            <button class="btn-acao-tabela deletar-log" data-index="${t.displayIndex}"><i class="fas fa-trash"></i></button>
+                        </td>
                     `;
                 });
             }
-        }
+        };
 
-        const renderizarTabelas = (transacoes, dividas) => {
+        const renderizarTabelas = (transacoes, dividas, fixas) => {
              renderizarLogReceitas(transacoes);
+             renderizarContasFixas(fixas);
              renderizarDívidas(dividas);
         }
 
@@ -963,10 +1197,8 @@
             
              metaDiariaTotalEl.textContent = formatarMoeda(metaTotal);
              
-             // NOVO: Aplica a classe de estilo e atualiza o texto centralizado
              if (atingido) {
                  metaDiariaCard.classList.add('meta-batida');
-                 // Corrigido para usar a cor de sucesso no valor total
                  metaDiariaTotalEl.style.color = 'var(--cor-sucesso)'; 
                  metaDiariaIncentivoEl.style.display = 'block';
                  
@@ -977,7 +1209,6 @@
                  metaDiariaIncentivoEl.style.color = 'var(--cor-sucesso)';
              } else {
                  metaDiariaCard.classList.remove('meta-batida');
-                 // Volta a cor normal/de alerta
                  metaDiariaTotalEl.style.color = 'var(--cor-meta-diaria)';
                  metaDiariaCard.style.border = `1px solid var(--cor-meta-diaria)`; 
                  metaDiariaIncentivoEl.style.display = 'block';
@@ -989,10 +1220,55 @@
              }
         }
         
-        // ... (renderizarDicasQuitacao mantida) ...
+        const renderizarDicasQuitacao = (dividas) => {
+             const div = document.getElementById('dicas-quitacao');
+             const dividasPendentes = dividas.filter(d => d.valorAtual > 0.01);
 
-        // ... (Restante do JS: Inicialização, Eventos, Login e Modals) ...
+             if (dividasPendentes.length === 0) {
+                  div.innerHTML = '';
+                  return;
+             }
+             
+             let html = `
+                 <h4>ESTRATÉGIA: BOLA DE NEVE (MENOR PARA MAIOR)</h4>
+                 <p style="margin-bottom: 10px; color: var(--cor-texto-secundario); font-size: 0.9em;">
+                    Priorize as menores dívidas para criar impulso rápido no protocolo de quitação.
+                 </p>
+             `;
+             
+             dividasPendentes.slice(0, 3).forEach((d, index) => {
+                 html += `
+                     <p>
+                         **PRIORIDADE ${index + 1}:** ${d.credor} (Saldo: ${formatarMoeda(d.valorAtual)})
+                     </p>
+                 `;
+             });
+             
+             html += `
+                 <p style="margin-top: 15px; font-weight: 700; color: var(--cor-alerta);">
+                     **Ação:** Direcione todo o excedente para a dívida **PRIORIDADE 1**.
+                 </p>
+             `;
+             
+             div.innerHTML = html;
+        }
+
+        // ===========================================
+        // FUNÇÕES DE EVENTOS (LISTENERS)
+        // ===========================================
         
+        const abrirModalReceita = () => document.getElementById('modal-receita').style.display = 'block';
+        const fecharModalReceita = () => document.getElementById('modal-receita').style.display = 'none';
+        
+        const abrirModalQuitacao = (credor, valor) => {
+             document.getElementById('nome-credor').textContent = credor;
+             document.getElementById('saldo-quitacao').textContent = formatarMoeda(valor);
+             document.getElementById('valor-pagamento').value = valor.toFixed(2);
+             document.getElementById('modal-quitacao').style.display = 'block';
+        }
+        const fecharModalQuitacao = () => document.getElementById('modal-quitacao').style.display = 'none';
+
+
         const initDashboard = () => {
             const transacoes = carregarTransacoes();
             const dividas = carregarDividas();
@@ -1002,9 +1278,7 @@
             const { totalDividasPendentes } = getTotais(transacoes, dividas);
             
             atualizarDashboard(transacoes, dividas, fixas);
-            // ... (renderizações) ...
-            renderizarContasFixas(fixas); 
-            renderizarTabelas(transacoes, dividas);
+            renderizarTabelas(transacoes, dividas, fixas); 
             
             // Recalcula o plano IA com a informação de dívidas pendentes
             gerarPlanoQuitacaoIA(false, totalDividasPendentes); 
@@ -1012,15 +1286,111 @@
             renderizarDicasQuitacao(dividas); 
         };
         
-        // ... (Outras funções e event listeners mantidos) ...
-
-        // Inicialização ao carregar
+        // ===========================================
+        // INICIALIZAÇÃO E EVENT LISTENERS
+        // ===========================================
+        
         document.addEventListener('DOMContentLoaded', () => {
-             // ... (Lógica de login mantida) ...
-             const loginBox = document.querySelector('.login-box');
-             loginBox.style.border = `2px solid var(--cor-primario)`; 
-             loginBox.style.boxShadow = `var(--sombra-card-hover)`;
+             
+             // --- Login e Sessão ---
+             document.getElementById('btn-login').addEventListener('click', () => {
+                 const password = document.getElementById('password-input').value;
+                 const feedback = document.getElementById('login-feedback');
+                 
+                 if (password === LOGIN_PASSWORD) {
+                     localStorage.setItem('loggedIn', 'true');
+                     document.getElementById('login-screen').style.display = 'none';
+                     document.getElementById('main-content').style.display = 'block';
+                     startSessionTimer();
+                     initDashboard();
+                 } else {
+                     feedback.textContent = 'ACESSO NEGADO: Chave incorreta.';
+                 }
+             });
+             
+             // --- Modals ---
+             document.getElementById('abrir-cadastro-receita').addEventListener('click', abrirModalReceita);
+             document.getElementById('fechar-modal-receita').addEventListener('click', fecharModalReceita);
+             document.getElementById('fechar-modal-quitacao').addEventListener('click', fecharModalQuitacao);
+             
+             document.getElementById('btn-cadastrar-receita').addEventListener('click', cadastrarReceita);
+             document.getElementById('btn-quitar-divida').addEventListener('click', realizarPagamentoDivida);
+             
+             // --- Toggles ---
+             document.getElementById('toggle-receitas').addEventListener('click', (e) => {
+                 const container = document.getElementById('lista-receitas-container');
+                 const icon = e.currentTarget.querySelector('i');
+                 if (container.style.display === 'none' || container.style.display === '') {
+                     container.style.display = 'block';
+                     e.currentTarget.classList.add('aberto');
+                 } else {
+                     container.style.display = 'none';
+                     e.currentTarget.classList.remove('aberto');
+                 }
+             });
+             document.getElementById('toggle-fixas').addEventListener('click', (e) => {
+                 const container = document.getElementById('lista-fixas-container');
+                 const icon = e.currentTarget.querySelector('i');
+                 if (container.style.display === 'none' || container.style.display === '') {
+                     container.style.display = 'block';
+                     e.currentTarget.classList.add('aberto');
+                 } else {
+                     container.style.display = 'none';
+                     e.currentTarget.classList.remove('aberto');
+                 }
+             });
+             document.getElementById('toggle-dividas').addEventListener('click', (e) => {
+                 const container = document.getElementById('lista-dividas-quitar-container');
+                 const icon = e.currentTarget.querySelector('i');
+                 if (container.style.display === 'none' || container.style.display === '') {
+                     container.style.display = 'block';
+                     e.currentTarget.classList.add('aberto');
+                 } else {
+                     container.style.display = 'none';
+                     e.currentTarget.classList.remove('aberto');
+                 }
+             });
+             
+             // --- Ações de Tabela ---
+             
+             // Listener de LOG DE RECEITAS (Deletar)
+             document.getElementById('lista-entradas').addEventListener('click', (e) => {
+                 if (e.target.closest('.deletar-log')) {
+                     const btn = e.target.closest('.deletar-log');
+                     const index = btn.getAttribute('data-index');
+                     deletarTransacao(parseInt(index));
+                 }
+             });
 
+             // Listener de PAGAR CONTA FIXA
+             document.getElementById('lista-contas-fixas-tabela').addEventListener('click', (e) => {
+                  const button = e.target.closest('.pagar-fixa');
+                  if (button && !button.disabled) {
+                      const id = parseInt(button.getAttribute('data-id'));
+                      pagarContaFixa(id);
+                  }
+             });
+
+             // Listener de QUITAR DÍVIDA
+             document.getElementById('lista-dividas-quitar-tabela').addEventListener('click', (e) => {
+                  const button = e.target.closest('.quitar-divida');
+                  if (button && !button.disabled) {
+                      idDebtQuitting = parseInt(button.getAttribute('data-id'));
+                      const credor = button.getAttribute('data-credor');
+                      const valor = parseFloat(button.getAttribute('data-valor'));
+                      abrirModalQuitacao(credor, valor);
+                  }
+             });
+             
+             // --- Módulo IA ---
+             document.getElementById('btn-gerar-plano').addEventListener('click', () => {
+                  const dividas = carregarDividas();
+                  const { totalDividasPendentes } = getTotais(carregarTransacoes(), dividas);
+                  gerarPlanoQuitacaoIA(false, totalDividasPendentes);
+                  renderizarDicasQuitacao(dividas);
+             });
+
+             // --- Inicialização da Tela ---
              if (localStorage.getItem('loggedIn') === 'true') {
                  document.getElementById('login-screen').style.display = 'none';
                  document.getElementById('main-content').style.display = 'block';
@@ -1028,6 +1398,10 @@
                  initDashboard();
              } else {
                  document.getElementById('login-screen').style.display = 'flex';
+                 // Configura o estilo inicial da caixa de login
+                 const loginBox = document.querySelector('.login-box');
+                 loginBox.style.border = `2px solid var(--cor-primario)`; 
+                 loginBox.style.boxShadow = `var(--sombra-card-hover)`;
              }
         });
         
