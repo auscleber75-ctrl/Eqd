@@ -2,10 +2,10 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>PROJECT TITAN | CORE FINANCIAL [V3.5]</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Space+Mono:wght+400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     
     <style>
@@ -76,6 +76,8 @@
             text-align: right;
             border-bottom: 2px solid var(--cor-fixa);
             box-shadow: 0 5px 20px rgba(29, 233, 182, 0.3);
+            /* Garante que o banner não cause scroll horizontal excessivo */
+            overflow: hidden; 
         }
         
         .banner-text {
@@ -407,7 +409,8 @@
             
             /* Global */
             .dynamic-banner {
-                display: none; /* Oculta banner animado em mobile */
+                /* ALTERAÇÃO CRUCIAL 2: Manter o banner visível, confiando na meta-tag para evitar zoom */
+                display: block; 
             }
             .container {
                 padding: 0 var(--espacamento-mobile);
