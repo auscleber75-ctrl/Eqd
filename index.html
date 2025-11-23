@@ -674,7 +674,7 @@
             <a href="javascript:void(0)" id="menu-perfil"><i class="fas fa-id-badge"></i> Perfil</a>
             <a href="https://wa.me/5521967074896" target="_blank" id="menu-suporte"><i class="fab fa-whatsapp"></i> Suporte</a>
             <button id="btn-logout-only"><i class="fas fa-sign-out-alt"></i> SAIR (MANTER DADOS)</button>
-        </div>
+            </div>
 
         <div class="dashboard-header">
             <span class="greeting" id="greeting-message" onclick="openNav()">
@@ -1294,7 +1294,7 @@
             calcularRelatorioDiario(totais);
         };
         
-        // NOVO/AJUSTADO: Função que verifica o estado das fixas e controla a visibilidade das Dívidas
+        // AJUSTADO: Função que verifica o estado das fixas e controla a visibilidade das Dívidas
         const verificarEstadoContasFixas = (fixas, dividas) => {
             const todasPagas = fixas.every(f => f.pago);
             const feedbackEl = document.getElementById('feedback-fixas-quitadas');
@@ -1302,7 +1302,7 @@
             const dividasContainer = document.getElementById('dividas-container');
             const planoQuitacao = document.getElementById('plano-quitacao-master');
             
-            // Total de dívidas ativas para cálculo da visibilidade do plano IA e container
+            // Total de dívidas ativas
             const totalDividasPendentes = dividas.filter(d => !d.quitada).reduce((sum, d) => sum + d.valorAtual, 0);
 
             // 1. VISIBILIDADE DO MÓDULO IA: Sempre visível se houver dívidas pendentes (Instrução 1)
@@ -1315,35 +1315,23 @@
                  document.getElementById('dicas-quitacao').innerHTML = '<p style="color: var(--cor-texto-secundario); font-weight: bold; margin-top: 15px;"><i class="fas fa-info-circle"></i> Cadastre sua primeira Dívida Única para ativar o Plano de Quitação Estratégico.</p>';
             }
 
-            // 2. VISIBILIDADE DA SEÇÃO DÍVIDAS ÚNICAS (Instrução 2)
-            // A seção de Dívidas Únicas só é visível se: 
-            // a) Existirem dívidas (ou se a flag de todas pagas estiver ativa)
-            // b) E todas as Contas Fixas estiverem pagas (ou se o container de fixas estiver oculto)
+            // 2. Lógica para CONTAS FIXAS
+            if (todasPagas) {
+                feedbackEl.style.display = 'block';
+                fixasToggle.style.display = 'none'; // Contas Fixas OCULTA se todas pagas
+            } else {
+                feedbackEl.style.display = 'none'; // O feedback de "Parabéns" só aparece se estiver quitado
+                fixasToggle.style.display = 'block'; // Contas Fixas VISÍVEL se pendente
+            }
             
-            // Simplificando a lógica do usuário:
-            // A DIVIDAS UNICAS deve ser visível APENAS SE CONTAS FIXAS estiver oculta (ou todas quitadas).
-            if (todasPagas && totalDividasPendentes > 0.01) {
+            // 3. VISIBILIDADE DA SEÇÃO DÍVIDAS ÚNICAS (Instrução 2)
+            // Dívidas Únicas visível APENAS SE CONTAS FIXAS estiver oculta (todas pagas) E houver dívidas pendentes
+            const contasFixasOcultas = fixasToggle.style.display === 'none'; 
+            
+            if (contasFixasOcultas && totalDividasPendentes > 0.01) {
                  dividasContainer.style.display = 'block'; 
             } else {
                  dividasContainer.style.display = 'none'; 
-            }
-            
-            // Lógica para CONTAS FIXAS
-            if (todasPagas) {
-                feedbackEl.style.display = 'block';
-                fixasToggle.style.display = 'none'; 
-            } else {
-                feedbackEl.style.display = 'block'; // O feedback sempre aparece no início do mês
-                fixasToggle.style.display = 'block';
-            }
-            
-            // Corrige o feedback para aparecer só se estiverem realmente quitadas, ou se estiverem sendo mostradas
-            if (todasPagas) {
-                feedbackEl.style.display = 'block';
-                fixasToggle.style.display = 'none'; 
-            } else {
-                feedbackEl.style.display = 'none';
-                fixasToggle.style.display = 'block';
             }
         }
 
@@ -1677,6 +1665,8 @@
             document.getElementById('close-sidebar').addEventListener('click', closeNav);
             document.getElementById('btn-logout-only').addEventListener('click', logoutOnly);
             
+            // REMOVIDO: O listener para #btn-reset-data foi excluído.
+            
             document.getElementById('btn-add-receita').addEventListener('click', () => {
                  const desc = document.getElementById('transaction-description').value;
                  const amount = document.getElementById('transaction-amount').value;
@@ -1718,7 +1708,7 @@
                 }
                 
                 if (id) {
-                     // Lógica de edição, simplificada para usar adicionarDivida (substituirá)
+                     // Lógica de edição
                      let dividas = getDividas().filter(d => d.id !== parseInt(id, 10)); // Remove a antiga
                      dividas.push({
                           id: parseInt(id, 10),
@@ -1749,7 +1739,7 @@
                 document.getElementById('modal-perfil').style.display = 'none';
             });
             
-            // NOVO: Listener para o botão realocado (Instrução 3)
+            // NOVO: Listener para o botão de Excluir Conta realocado para dentro do Modal de Perfil
             document.getElementById('btn-excluir-conta-perfil').addEventListener('click', excluirConta);
         });
     </script>
