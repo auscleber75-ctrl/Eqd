@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PROJECT TITAN | CORE FINANCIAL [V3.3]</title>
+    <title>PROJECT TITAN | CORE FINANCIAL [V3.4]</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -64,13 +64,13 @@
         }
         
         /* =================================== */
-        /* 2. BANNER DINÂMICO (NOVO DESIGN)    */
+        /* 2. BANNER E TÍTULO */
         /* =================================== */
 
         .dynamic-banner {
             width: 100%;
             background-color: #000000;
-            color: var(--cor-fixa); /* Cor Neon Verde */
+            color: var(--cor-fixa); 
             padding: 10px 0;
             text-align: right;
             border-bottom: 2px solid var(--cor-fixa);
@@ -94,7 +94,6 @@
             100% { transform: translateX(-100%); }
         }
 
-        /* Título Principal (Simples e Impactante) */
         h1 {
             font-family: var(--fonte-titulo);
             color: var(--cor-texto-principal);
@@ -102,7 +101,7 @@
             margin-top: 30px;
             margin-bottom: 30px;
             font-weight: 800;
-            font-size: 3em; /* Menor e mais simples */
+            font-size: 3em; 
             letter-spacing: 2px;
             text-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
             padding-bottom: 15px;
@@ -114,10 +113,10 @@
         }
 
         /* =================================== */
-        /* 3. Ajustes no Layout e Toggle (Fixas) */
+        /* 3. Ajustes no Layout e Toggle */
         /* =================================== */
 
-        .tabela-transacoes th:nth-child(4), /* Coluna Status */
+        .tabela-transacoes th:nth-child(4), 
         .tabela-transacoes td:nth-child(4) {
             display: none; 
         }
@@ -128,7 +127,6 @@
             font-family: var(--fonte-titulo);
         }
         
-        /* Estilos base */
         h2 {
             font-family: var(--fonte-titulo);
             font-weight: 600;
@@ -172,7 +170,7 @@
             color: var(--cor-sucesso);
         }
         .section-toggle.fixas h2 {
-             color: var(--cor-fixa); /* Cor para Contas Fixas */
+             color: var(--cor-fixa); 
         }
         .section-toggle i {
             transition: transform 0.3s;
@@ -188,7 +186,6 @@
         }
         
         .contas-fixas-container {
-             /* Remove o estilo de card, pois agora é um toggle-section */
              margin-top: 0; 
              padding: 0; 
              border: none;
@@ -198,7 +195,6 @@
         }
         
         .contas-fixas-container h3 {
-             /* Estilo do título interno removido */
              display: none;
         }
         .contas-fixas-container ul {
@@ -228,7 +224,7 @@
             border-radius: 4px;
         }
         
-        /* Novo Botão Pagar Conta Fixa */
+        /* Botão Pagar Conta Fixa */
         .btn-pagar-fixa {
             background-color: var(--cor-fixa);
             color: var(--cor-fundo-principal);
@@ -258,8 +254,6 @@
              cursor: not-allowed;
              opacity: 0.4;
         }
-        
-        /* Manter outros estilos */
         
         .motivacao-box {
             background-color: var(--cor-fundo-card);
@@ -294,15 +288,87 @@
             backdrop-filter: blur(5px);
             border: 1px solid var(--cor-borda);
         }
-        
-        /* Estilos de login, modais e responsividade mantidos */
 
-        /* Adicionar estilos omitidos para brevidade, mas que existem no código completo */
-        #login-screen { display: flex; /* ... */ }
-        .login-box { /* ... */ }
-        .btn-principal { /* ... */ }
-        .tabela-transacoes { /* ... */ }
-        .modal { /* ... */ }
+        /* Estilos de login e modais (Omitidos para brevidade, mas presentes no CSS completo) */
+        #login-screen { 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            min-height: 100vh;
+            background-color: var(--cor-fundo-principal);
+        }
+        .login-box {
+            background-color: var(--cor-fundo-card);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: var(--sombra-card-hover);
+            border: 2px solid var(--cor-primario);
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+        }
+        .login-box label {
+            display: block;
+            text-align: left;
+            margin-top: 20px;
+            margin-bottom: 8px;
+            color: var(--cor-texto-principal);
+            font-weight: 600;
+        }
+        .login-box input[type="password"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--cor-borda);
+            border-radius: 8px;
+            background-color: #1A212E;
+            color: var(--cor-fixa);
+            font-family: var(--fonte-dados);
+            font-size: 1.1em;
+            text-align: center;
+        }
+        .btn-principal {
+            background-color: var(--cor-primario);
+            color: var(--cor-fundo-principal);
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 1em;
+            margin-top: 20px;
+            transition: background-color 0.3s, box-shadow 0.3s;
+        }
+        .btn-principal:hover {
+            background-color: #00E5FF;
+            box-shadow: 0 0 15px rgba(0, 188, 212, 0.7);
+        }
+        
+        /* Estilos de tabela e modal mantidos */
+        .tabela-transacoes { 
+            width: 100%; 
+            border-collapse: collapse;
+            font-family: var(--fonte-dados);
+        }
+        .tabela-transacoes th, .tabela-transacoes td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--cor-borda);
+        }
+        .tabela-transacoes th {
+            background-color: #1A212E;
+            color: var(--cor-primario);
+            text-transform: uppercase;
+            font-weight: 700;
+            font-size: 0.9em;
+        }
+        .valor-caixa {
+            color: var(--cor-sucesso);
+            font-weight: 700;
+        }
+        .saldo-divida {
+            color: var(--cor-divida);
+            font-weight: 700;
+        }
         
     </style>
 </head>
@@ -340,10 +406,12 @@
             "DISCIPLINA É O COMANDO. A LIBERDADE FINANCEIRA É O STATUS. Mantenha o Foco."
         </div>
         
-        <div id="meta-diaria-card" class="meta-diaria-total container">
-            <p>TARGET DIÁRIO DE APORTE (FIXAS + QUITAÇÃO)</p>
-            <span id="meta-diaria-total-el">R$ 0,00</span>
-            <span id="meta-diaria-incentivo" class="destaque-conclusao" style="display: none;"></span>
+        <div id="meta-diaria-card" class="meta-diaria-total container" style="display: flex; justify-content: space-between; align-items: center; background-color: var(--cor-fundo-card); padding: 25px; border-radius: 12px; box-shadow: var(--sombra-card); margin-bottom: 30px; border: 1px solid var(--cor-borda);">
+            <div>
+                <p style="color: var(--cor-texto-secundario); font-weight: 600;"><i class="fas fa-bullseye"></i> TARGET DIÁRIO DE APORTE (FIXAS + QUITAÇÃO)</p>
+                <span id="meta-diaria-total-el" style="font-size: 2.2em; font-family: var(--fonte-dados); color: var(--cor-meta-diaria); font-weight: 700;">R$ 0,00</span>
+            </div>
+            <span id="meta-diaria-incentivo" class="destaque-conclusao" style="display: none; font-weight: bold; font-family: var(--fonte-titulo); font-size: 1em;"></span>
         </div>
         
 
@@ -351,7 +419,7 @@
             
             <div class="info-card">
                 <p class="rotulo"><i class="fas fa-satellite-dish"></i> CAPITAL ACUMULADO (ENTRADAS)</p>
-                <span id="total-lancado" class="valor valor-caixa">R$ 0,00</span>
+                <span id="total-lancado" class="valor valor-caixa" style="font-size: 2.5em; font-family: var(--fonte-dados);">R$ 0,00</span>
             </div>
             
             <div class="progress-area" id="meta-area">
@@ -359,20 +427,20 @@
                 <p style="margin-bottom: 5px; color: var(--cor-texto-secundario);">Dívidas Pendentes: <span id="total-dividas-pendentes" style="font-weight: 700; color: var(--cor-divida); font-family: var(--fonte-dados);">R$ 0,00</span></p>
                 <p>Progresso de Quitação com Capital: <span id="progresso-capital-txt" style="font-weight: 700; color: var(--cor-sucesso); font-family: var(--fonte-dados);">0.00%</span></p>
                 
-                <div class="progresso-bar-container">
-                    <div id="progresso-bar" class="progresso" style="width: 0%;"></div>
+                <div class="progresso-bar-container" style="height: 10px; background-color: #1A212E; border-radius: 5px; overflow: hidden; margin-top: 10px;">
+                    <div id="progresso-bar" class="progresso" style="height: 100%; width: 0%; background-color: var(--cor-sucesso); transition: width 0.5s;"></div>
                 </div>
             </div>
             
             <div class="info-card">
                 <p class="rotulo"><i class="fas fa-skull-crossbones"></i> SALDO TOTAL A QUITAR</p>
-                <span id="saldo-pendente-total" class="valor valor-divida">R$ 0,00</span>
+                <span id="saldo-pendente-total" class="valor valor-divida" style="font-size: 2.5em; font-family: var(--fonte-dados);">R$ 0,00</span>
             </div>
         </header>
         
         <main class="container">
             
-            <div class="section-header">
+            <div class="section-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
                 <h2><i class="fas fa-arrow-circle-up"></i> MÓDULO: INJEÇÃO DE CAPITAL</h2>
                 <button id="abrir-cadastro-receita" class="btn-principal"> <i class="fas fa-plus"></i> INJETAR VALOR</button>
             </div>
@@ -391,7 +459,6 @@
                                 <th>DESCRIÇÃO</th>
                                 <th>VALOR (R$)</th>
                                 <th>DATA</th>
-                                <th>STATUS</th> 
                                 <th>AÇÃO</th>
                             </tr>
                         </thead>
@@ -401,9 +468,9 @@
                 </div>
             </div>
             
-            <div id="feedback-fixas-quitadas" style="display: none;">
-                 <i class="fas fa-medal"></i> PROTOCOLO DE CONTAS FIXAS CONCLUÍDO! <i class="fas fa-medal"></i>
-                 <p>Contas Fixas liquidadas para este ciclo. Foco total em reduzir o Saldo Pendente.</p>
+            <div id="feedback-fixas-quitadas" class="motivacao-box" style="display: none; margin-top: 40px; border: 2px solid var(--cor-sucesso);">
+                 <i class="fas fa-medal" style="color: var(--cor-sucesso);"></i> PROTOCOLO DE CONTAS FIXAS CONCLUÍDO! <i class="fas fa-medal" style="color: var(--cor-sucesso);"></i>
+                 <p style="color: var(--cor-texto-principal); font-weight: 600;">Contas Fixas liquidadas para este ciclo. Foco total em reduzir o Saldo Pendente.</p>
             </div>
 
             
@@ -451,21 +518,24 @@
                 </div>
             </div>
             
-            <div class="plano-quitacao">
+            <div class="plano-quitacao" style="margin-top: 50px; padding: 30px; background-color: var(--cor-fundo-card); border-radius: 12px; box-shadow: var(--sombra-card); border: 1px solid var(--cor-borda);">
                 <h3><i class="fas fa-brain"></i> PLANO DE QUITAÇÃO ESTRATÉGICO (MÓDULO IA)</h3>
                 
-                <div id="plano-ia-controls">
-                    <label for="meses-plano" style="margin-bottom: 0; color: var(--cor-texto-principal);">TARGET: Meses para Quitar Dívidas ÚNICAS:</label>
-                    <input type="number" id="meses-plano" value="5" min="1" max="60">
-                    <button id="btn-gerar-plano" class="btn-principal">
+                <div id="plano-ia-controls" style="display: flex; gap: 20px; align-items: flex-end; margin-top: 15px; margin-bottom: 25px;">
+                    <div>
+                         <label for="meses-plano" style="margin-bottom: 5px; display: block; color: var(--cor-texto-principal); font-weight: 600;">TARGET: Meses para Quitar Dívidas ÚNICAS:</label>
+                         <input type="number" id="meses-plano" value="5" min="1" max="60" style="padding: 8px; border-radius: 4px; border: 1px solid var(--cor-borda); background: #1A212E; color: var(--cor-texto-principal); width: 80px;">
+                    </div>
+                    <button id="btn-gerar-plano" class="btn-principal" style="margin-top: 0; padding: 10px 15px;">
                         <i class="fas fa-redo-alt"></i> RECALCULAR PLANO
                     </button>
                 </div>
                 
-                <div id="resultado-plano-ia">
+                <div id="resultado-plano-ia" style="border-left: 3px solid var(--cor-primario); padding-left: 15px; margin-top: 20px;">
+                    <p style="color: var(--cor-texto-secundario);">Aguardando cálculo...</p>
                     </div>
                 
-                <div id="dicas-quitacao">
+                <div id="dicas-quitacao" style="margin-top: 30px; padding-top: 20px; border-top: 1px dashed var(--cor-borda);">
                      </div>
             </div>
             
@@ -473,19 +543,19 @@
     </div>
 
 
-    <div id="modal-receita" class="modal">
-        <div class="modal-content">
-            <span class="fechar-modal" id="fechar-modal-receita">&times;</span>
-            <h3 id="titulo-dados-receita"><i class="fas fa-arrow-up"></i> LANÇAMENTO DE CAPITAL</h3>
-            <label for="valor-input-receita">VALOR DO APORTE (R$)</label>
-            <input type="number" id="valor-input-receita" placeholder="0.00" min="0.01" step="0.01">
-            <button class="btn-ok" id="btn-cadastrar-receita">CONFIRMAR LANÇAMENTO <i class="fas fa-check"></i></button>
+    <div id="modal-receita" class="modal" style="display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.7);">
+        <div class="modal-content" style="background-color: var(--cor-fundo-card); margin: 15% auto; padding: 30px; border-radius: 10px; border: 1px solid var(--cor-primario); width: 80%; max-width: 400px; box-shadow: var(--sombra-card-hover);">
+            <span class="fechar-modal" id="fechar-modal-receita" style="color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer;">&times;</span>
+            <h3 id="titulo-dados-receita" style="color: var(--cor-sucesso);"><i class="fas fa-arrow-up"></i> LANÇAMENTO DE CAPITAL</h3>
+            <label for="valor-input-receita" style="display: block; margin-top: 20px; color: var(--cor-texto-principal); font-weight: 600;">VALOR DO APORTE (R$)</label>
+            <input type="number" id="valor-input-receita" placeholder="0.00" min="0.01" step="0.01" style="width: 100%; padding: 10px; margin-top: 8px; border-radius: 5px; border: 1px solid var(--cor-borda); background-color: #1A212E; color: var(--cor-fixa); font-family: var(--fonte-dados);">
+            <button class="btn-principal btn-ok" id="btn-cadastrar-receita" style="background-color: var(--cor-sucesso); margin-top: 25px;">CONFIRMAR LANÇAMENTO <i class="fas fa-check"></i></button>
         </div>
     </div>
     
-    <div id="modal-quitacao" class="modal">
-        <div class="modal-content">
-            <span class="fechar-modal" id="fechar-modal-quitacao">&times;</span>
+    <div id="modal-quitacao" class="modal" style="display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.7);">
+        <div class="modal-content" style="background-color: var(--cor-fundo-card); margin: 15% auto; padding: 30px; border-radius: 10px; border: 1px solid var(--cor-divida); width: 80%; max-width: 400px; box-shadow: 0 0 20px rgba(239, 68, 68, 0.5);">
+            <span class="fechar-modal" id="fechar-modal-quitacao" style="color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer;">&times;</span>
             <h3 id="titulo-quitacao" style="color: var(--cor-divida);"><i class="fas fa-receipt"></i> REGISTRAR PAGAMENTO</h3>
             <p style="margin-top: 15px; margin-bottom: 10px; font-family: var(--fonte-titulo); font-weight: 600; color: var(--cor-texto-secundario);">
                 TARGET CREDOR: <span id="nome-credor" style="font-family: var(--fonte-dados); color: var(--cor-texto-principal);"></span>
@@ -493,34 +563,23 @@
             <p style="margin-bottom: 20px; font-family: var(--fonte-titulo); font-weight: 600; color: var(--cor-texto-secundario);">
                 SALDO PENDENTE: <span id="saldo-quitacao" class="saldo-divida" style="font-family: var(--fonte-dados);"></span>
             </p>
-            <label for="valor-pagamento">VALOR DO PAGAMENTO (R$)</label>
-            <input type="number" id="valor-pagamento" placeholder="0.00" min="0.01" step="0.01">
-            <button class="btn-ok" id="btn-quitar-divida">FINALIZAR TRANSAÇÃO</button>
-        </div>
-    </div>
-    
-    <div id="modal-rastreio-metas" class="modal">
-        <div class="modal-content">
-            <span class="fechar-modal" id="fechar-modal-rastreio">&times;</span>
-            <h3><i class="fas fa-check-square"></i> LOG DE RASTREIO DE METAS DIÁRIAS</h3>
-            <div id="lista-dias-rastreio">
-                <p>Carregando dados...</p>
-            </div>
-            <div style="clear: both;"></div> 
+            <label for="valor-pagamento" style="display: block; margin-top: 20px; color: var(--cor-texto-principal); font-weight: 600;">VALOR DO PAGAMENTO (R$)</label>
+            <input type="number" id="valor-pagamento" placeholder="0.00" min="0.01" step="0.01" style="width: 100%; padding: 10px; margin-top: 8px; border-radius: 5px; border: 1px solid var(--cor-borda); background-color: #1A212E; color: var(--cor-fixa); font-family: var(--fonte-dados);">
+            <button class="btn-principal btn-ok" id="btn-quitar-divida" style="background-color: var(--cor-divida); margin-top: 25px;">FINALIZAR TRANSAÇÃO</button>
         </div>
     </div>
     
     <script>
         // ===========================================
-        // JAVASCRIPT: LÓGICA DE NEGÓCIO E CONEXÃO V3.3
+        // JAVASCRIPT: LÓGICA DE NEGÓCIO E CONEXÃO V3.4 (OTIMIZADA)
         // ===========================================
 
         const DIAS_UTEIS_MES = 22; 
         const LOGIN_PASSWORD = '01';
-        const SESSION_TIMEOUT_MS = 600000; // 10 minutos (10 * 60 * 1000)
+        const SESSION_TIMEOUT_MS = 600000; // 10 minutos
         let sessionTimer;
 
-        // Dados Iniciais
+        // Dados Iniciais (Mantidos - Importante para resetar Contas Fixas)
         const DEBT_LIST_INITIAL = [
              { id: 1, credor: "Itau visa", valorInicial: 200.00, valorAtual: 200.00 },
              { id: 2, credor: "Banco Inter", valorInicial: 120.00, valorAtual: 120.00 },
@@ -555,114 +614,10 @@
         
         let idDebtQuitting = null; 
         
-        // Elementos DOM principais
-        const dataAtualEl = document.getElementById('data-atual');
-        const metaDiariaCard = document.getElementById('meta-diaria-card');
-        const metaDiariaTotalEl = document.getElementById('meta-diaria-total-el');
-        const metaDiariaIncentivoEl = document.getElementById('meta-diaria-incentivo');
-        const totalDividasPendentesEl = document.getElementById('total-dividas-pendentes'); 
-        const progressoCapitalTxtEl = document.getElementById('progresso-capital-txt'); 
-        const saldoPendenteTotalEl = document.getElementById('saldo-pendente-total');
-        const totalLancadoEl = document.getElementById('total-lancado');
-        const somaFixasEl = document.getElementById('soma-fixas');
-        const listaContasFixasEl = document.getElementById('lista-contas-fixas');
-        const contasFixasToggle = document.getElementById('contas-fixas-toggle');
-        const listaFixasContainer = document.getElementById('lista-fixas-container');
-        const toggleFixasBtn = document.getElementById('toggle-fixas');
-        const feedbackFixasQuitadasEl = document.getElementById('feedback-fixas-quitadas');
-        
-        // Modais 
-        const modalReceita = document.getElementById('modal-receita');
-        const modalQuitacao = document.getElementById('modal-quitacao');
-        const modalRastreioMetas = document.getElementById('modal-rastreio-metas'); 
-        const valorInputReceita = document.getElementById('valor-input-receita');
-        const btnCadastrarReceita = document.getElementById('btn-cadastrar-receita');
-        const valorPagamentoInput = document.getElementById('valor-pagamento');
-        const btnQuitarDivida = document.getElementById('btn-quitar-divida');
-        const toggleDividasBtn = document.getElementById('toggle-dividas');
-        const toggleReceitasBtn = document.getElementById('toggle-receitas');
-        const listaDividasQuitarContainer = document.getElementById('lista-dividas-quitar-container');
-        const listaReceitasContainer = document.getElementById('lista-receitas-container');
-
-
-        // ===========================================
-        // FUNÇÕES DE SESSÃO E SEGURANÇA (NOVA LÓGICA)
-        // ===========================================
-        
-        const startSessionTimer = () => {
-             // Limpa qualquer timer anterior para evitar múltiplos timers
-             if (sessionTimer) {
-                 clearTimeout(sessionTimer);
-             }
-             
-             sessionTimer = setTimeout(logOut, SESSION_TIMEOUT_MS);
-        }
-        
-        const resetSessionTimer = () => {
-             startSessionTimer(); // Simplesmente reinicia o timer ao interagir
-        }
-        
-        const logOut = () => {
-            clearTimeout(sessionTimer);
-            localStorage.removeItem('loggedIn');
-            localStorage.removeItem('lastActivity');
-            alert("Sessão expirada. Por favor, faça login novamente.");
-            window.location.reload(); 
-        }
-        
-        // Adiciona listeners para interações que resetam o timer
-        document.addEventListener('mousemove', resetSessionTimer);
-        document.addEventListener('keypress', resetSessionTimer);
-        document.addEventListener('click', resetSessionTimer); 
-        
         // ===========================================
         // FUNÇÕES UTILITÁRIAS DE DADOS
         // ===========================================
         
-        const carregarContasFixas = () => {
-            const fixas = localStorage.getItem('contasFixas');
-            if (!fixas) {
-                salvarContasFixas(CONTAS_FIXAS_INITIAL);
-                return CONTAS_FIXAS_INITIAL;
-            }
-            return JSON.parse(fixas);
-        };
-        
-        const salvarContasFixas = (fixas) => {
-             localStorage.setItem('contasFixas', JSON.stringify(fixas));
-        };
-        
-        const getSomaFixas = (fixas) => {
-             return fixas.reduce((sum, item) => sum + item.valor, 0);
-        }
-        
-        const getMetaDiariaFixas = (somaFixas) => somaFixas / DIAS_UTEIS_MES;
-
-        const carregarTransacoes = () => {
-            const transacoes = localStorage.getItem('transacoes') || '[]';
-            return JSON.parse(transacoes);
-        };
-
-        const salvarTransacoes = (transacoes) => {
-            localStorage.setItem('transacoes', JSON.stringify(transacoes));
-        };
-        
-        const carregarDividas = () => {
-            const dividas = localStorage.getItem('dividas');
-            if (!dividas) {
-                salvarDividas(DEBT_LIST_INITIAL);
-                return DEBT_LIST_INITIAL;
-            }
-            const loadedDebts = JSON.parse(dividas);
-            loadedDebts.sort((a, b) => a.valorAtual - b.valorAtual);
-            return loadedDebts;
-        }
-        
-        const salvarDividas = (dividas) => {
-             dividas.sort((a, b) => a.valorAtual - b.valorAtual);
-             localStorage.setItem('dividas', JSON.stringify(dividas));
-        }
-
         const formatarMoeda = (valor) => {
             return parseFloat(valor).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
         };
@@ -673,31 +628,68 @@
             return `${day}/${month}/${year}`;
         }
         
-        const getHojeString = () => {
-            return new Date().toISOString().slice(0, 10);
+        const getHojeString = () => new Date().toISOString().slice(0, 10);
+        
+        const getPrimeiroDiaDoMesString = (data = new Date()) => new Date(data.getFullYear(), data.getMonth(), 1).toISOString().slice(0, 10);
+        
+        // --- Funções de Carregamento/Salvamento (Garantem que os dados são arrays) ---
+        
+        const carregarContasFixas = () => {
+            const fixas = localStorage.getItem('contasFixas');
+            if (!fixas) return CONTAS_FIXAS_INITIAL;
+            
+            // Garantir que os IDs sejam Number ao carregar
+            const loadedFixas = JSON.parse(fixas);
+            return loadedFixas.map(f => ({ ...f, id: parseInt(f.id) }));
+        };
+        
+        const salvarContasFixas = (fixas) => localStorage.setItem('contasFixas', JSON.stringify(fixas));
+        
+        const carregarTransacoes = () => {
+            const transacoes = localStorage.getItem('transacoes');
+            return transacoes ? JSON.parse(transacoes) : [];
+        };
+
+        const salvarTransacoes = (transacoes) => localStorage.setItem('transacoes', JSON.stringify(transacoes));
+        
+        const carregarDividas = () => {
+            const dividas = localStorage.getItem('dividas');
+            if (!dividas) {
+                salvarDividas(DEBT_LIST_INITIAL);
+                return DEBT_LIST_INITIAL;
+            }
+            // Garantir que os IDs sejam Number ao carregar
+            const loadedDebts = JSON.parse(dividas).map(d => ({ ...d, id: parseInt(d.id) }));
+            loadedDebts.sort((a, b) => a.valorAtual - b.valorAtual);
+            return loadedDebts;
         }
         
-        const getPrimeiroDiaDoMes = (data = new Date()) => {
-            return new Date(data.getFullYear(), data.getMonth(), 1).toISOString().slice(0, 10);
+        const salvarDividas = (dividas) => {
+             dividas.sort((a, b) => a.valorAtual - b.valorAtual);
+             localStorage.setItem('dividas', JSON.stringify(dividas));
         }
-        
+
+        const getSomaFixas = (fixas) => fixas.reduce((sum, item) => sum + item.valor, 0);
+        const getMetaDiariaFixas = (somaFixas) => somaFixas / DIAS_UTEIS_MES;
+
         const getReceitasPorDia = (transacoes) => {
              const receitasDiarias = {};
              transacoes.filter(t => parseFloat(t.valor) > 0).forEach(t => { 
                  const data = t.data;
+                 // Usamos toFixed(2) para lidar com precisão de floating point na soma
                  receitasDiarias[data] = (receitasDiarias[data] || 0) + parseFloat(t.valor);
              });
              return receitasDiarias;
         }
         
         const getTotais = (transacoes, dividas) => {
-            let totalReceitas = 0;
-            // Soma todas as transações (entradas positivas, saídas negativas)
-            transacoes.forEach(t => totalReceitas += parseFloat(t.valor)); 
+            // Soma todas as transações (Entradas positivas, Saídas Fixas/Dívidas negativas)
+            let totalReceitas = transacoes.reduce((sum, t) => sum + parseFloat(t.valor), 0); 
+            // O Capital Acumulado nunca deve ser negativo na exibição, apesar do log interno
+            totalReceitas = Math.max(0, totalReceitas);
 
-            let totalDividasIniciais = DEBT_LIST_INITIAL.reduce((sum, d) => sum + d.valorInicial, 0);
-            let totalDividasPendentes = 0;
-            dividas.filter(d => d.valorAtual > 0.01).forEach(d => totalDividasPendentes += parseFloat(d.valorAtual));
+            const totalDividasIniciais = DEBT_LIST_INITIAL.reduce((sum, d) => sum + d.valorInicial, 0);
+            const totalDividasPendentes = dividas.filter(d => d.valorAtual > 0.01).reduce((sum, d) => sum + parseFloat(d.valorAtual), 0);
             
             const progressoCapital = totalDividasIniciais > 0.01 
                 ? ((totalDividasIniciais - totalDividasPendentes) / totalDividasIniciais) * 100 
@@ -707,16 +699,56 @@
 
             return { totalReceitas, totalDividasIniciais, totalDividasPendentes, progressoCapital, saldoPendenteTotal };
         }
-
-
+        
+        // ===========================================
+        // FUNÇÕES DE SESSÃO E SEGURANÇA
+        // ===========================================
+        
+        const startSessionTimer = () => {
+             if (sessionTimer) clearTimeout(sessionTimer);
+             sessionTimer = setTimeout(logOut, SESSION_TIMEOUT_MS);
+        }
+        
+        const resetSessionTimer = () => startSessionTimer();
+        
+        const logOut = () => {
+            clearTimeout(sessionTimer);
+            localStorage.removeItem('loggedIn');
+            alert("Sessão expirada. Por favor, faça login novamente.");
+            window.location.reload(); 
+        }
+        
         // ===========================================
         // LÓGICA DE NEGÓCIO: CONTAS FIXAS
         // ===========================================
+        
+        /**
+         * CORREÇÃO V3.4: Verifica se o reset das fixas já foi feito no mês atual.
+         */
+        const checkAndResetContasFixas = () => {
+            let fixas = carregarContasFixas();
+            const hoje = getHojeString();
+            const primeiroDiaMes = getPrimeiroDiaDoMesString();
+            const lastResetFixas = localStorage.getItem('lastResetFixas');
+            
+            const isNovoMes = lastResetFixas ? lastResetFixas.substring(0, 7) !== hoje.substring(0, 7) : true;
+
+            if (isNovoMes) {
+                 // Força o reset para o estado inicial, marcando todas como não pagas
+                 fixas = CONTAS_FIXAS_INITIAL.map(f => ({ ...f, pago: false }));
+                 salvarContasFixas(fixas);
+                 localStorage.setItem('lastResetFixas', hoje); // Marca o reset para o mês atual
+                 console.log("Contas Fixas resetadas para o novo ciclo mensal.");
+            }
+            return fixas;
+        };
 
         const verificarEstadoContasFixas = (fixas) => {
              const todasPagas = fixas.every(f => f.pago);
              
-             // Mostra/Oculta a seção inteira e o feedback
+             const contasFixasToggle = document.getElementById('contas-fixas-toggle');
+             const feedbackFixasQuitadasEl = document.getElementById('feedback-fixas-quitadas');
+
              contasFixasToggle.style.display = todasPagas ? 'none' : 'block';
              feedbackFixasQuitadasEl.style.display = todasPagas ? 'block' : 'none';
         }
@@ -726,10 +758,9 @@
             const transacoes = carregarTransacoes();
             const { totalReceitas } = getTotais(transacoes, carregarDividas());
             
-            const conta = fixas.find(f => f.id === id);
+            const conta = fixas.find(f => f.id === parseInt(id));
             
-            if (!conta) return;
-            if (conta.pago) return;
+            if (!conta || conta.pago) return;
 
             // Ajuste de precisão para checagem
             if (totalReceitas < conta.valor - 0.01) {
@@ -737,7 +768,7 @@
                  return;
             }
             
-            if (!confirm(`Confirma o pagamento de ${formatarMoeda(conta.valor)} para ${conta.nome}? O valor será deduzido do Capital Acumulado.`)) {
+            if (!confirm(`Confirma o pagamento de ${formatarMoeda(conta.valor)} para ${conta.nome}? O valor será deduzido imediatamente do Capital Acumulado.`)) {
                 return;
             }
 
@@ -753,10 +784,13 @@
             salvarTransacoes(transacoesSalvas);
 
             // 2. ATUALIZAÇÃO DO STATUS DA CONTA FIXA
-            conta.pago = true;
+            const index = fixas.findIndex(f => f.id === parseInt(id));
+            if (index !== -1) {
+                fixas[index].pago = true;
+            }
             salvarContasFixas(fixas);
 
-            alert(`Pagamento de ${conta.nome} concluído. ${formatarMoeda(conta.valor)} deduzido.`);
+            // alert(`Pagamento de ${conta.nome} concluído. ${formatarMoeda(conta.valor)} deduzido.`);
             initDashboard();
         }
 
@@ -775,6 +809,7 @@
              }
 
              const valorMensalNecessario = totalDividasPendentes / meses;
+             // Usamos 30 dias como estimativa para cálculo de aporte diário
              const valorDiarioNecessario = valorMensalNecessario / 30; 
 
              if (!isInit) {
@@ -800,12 +835,14 @@
             const metaQuitacaoDiaria = gerarPlanoQuitacaoIA(true, totalDividasPendentes); 
             const metaTotalDiaria = metaDiariaFixas + metaQuitacaoDiaria;
             
-            const recebidoNaData = receitasDiarias[dataAlvo] || 0;
-            
+            const recebido = receitasDiarias[dataAlvo] || 0;
+            const faltando = Math.max(0, metaTotalDiaria - recebido);
+
             return {
                 metaTotal: metaTotalDiaria,
-                atingido: recebidoNaData >= metaTotalDiaria - 0.01,
-                recebido: recebidoNaData
+                atingido: recebido >= metaTotalDiaria - 0.01,
+                recebido: recebido,
+                faltando: faltando
             };
         }
         
@@ -813,15 +850,15 @@
             const { totalReceitas, totalDividasPendentes, progressoCapital, saldoPendenteTotal } = getTotais(transacoes, dividas);
             const somaFixas = getSomaFixas(fixas);
             
-            dataAtualEl.textContent = new Date().toLocaleDateString('pt-BR');
-            somaFixasEl.textContent = formatarMoeda(somaFixas).replace('R$', '').trim(); 
+            document.getElementById('data-atual').textContent = new Date().toLocaleDateString('pt-BR');
+            document.getElementById('soma-fixas').textContent = formatarMoeda(somaFixas).replace('R$', '').trim(); 
 
-            totalLancadoEl.textContent = formatarMoeda(totalReceitas); 
-            saldoPendenteTotalEl.textContent = formatarMoeda(saldoPendenteTotal);
-            totalDividasPendentesEl.textContent = formatarMoeda(totalDividasPendentes);
+            document.getElementById('total-lancado').textContent = formatarMoeda(totalReceitas); 
+            document.getElementById('saldo-pendente-total').textContent = formatarMoeda(saldoPendenteTotal);
+            document.getElementById('total-dividas-pendentes').textContent = formatarMoeda(totalDividasPendentes);
             
             const progressoExibido = Math.min(100, progressoCapital).toFixed(2);
-            progressoCapitalTxtEl.textContent = `${progressoExibido}%`;
+            document.getElementById('progresso-capital-txt').textContent = `${progressoExibido}%`;
             document.getElementById('progresso-bar').style.width = `${progressoExibido}%`;
             
             verificarEstadoContasFixas(fixas);
@@ -832,7 +869,9 @@
         // ===========================================
         
         const renderizarContasFixas = (fixas) => {
+            const listaContasFixasEl = document.getElementById('lista-contas-fixas');
             listaContasFixasEl.innerHTML = '';
+            
             const somaFixas = getSomaFixas(fixas);
             const metaDiariaFixas = getMetaDiariaFixas(somaFixas);
             const transacoes = carregarTransacoes();
@@ -844,6 +883,7 @@
             `;
             
             fixas.forEach(conta => {
+                 // Deve-se permitir pagar se tiver capital suficiente, mesmo que haja dívidas
                  const podePagar = totalReceitas >= conta.valor - 0.01;
                  const classeBotao = conta.pago ? 'pago' : (podePagar ? '' : 'inativo');
                  const textoBotao = conta.pago ? 'PAGO' : 'PAGAR';
@@ -872,19 +912,15 @@
             
             // --- Renderização das Receitas (LOG) ---
             listaEntradasBody.innerHTML = '';
-            // ... (Lógica de renderização de receitas mantida da V3.2)
             if (transacoesOrdenadas.length === 0) {
                  listaEntradasBody.innerHTML = '<tr><td colspan="4" style="text-align: center; color: var(--cor-texto-secundario);">Nenhuma receita lançada no log.</td></tr>';
             } else {
                 transacoesOrdenadas.forEach((t, index) => {
-                    const descricaoHTML = `<span class="sucesso-adicionado">SALDO ADICIONADO</span>`; 
-                        
                     const row = listaEntradasBody.insertRow();
                     row.innerHTML = `
-                        <td>${descricaoHTML}</td>
+                        <td><span class="sucesso-adicionado">SALDO ADICIONADO</span></td>
                         <td class="valor-caixa">${formatarMoeda(t.valor)}</td>
                         <td>${formatarData(t.data)}</td>
-                        <td></td> 
                         <td><button class="btn-acao-tabela deletar" data-index="${index}"><i class="fas fa-trash"></i> EXCLUIR</button></td>
                     `;
                 });
@@ -898,12 +934,12 @@
                  listaDividasBody.innerHTML = '<tr><td colspan="4" style="text-align: center; color: var(--cor-sucesso); font-weight: bold;">🎉 PROTOCOL COMPLETE: Todas as dívidas únicas foram quitadas!</td></tr>';
             } else {
                 dividasAtivas.forEach((d) => {
-                    // CORREÇÃO: Lógica de ativação do botão revisada (Capital >= Dívida)
+                    // Lógica de ativação do botão revisada (Capital >= Dívida)
                     const podeQuitar = (totalReceitas >= d.valorAtual - 0.01); 
                     
                     const botaoHTML = podeQuitar 
                         ? `<button class="btn-acao-tabela quitar" data-id="${d.id}"><i class="fas fa-hand-holding-usd"></i> PAGAR</button>`
-                        : `<button class="btn-acao-tabela btn-inativo-capital" disabled title="Capital (R${formatarMoeda(totalReceitas)}) insuficiente para cobrir o Saldo da Dívida (R${formatarMoeda(d.valorAtual)}).">PENDENTE</button>`;
+                        : `<button class="btn-acao-tabela btn-inativo-capital" disabled title="Capital (${formatarMoeda(totalReceitas)}) insuficiente para cobrir o Saldo da Dívida (${formatarMoeda(d.valorAtual)}).">PENDENTE</button>`;
 
                     const row = listaDividasBody.insertRow();
                     row.innerHTML = `
@@ -917,20 +953,23 @@
         };
 
         const renderizarMetaDiaria = (transacoes, totalDividasPendentes, fixas) => {
-             const hoje = getHojeString();
-             const { metaTotal, atingido, recebido } = getMetaDiariaAtingida(transacoes, totalDividasPendentes, fixas, hoje);
+             const { metaTotal, atingido, recebido, faltando } = getMetaDiariaAtingida(transacoes, totalDividasPendentes, fixas, getHojeString());
              
+             const metaDiariaTotalEl = document.getElementById('meta-diaria-total-el');
+             const metaDiariaCard = document.getElementById('meta-diaria-card');
+             const metaDiariaIncentivoEl = document.getElementById('meta-diaria-incentivo');
+            
              metaDiariaTotalEl.textContent = formatarMoeda(metaTotal);
-             metaDiariaCard.classList.remove('meta-diaria-concluida');
-             metaDiariaIncentivoEl.style.display = 'none';
+             metaDiariaCard.style.border = atingido ? `1px solid var(--cor-sucesso)` : `1px solid var(--cor-meta-diaria)`;
 
              if (atingido) {
-                 metaDiariaCard.classList.add('meta-diaria-concluida');
                  metaDiariaIncentivoEl.style.display = 'block';
                  metaDiariaIncentivoEl.textContent = `🎯 META DIÁRIA BATIDA! Capital Extra: ${formatarMoeda(recebido - metaTotal)}`;
+                 metaDiariaIncentivoEl.style.color = 'var(--cor-sucesso)';
              } else {
                  metaDiariaIncentivoEl.style.display = 'block';
-                 metaDiariaIncentivoEl.textContent = `🚨 FALTAM ${formatarMoeda(metaTotal - recebido)} PARA BATER A META DIÁRIA.`;
+                 metaDiariaIncentivoEl.textContent = `🚨 FALTAM ${formatarMoeda(faltando)} PARA BATER A META DIÁRIA.`;
+                 metaDiariaIncentivoEl.style.color = 'var(--cor-alerta)';
              }
         }
         
@@ -963,7 +1002,7 @@
              `;
              dicasEl.innerHTML = html;
         }
-
+        
         // ===========================================
         // INICIALIZAÇÃO E EVENTOS
         // ===========================================
@@ -971,19 +1010,12 @@
         const initDashboard = () => {
             const transacoes = carregarTransacoes();
             const dividas = carregarDividas();
-            const fixas = carregarContasFixas();
+            
+            // CORREÇÃO V3.4: Lógica de reset das fixas centralizada e corrigida
+            const fixas = checkAndResetContasFixas(); 
+            
             const { totalDividasPendentes } = getTotais(transacoes, dividas);
             
-            // CORREÇÃO: Reseta contas fixas no primeiro dia do mês, se não pagas.
-            const hoje = getHojeString();
-            const primeiroDiaMes = getPrimeiroDiaDoMes();
-            const fixasPagas = fixas.every(f => f.pago);
-
-            if (hoje === primeiroDiaMes && fixasPagas) {
-                 // Reinicia as contas fixas
-                 salvarContasFixas(CONTAS_FIXAS_INITIAL);
-            }
-
             atualizarDashboard(transacoes, dividas, fixas);
             renderizarContasFixas(fixas); 
             renderizarTabelas(transacoes, dividas);
@@ -1001,7 +1033,7 @@
                 document.getElementById('login-screen').style.display = 'none';
                 document.getElementById('main-content').style.display = 'block';
                 localStorage.setItem('loggedIn', 'true');
-                startSessionTimer(); // Inicia o timer de sessão
+                startSessionTimer(); 
                 initDashboard();
             } else {
                 loginFeedback.textContent = 'ERRO: CHAVE DE SEGURANÇA INVÁLIDA.';
@@ -1010,24 +1042,16 @@
             }
         };
 
-        const fecharModal = (modalEl) => {
-            modalEl.style.display = 'none';
-        };
+        const fecharModal = (modalEl) => modalEl.style.display = 'none';
         
         const toggleSection = (container, button) => {
             const isOculta = container.style.display === 'none';
-            
-            if (isOculta) {
-                container.style.display = 'block';
-                button.classList.add('aberto');
-            } else {
-                container.style.display = 'none';
-                button.classList.remove('aberto');
-            }
+            container.style.display = isOculta ? 'block' : 'none';
+            button.classList.toggle('aberto', isOculta);
         };
 
         const adicionarReceita = () => {
-             const valor = parseFloat(valorInputReceita.value);
+             const valor = parseFloat(document.getElementById('valor-input-receita').value);
 
              if (isNaN(valor) || valor <= 0) {
                  alert("ERRO: Valor de aporte inválido. Insira um valor positivo.");
@@ -1046,11 +1070,12 @@
              salvarTransacoes(transacoes);
             
              initDashboard(); 
-             fecharModal(modalReceita); 
+             fecharModal(document.getElementById('modal-receita')); 
         };
         
         const iniciarQuitarDivida = (id) => {
              const dividas = carregarDividas();
+             // Otimização: ID já é Number, não precisa de parseInt
              const divida = dividas.find(d => d.id === id); 
              const transacoes = carregarTransacoes();
              const { totalReceitas } = getTotais(transacoes, dividas);
@@ -1060,7 +1085,6 @@
                  return;
              }
             
-             // CORREÇÃO: Lógica de ativação Pagar Dívida (Capital >= Dívida)
              const podeQuitar = (totalReceitas >= divida.valorAtual - 0.01);
             
              if (!podeQuitar) {
@@ -1072,17 +1096,17 @@
              document.getElementById('nome-credor').textContent = divida.credor;
              document.getElementById('saldo-quitacao').textContent = formatarMoeda(divida.valorAtual);
             
-             valorPagamentoInput.value = divida.valorAtual.toFixed(2);
-             valorPagamentoInput.focus();
+             document.getElementById('valor-pagamento').value = divida.valorAtual.toFixed(2);
+             document.getElementById('valor-pagamento').focus();
             
-             modalQuitacao.style.display = 'block';
+             document.getElementById('modal-quitacao').style.display = 'block';
         }
         
         const registrarPagamento = () => {
-             const valorPagamento = parseFloat(valorPagamentoInput.value);
+             const valorPagamento = parseFloat(document.getElementById('valor-pagamento').value);
              const dividas = carregarDividas();
              let divida = dividas.find(d => d.id === idDebtQuitting);
-             const transacoes = carregarTransacoes();
+             let transacoes = carregarTransacoes();
              const { totalReceitas } = getTotais(transacoes, dividas);
             
              if (isNaN(valorPagamento) || valorPagamento <= 0) {
@@ -1095,10 +1119,8 @@
                  return;
              }
             
-             let valorEfetivo = valorPagamento;
-             if (valorPagamento > divida.valorAtual + 0.01) {
-                 valorEfetivo = divida.valorAtual; 
-             } 
+             // O pagamento não pode ser maior que o saldo atual da dívida.
+             let valorEfetivo = Math.min(valorPagamento, divida.valorAtual);
             
              // Re-verificação da regra estrita no momento do pagamento (Capital >= Valor a Pagar)
              const podePagar = (totalReceitas >= valorEfetivo - 0.01);
@@ -1120,26 +1142,101 @@
 
              // 2. ATUALIZAÇÃO DA DÍVIDA
              divida.valorAtual = divida.valorAtual - valorEfetivo;
-            
+             divida.valorAtual = Math.max(0, divida.valorAtual); // Garante que não fique negativo
+
              if (divida.valorAtual < 0.01) {
-                 divida.valorAtual = 0;
-                 alert(`🎉 SUCESSO! Dívida com ${divida.credor} quitada! O valor de ${formatarMoeda(valorEfetivo)} foi deduzido do seu Capital Acumulado.`);
+                 alert(`🎉 SUCESSO! Dívida com ${divida.credor} quitada!`);
              } else {
-                  alert(`SUCESSO! Pagamento de ${formatarMoeda(valorEfetivo)} registrado e deduzido do Capital Acumulado.`);
+                  alert(`SUCESSO! Pagamento de ${formatarMoeda(valorEfetivo)} registrado e deduzido.`);
              }
             
              salvarDividas(dividas);
              initDashboard();
-             fecharModal(modalQuitacao);
+             fecharModal(document.getElementById('modal-quitacao'));
         }
         
+        // ===========================================
+        // EVENT LISTENERS GLOBAIS
+        // ===========================================
+        
+        // Listener para interação (reseta o timer da sessão)
+        document.addEventListener('mousemove', resetSessionTimer);
+        document.addEventListener('keypress', resetSessionTimer);
+        document.addEventListener('click', resetSessionTimer); 
+
+        // Login
         document.getElementById('btn-login').addEventListener('click', handleLogin);
         document.getElementById('password-input').addEventListener('keypress', (e) => {
-             if (e.key === 'Enter') {
-                 handleLogin();
+             if (e.key === 'Enter') handleLogin();
+        });
+        
+        // Cadastro Receita
+        document.getElementById('abrir-cadastro-receita').addEventListener('click', () => {
+             document.getElementById('valor-input-receita').value = '';
+             document.getElementById('modal-receita').style.display = 'block';
+             document.getElementById('valor-input-receita').focus();
+        });
+        document.getElementById('fechar-modal-receita').addEventListener('click', () => fecharModal(document.getElementById('modal-receita')));
+        document.getElementById('btn-cadastrar-receita').addEventListener('click', adicionarReceita); 
+        
+        // Quitação Dívida
+        document.getElementById('fechar-modal-quitacao').addEventListener('click', () => fecharModal(document.getElementById('modal-quitacao')));
+        document.getElementById('btn-quitar-divida').addEventListener('click', registrarPagamento);
+        
+        // Plano IA
+        document.getElementById('btn-gerar-plano').addEventListener('click', () => {
+             const fixas = carregarContasFixas();
+             const { totalDividasPendentes } = getTotais(carregarTransacoes(), carregarDividas());
+             gerarPlanoQuitacaoIA(false, totalDividasPendentes); 
+             renderizarMetaDiaria(carregarTransacoes(), totalDividasPendentes, fixas); 
+        });
+
+        // Toggle Event Listeners
+        document.getElementById('toggle-dividas').addEventListener('click', () => toggleSection(document.getElementById('lista-dividas-quitar-container'), document.getElementById('toggle-dividas')));
+        document.getElementById('toggle-receitas').addEventListener('click', () => toggleSection(document.getElementById('lista-receitas-container'), document.getElementById('toggle-receitas')));
+        document.getElementById('toggle-fixas').addEventListener('click', () => toggleSection(document.getElementById('lista-fixas-container'), document.getElementById('toggle-fixas')));
+
+        // Deleção, Quitação e Pagamento Fixas
+        document.addEventListener('click', (e) => {
+             // 1. Deletar Receita (Log)
+             if (e.target.closest('.btn-acao-tabela.deletar')) {
+                 if (!confirm("ALERTA: Confirme a exclusão do registro de receita. Esta ação é irreversível e o Capital Acumulado será ajustado.")) { return; }
+                 
+                 let transacoesSalvas = carregarTransacoes();
+                 const transacoesEntrada = transacoesSalvas.filter(t => parseFloat(t.valor) > 0).sort((a, b) => new Date(b.data) - new Date(a.data));
+                 const dataIndex = parseInt(e.target.closest('.btn-acao-tabela.deletar').getAttribute('data-index'));
+                 const transacaoParaDeletar = transacoesEntrada[dataIndex];
+                 
+                 // Otimização V3.4: Encontra o índice real no array completo para exclusão
+                 const originalIndex = transacoesSalvas.findIndex(t => 
+                     t.data === transacaoParaDeletar.data && 
+                     t.valor === transacaoParaDeletar.valor && 
+                     t.descricao === transacaoParaDeletar.descricao &&
+                     t.tipo === 'ENTRADA'
+                 );
+
+                 if (originalIndex !== -1) {
+                      transacoesSalvas.splice(originalIndex, 1);
+                      salvarTransacoes(transacoesSalvas);
+                 }
+                 initDashboard();
+             }
+            
+             // 2. Iniciar Pagar Dívida Única
+             if (e.target.closest('.btn-acao-tabela.quitar')) {
+                 // ID já é tratado como Number ao carregar, mas vem como string do data-id.
+                 const id = parseInt(e.target.closest('.btn-acao-tabela.quitar').getAttribute('data-id'));
+                 iniciarQuitarDivida(id);
+             }
+             
+             // 3. Pagar Conta Fixa Individual
+             if (e.target.closest('.btn-pagar-fixa:not([disabled])')) {
+                 const id = parseInt(e.target.closest('.btn-pagar-fixa').getAttribute('data-id'));
+                 pagarContaFixa(id);
              }
         });
         
+        // Inicialização ao carregar
         document.addEventListener('DOMContentLoaded', () => {
              if (localStorage.getItem('loggedIn') === 'true') {
                  document.getElementById('login-screen').style.display = 'none';
@@ -1151,67 +1248,6 @@
              }
         });
         
-        document.getElementById('abrir-cadastro-receita').addEventListener('click', () => {
-             valorInputReceita.value = '';
-             modalReceita.style.display = 'block';
-             valorInputReceita.focus();
-        });
-
-        document.getElementById('fechar-modal-receita').addEventListener('click', () => fecharModal(modalReceita));
-        btnCadastrarReceita.addEventListener('click', adicionarReceita); 
-        
-        document.getElementById('fechar-modal-quitacao').addEventListener('click', () => fecharModal(modalQuitacao));
-        btnQuitarDivida.addEventListener('click', registrarPagamento);
-        
-        document.getElementById('btn-gerar-plano').addEventListener('click', () => {
-             const fixas = carregarContasFixas();
-             const { totalDividasPendentes } = getTotais(carregarTransacoes(), carregarDividas());
-             gerarPlanoQuitacaoIA(false, totalDividasPendentes); 
-             renderizarMetaDiaria(carregarTransacoes(), totalDividasPendentes, fixas); 
-        });
-
-        // Toggle Event Listeners
-        toggleDividasBtn.addEventListener('click', () => toggleSection(listaDividasQuitarContainer, toggleDividasBtn));
-        toggleReceitasBtn.addEventListener('click', () => toggleSection(listaReceitasContainer, toggleReceitasBtn));
-        toggleFixasBtn.addEventListener('click', () => toggleSection(listaFixasContainer, toggleFixasBtn));
-
-        // Eventos de Deleção e Quitação (Contas Fixas e Dívidas)
-        document.addEventListener('click', (e) => {
-             // Deletar Receita (Log)
-             if (e.target.closest('.btn-acao-tabela.deletar')) {
-                 // ... (Lógica de deletar receita mantida da V3.2)
-                 if (!confirm("ALERTA: Confirme a exclusão do registro de receita. Esta ação é irreversível.")) { return; }
-                 
-                 let transacoesSalvas = carregarTransacoes();
-                 const transacoesEntrada = transacoesSalvas.filter(t => parseFloat(t.valor) > 0).sort((a, b) => new Date(b.data) - new Date(a.data));
-                 const index = e.target.closest('.btn-acao-tabela.deletar').getAttribute('data-index');
-                 const transacaoParaDeletar = transacoesEntrada[parseInt(index)];
-                 
-                 const originalIndex = transacoesSalvas.findIndex(t => 
-                     t.data === transacaoParaDeletar.data && 
-                     t.valor === transacaoParaDeletar.valor && 
-                     t.descricao === transacaoParaDeletar.descricao 
-                 );
-
-                 if (originalIndex !== -1) {
-                      transacoesSalvas.splice(originalIndex, 1);
-                      salvarTransacoes(transacoesSalvas);
-                 }
-                 initDashboard();
-             }
-            
-             // Iniciar Pagar Dívida Única
-             if (e.target.closest('.btn-acao-tabela.quitar')) {
-                 const id = parseInt(e.target.closest('.btn-acao-tabela.quitar').getAttribute('data-id'));
-                 iniciarQuitarDivida(id);
-             }
-             
-             // Pagar Conta Fixa Individual
-             if (e.target.closest('.btn-pagar-fixa:not([disabled])')) {
-                 const id = parseInt(e.target.closest('.btn-pagar-fixa').getAttribute('data-id'));
-                 pagarContaFixa(id);
-             }
-        });
 
     </script>
 </body>
