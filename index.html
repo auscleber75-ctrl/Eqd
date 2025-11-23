@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PROJECT TITAN | CORE FINANCIAL [V3.0]</title>
+    <title>PROJECT TITAN | CORE FINANCIAL [V3.1]</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -63,7 +63,7 @@
         }
         
         /* =================================== */
-        /* 2. BANNER DINÂMICO (NOVO)           */
+        /* 2. BANNER DINÂMICO                  */
         /* =================================== */
 
         .dynamic-banner {
@@ -164,10 +164,8 @@
             transform: none !important;
             border-left: 5px solid var(--cor-divida);
         }
-
-        /* Manter o restante do CSS da V2.0 */
-        /* ... (O restante do CSS da V2.0 deve ser mantido aqui) ... */
         
+        /* Estilos base (Mantidos) */
         h2 {
             font-family: var(--fonte-titulo);
             font-weight: 600;
@@ -823,7 +821,7 @@
     
     <div id="login-screen">
         <div class="login-box">
-            <h2><i class="fas fa-fingerprint"></i> PROTOCOLO DE ACESSO (V3.0)</h2>
+            <h2><i class="fas fa-fingerprint"></i> PROTOCOLO DE ACESSO (V3.1)</h2>
             <p style="color: var(--cor-texto-secundario); margin-bottom: 25px;">Acesso restrito ao Painel de Gestão Estratégica.</p>
             <label for="password-input">CHAVE DE SEGURANÇA (Senha)</label>
             <input type="password" id="password-input" placeholder="01" required>
@@ -923,7 +921,10 @@
 
             
             <div id="contas-fixas-card" class="contas-fixas-container">
-                 <h3><i class="fas fa-calculator"></i> COMPONENTES FIXOS (Soma: R$ <span id="soma-fixas" class="valor-divida" style="font-family: var(--fonte-dados); font-size: 1em;">0,00</span>)</h3>
+                 <h3><i class="fas fa-calculator"></i> COMPONENTES FIXOS (Meta: R$ <span id="soma-fixas" class="valor-divida" style="font-family: var(--fonte-dados); font-size: 1em;">0,00</span>)</h3>
+                 <p style="color: var(--cor-alerta); font-weight: bold; margin-bottom: 20px;">
+                    <i class="fas fa-exclamation-triangle"></i> NOTA: O botão "PAGAR" só será ativado quando o Capital for **MAIOR** que o valor de Meta Fixa.
+                 </p>
                  <ul id="lista-contas-fixas">
                      </ul>
             </div>
@@ -1022,19 +1023,19 @@
     
     <script>
         // ===========================================
-        // JAVASCRIPT: LÓGICA DE NEGÓCIO E CONEXÃO V3.0
+        // JAVASCRIPT: LÓGICA DE NEGÓCIO E CONEXÃO V3.1
         // ===========================================
 
         const DADOS_CONTAS_FIXAS = [
-            { nome: "Aluguel", valor: 850.00 },
             { nome: "Carro", valor: 1800.00 },
+            { nome: "Aluguel", valor: 850.00 },
+            { nome: "Academia", valor: 300.00 },
             { nome: "Luz", valor: 250.00 },
             { nome: "Internet Movel", valor: 120.00 },
-            { nome: "Wifi", valor: 100.00 },
-            { nome: "Academia", valor: 300.00 } 
-        ];
+            { nome: "Wifi", valor: 100.00 }
+        ].sort((a, b) => b.valor - a.valor); // **NOVO: ORDENAÇÃO POR VALOR DECRESCENTE**
         
-        const SOMA_CONTAS_FIXAS = DADOS_CONTAS_FIXAS.reduce((sum, item) => sum + item.valor, 0); 
+        const SOMA_CONTAS_FIXAS = DADOS_CONTAS_FIXAS.reduce((sum, item) => sum + item.valor, 0); // Total: 3420.00
         const DIAS_UTEIS_MES = 22; 
         const META_DIARIA_FIXAS = SOMA_CONTAS_FIXAS / DIAS_UTEIS_MES; 
 
@@ -1076,7 +1077,7 @@
         const feedbackFixasQuitadasEl = document.getElementById('feedback-fixas-quitadas');
         const listaContasFixasEl = document.getElementById('lista-contas-fixas');
         const somaFixasEl = document.getElementById('soma-fixas');
-        const totalLancadoEl = document.getElementById('total-lancado'); // Adicionado
+        const totalLancadoEl = document.getElementById('total-lancado');
         
         // Modais (MANTIDOS)
         const modalReceita = document.getElementById('modal-receita');
@@ -1108,8 +1109,7 @@
              setInterval(() => {
                  bannerEl.textContent = BANNER_MESSAGES[index];
                  index = (index + 1) % BANNER_MESSAGES.length;
-             }, 5000); // Troca a cada 5 segundos
-             // Inicializa
+             }, 5000); 
              bannerEl.textContent = BANNER_MESSAGES[0];
         }
 
@@ -1228,7 +1228,6 @@
             return { totalReceitas, totalDividasIniciais, totalDividasPendentes, progressoCapital, saldoPendenteTotal };
         }
         
-        // ... (Função verificarEstadoContasFixas mantida, mas omitida por concisão) ...
         const verificarEstadoContasFixas = (totalReceitas) => {
              const hoje = getHojeString();
              const primeiroDiaMes = getPrimeiroDiaDoMes();
@@ -1285,7 +1284,8 @@
                         <td>${descricaoHTML}</td>
                         <td class="valor-caixa">${formatarMoeda(t.valor)}</td>
                         <td>${formatarData(t.data)}</td>
-                        <td></td> <td><button class="btn-acao-tabela deletar" data-index="${index}"><i class="fas fa-trash"></i> EXCLUIR</button></td>
+                        <td></td> 
+                        <td><button class="btn-acao-tabela deletar" data-index="${index}"><i class="fas fa-trash"></i> EXCLUIR</button></td>
                     `;
                 });
             }
@@ -1298,12 +1298,13 @@
                  listaDividasBody.innerHTML = '<tr><td colspan="4" style="text-align: center; color: var(--cor-sucesso); font-weight: bold;">🎉 PROTOCOL COMPLETE: Todas as dívidas únicas foram quitadas!</td></tr>';
             } else {
                 dividasAtivas.forEach((d) => {
-                    // **NOVA REGRA:** O botão Quitar só aparece se o Capital Acumulado for >= Saldo da Dívida
-                    const podeQuitar = totalReceitas >= d.valorAtual - 0.01;
+                    // **NOVA REGRA CRÍTICA:** // 1. Capital deve ser MAIOR que a Soma Total de Contas Fixas (R$ 3420.00)
+                    // 2. Capital deve ser MAIOR OU IGUAL ao valor da Dívida específica.
+                    const podeQuitar = (totalReceitas > SOMA_CONTAS_FIXAS) && (totalReceitas >= d.valorAtual);
                     
                     const botaoHTML = podeQuitar 
                         ? `<button class="btn-acao-tabela quitar" data-id="${d.id}"><i class="fas fa-hand-holding-usd"></i> PAGAR</button>`
-                        : `<button class="btn-acao-tabela btn-inativo-capital" disabled title="Capital insuficiente para esta quitação.">${formatarMoeda(d.valorAtual)} PENDENTE</button>`;
+                        : `<button class="btn-acao-tabela btn-inativo-capital" disabled title="Requisitos não atendidos. Capital (R${formatarMoeda(totalReceitas)}) vs. Meta Fixa (R${formatarMoeda(SOMA_CONTAS_FIXAS)}) e Dívida (R${formatarMoeda(d.valorAtual)}).">${formatarMoeda(d.valorAtual)} PENDENTE</button>`;
 
                     const row = listaDividasBody.insertRow();
                     row.innerHTML = `
@@ -1315,7 +1316,6 @@
                 });
             }
             
-            // Atualiza os Totais novamente após a renderização
             atualizarDashboard(transacoes, dividas); 
         };
 
@@ -1325,7 +1325,6 @@
             dataAtualEl.textContent = new Date().toLocaleDateString('pt-BR');
             somaFixasEl.textContent = formatarMoeda(SOMA_CONTAS_FIXAS).replace('R$', '').trim(); 
 
-            // **IMPORTANTE:** Atualiza o elemento de Capital Acumulado
             totalLancadoEl.textContent = formatarMoeda(totalReceitas); 
             
             saldoPendenteTotalEl.textContent = formatarMoeda(saldoPendenteTotal);
@@ -1351,7 +1350,7 @@
             const novaTransacao = {
                 tipo: 'CAIXA',
                 valor: valor.toFixed(2), 
-                descricao: 'SALDO ADICIONADO COM SUCESSO', // Nova descrição
+                descricao: 'SALDO ADICIONADO COM SUCESSO', 
                 data: getHojeString()
             };
 
@@ -1363,7 +1362,6 @@
             fecharModal(modalReceita);
         };
         
-        // **NOVA LÓGICA:** Iniciar Quitar (Direto no modal)
         const iniciarQuitarDivida = (id) => {
             const dividas = carregarDividas();
             const divida = dividas.find(d => d.id === id); 
@@ -1375,9 +1373,11 @@
                 return;
             }
             
-            // Verifica se o Capital Acumulado é suficiente ANTES de abrir o modal
-            if (totalReceitas < divida.valorAtual - 0.01) {
-                alert("ERRO DE PROTOCOLO: O Capital Acumulado não cobre o valor total desta dívida. O botão PAGAR está desativado.");
+            // **Verificação Dupla da Regra de Negócio**
+            const podeQuitar = (totalReceitas > SOMA_CONTAS_FIXAS) && (totalReceitas >= divida.valorAtual);
+            
+            if (!podeQuitar) {
+                alert("ERRO DE PROTOCOLO: O botão PAGAR está desativado. Requisitos: Capital Acumulado deve ser MAIOR que a Soma Fixa E MAIOR OU IGUAL ao Saldo da Dívida.");
                 return;
             }
             
@@ -1385,14 +1385,12 @@
             document.getElementById('nome-credor').textContent = divida.credor;
             document.getElementById('saldo-quitacao').textContent = formatarMoeda(divida.valorAtual);
             
-            // Sugere o valor total, mas dedução será total da dívida
             valorPagamentoInput.value = divida.valorAtual.toFixed(2);
             valorPagamentoInput.focus();
             
             modalQuitacao.style.display = 'block';
         }
         
-        // **NOVA LÓGICA:** Registrar Pagamento (Dedução do Capital Acumulado)
         const registrarPagamento = () => {
             const valorPagamento = parseFloat(valorPagamentoInput.value);
             const dividas = carregarDividas();
@@ -1412,16 +1410,18 @@
             
             let valorEfetivo = valorPagamento;
             if (valorPagamento > divida.valorAtual + 0.01) {
-                valorEfetivo = divida.valorAtual; // Paga no máximo o que deve
+                valorEfetivo = divida.valorAtual; 
             } 
             
-            // **NOVA REGRA CRÍTICA:** Verifica se o Capital Acumulado cobre o pagamento efetivo
-            if (totalReceitas < valorEfetivo - 0.01) {
-                 alert("ERRO CRÍTICO: O Capital Acumulado não é suficiente para realizar este pagamento. Corrija o valor ou injete mais capital.");
+            // Re-verificação da regra estrita no momento do pagamento
+            const podeQuitar = (totalReceitas > SOMA_CONTAS_FIXAS) && (totalReceitas >= valorEfetivo);
+
+            if (!podeQuitar) {
+                 alert("ERRO CRÍTICO: O Capital Acumulado não cumpre a regra de Meta Fixa. Transação abortada.");
                  return;
             }
             
-            // 1. DEDUÇÃO DO SALDO ACUMULADO (Simulado como um Lançamento de saída negativo)
+            // 1. DEDUÇÃO DO SALDO ACUMULADO 
             const novaTransacaoSaida = {
                 tipo: 'SAIDA',
                 valor: (-valorEfetivo).toFixed(2), 
@@ -1446,7 +1446,6 @@
             fecharModal(modalQuitacao);
         }
 
-        // ... (Deletar Receita e outras funções mantidas, omitidas por concisão) ...
         const deletarReceita = (index) => {
              if (!confirm("ALERTA: Confirme a exclusão do registro de receita. Esta ação é irreversível.")) {
                 return;
@@ -1464,9 +1463,10 @@
             
             let html = `
                 <li>TARGET DIÁRIO (FIXAS / 22 dias): <span class="diaria-fixa-destaque">${formatarMoeda(META_DIARIA_FIXAS)}</span></li>
-                <li>TOTAL GERAL FIXAS MÊS: <span style="color: var(--cor-sucesso);">${formatarMoeda(SOMA_CONTAS_FIXAS)}</span></li>
+                <li>TOTAL GERAL FIXAS MÊS (META): <span style="color: var(--cor-meta-diaria);">${formatarMoeda(SOMA_CONTAS_FIXAS)}</span></li>
             `;
             
+            // DADOS_CONTAS_FIXAS já está ordenado do maior para o menor (V3.1)
             DADOS_CONTAS_FIXAS.forEach(conta => {
                  html += `<li>${conta.nome}: <span>${formatarMoeda(conta.valor)}</span></li>`;
             });
@@ -1502,6 +1502,24 @@
             });
             
             listaDiasRastreio.innerHTML = html;
+        }
+        
+        const renderizarMetaDiaria = (transacoes, totalDividasPendentes) => {
+             const hoje = getHojeString();
+             const { metaTotal, atingido, recebido } = getMetaDiariaAtingida(transacoes, totalDividasPendentes, hoje);
+             
+             metaDiariaTotalEl.textContent = formatarMoeda(metaTotal);
+             metaDiariaCard.classList.remove('meta-diaria-concluida');
+             metaDiariaIncentivoEl.style.display = 'none';
+
+             if (atingido) {
+                 metaDiariaCard.classList.add('meta-diaria-concluida');
+                 metaDiariaIncentivoEl.style.display = 'block';
+                 metaDiariaIncentivoEl.textContent = `🎯 META DIÁRIA BATIDA! Capital Extra: ${formatarMoeda(recebido - metaTotal)}`;
+             } else {
+                 metaDiariaIncentivoEl.style.display = 'block';
+                 metaDiariaIncentivoEl.textContent = `🚨 FALTAM ${formatarMoeda(metaTotal - recebido)} PARA BATER A META DIÁRIA.`;
+             }
         }
         
         const renderizarDicasQuitacao = (dividas) => {
@@ -1564,7 +1582,7 @@
                 document.getElementById('main-content').style.display = 'block';
                 localStorage.setItem('loggedIn', 'true');
                 initDashboard();
-                updateBanner(); // Inicia o banner dinâmico
+                updateBanner(); 
             } else {
                 loginFeedback.textContent = 'ERRO: CHAVE DE SEGURANÇA INVÁLIDA.';
                 document.getElementById('password-input').value = '';
@@ -1601,13 +1619,12 @@
                  document.getElementById('login-screen').style.display = 'none';
                  document.getElementById('main-content').style.display = 'block';
                  initDashboard();
-                 updateBanner(); // Inicia o banner dinâmico
+                 updateBanner(); 
              } else {
                  document.getElementById('login-screen').style.display = 'flex';
              }
         });
         
-        // Listener para abrir o modal de Rastreio de Metas (substitui o de data)
         document.getElementById('btn-data-atual').addEventListener('click', () => {
              const transacoes = carregarTransacoes();
              const dividas = carregarDividas();
@@ -1617,7 +1634,6 @@
              modalRastreioMetas.style.display = 'block';
         });
 
-        // Listeners Modais (Mantidos)
         document.getElementById('abrir-cadastro-receita').addEventListener('click', () => {
             valorInputReceita.value = '';
             modalReceita.style.display = 'block';
@@ -1640,17 +1656,14 @@
         toggleDividasBtn.addEventListener('click', () => toggleSection(listaDividasQuitarContainer, toggleDividasBtn));
         toggleReceitasBtn.addEventListener('click', () => toggleSection(listaReceitasContainer, toggleReceitasBtn));
         
-        // Listener para Quitar/Deletar na Tabela
         document.addEventListener('click', (e) => {
             if (e.target.closest('.btn-acao-tabela.deletar')) {
                 const button = e.target.closest('.btn-acao-tabela.deletar');
                 const index = button.getAttribute('data-index');
                 
-                // Precisa recalcular o índice real pois as transações são ordenadas
                 const transacoes = carregarTransacoes().sort((a, b) => new Date(b.data) - new Date(a.data));
                 const transacaoParaDeletar = transacoes[parseInt(index)];
                 
-                // Encontra o índice no array não ordenado (o original salvo no storage)
                 const transacoesSalvas = JSON.parse(localStorage.getItem('transacoes') || '[]');
                 const originalIndex = transacoesSalvas.findIndex(t => t.data === transacaoParaDeletar.data && t.valor === transacaoParaDeletar.valor);
 
