@@ -1294,7 +1294,7 @@
             calcularRelatorioDiario(totais);
         };
         
-        // AJUSTADO: Função que verifica o estado das fixas e controla a visibilidade das Dívidas
+        // ALTERADO: Função que verifica o estado das fixas e controla a visibilidade das Dívidas e IA
         const verificarEstadoContasFixas = (fixas, dividas) => {
             const todasPagas = fixas.every(f => f.pago);
             const feedbackEl = document.getElementById('feedback-fixas-quitadas');
@@ -1665,7 +1665,7 @@
             document.getElementById('close-sidebar').addEventListener('click', closeNav);
             document.getElementById('btn-logout-only').addEventListener('click', logoutOnly);
             
-            // REMOVIDO: O listener para #btn-reset-data foi excluído.
+            // REMOVIDO: O listener para #btn-reset-data foi excluído (Instrução 3).
             
             document.getElementById('btn-add-receita').addEventListener('click', () => {
                  const desc = document.getElementById('transaction-description').value;
@@ -1739,7 +1739,7 @@
                 document.getElementById('modal-perfil').style.display = 'none';
             });
             
-            // NOVO: Listener para o botão de Excluir Conta realocado para dentro do Modal de Perfil
+            // NOVO: Listener para o botão de Excluir Conta realocado para dentro do Modal de Perfil (Instrução 3)
             document.getElementById('btn-excluir-conta-perfil').addEventListener('click', excluirConta);
         });
     </script>
