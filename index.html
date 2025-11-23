@@ -3,12 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Protocolo Financeiro | Painel de Gestão Estratégica [V2.0]</title>
+    <title>PROJECT TITAN | CORE FINANCIAL [V3.0]</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     
-
     <style>
         /* =================================== */
         /* 1. VARIÁVEIS CSS E BASE (FUTURE NOIR)*/
@@ -16,22 +15,22 @@
         :root {
             /* Fundo Escuro Classudo */
             --cor-fundo-principal: #0E1117; 
-            --cor-fundo-card: rgba(20, 25, 33, 0.7); /* Transparente/Glass */
-            --cor-borda: #2C3540; /* Separadores/Bordas escuras */
-            --cor-texto-principal: #F0F6FC; /* Texto Claro */
-            --cor-texto-secundario: #8B949E; /* Rótulos/Secundário */
+            --cor-fundo-card: rgba(20, 25, 33, 0.7); 
+            --cor-borda: #2C3540; 
+            --cor-texto-principal: #F0F6FC; 
+            --cor-texto-secundario: #8B949E; 
             
             /* Cores de Destaque Futuristas */
-            --cor-sucesso: #10B981; /* Verde Esmeralda */
+            --cor-sucesso: #10B981; /* Verde Esmeralda (Sucesso/Confirmação) */
             --cor-divida: #EF4444; /* Vermelho Alerta */
-            --cor-primario: #00BCD4; /* Azul Ciano Vibrante */
+            --cor-primario: #00BCD4; /* Azul Ciano Vibrante (Ação/Destaque) */
             --cor-meta-diaria: #9B59B6; /* Roxo Profundo */
             --cor-alerta: #F59E0B; /* Amarelo */
 
             /* Tipografia */
             --fonte-titulo: 'Inter', sans-serif;
             --fonte-corpo: 'Inter', sans-serif;
-            --fonte-dados: 'Space Mono', monospace; /* Para números e valores */
+            --fonte-dados: 'Space Mono', monospace; 
             
             /* Efeitos */
             --sombra-card: 0 4px 20px rgba(0, 0, 0, 0.5), inset 0 0 0 1px var(--cor-borda);
@@ -53,28 +52,122 @@
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-            /* Efeito de Vidro/Fosco no Fundo */
             background-image: radial-gradient(circle at 50% 50%, rgba(0, 188, 212, 0.1), transparent 80%);
         }
 
         .container {
-            max-width: 1300px; /* Maior Largura */
+            max-width: 1300px; 
             margin: 40px auto;
             padding: 0 25px;
             width: 100%;
         }
         
-        h1 {
-            font-family: var(--fonte-titulo);
+        /* =================================== */
+        /* 2. BANNER DINÂMICO (NOVO)           */
+        /* =================================== */
+
+        .dynamic-banner {
+            width: 100%;
+            background-color: #1A212E;
             color: var(--cor-primario);
+            padding: 20px 0;
             text-align: center;
-            margin-bottom: 25px;
-            font-weight: 700;
-            font-size: 2.8em;
-            letter-spacing: 1px;
-            text-shadow: 0 0 10px rgba(0, 188, 212, 0.4);
+            overflow: hidden;
+            border-bottom: 2px solid var(--cor-primario);
+            box-shadow: 0 5px 20px rgba(0, 188, 212, 0.2);
+            position: relative;
         }
 
+        /* Efeito HUD Scanline */
+        .dynamic-banner::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(0, 188, 212, 0.1),
+                rgba(0, 188, 212, 0.05) 1px,
+                transparent 2px,
+                transparent 4px
+            );
+            animation: scanline 10s linear infinite;
+        }
+        @keyframes scanline {
+            0% { background-position: 0 0; }
+            100% { background-position: 0 200px; }
+        }
+        
+        .banner-text {
+            font-family: var(--fonte-dados);
+            font-size: 1.5em;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            text-shadow: 0 0 10px rgba(0, 188, 212, 0.8);
+            position: relative; /* Para ficar acima do ::before */
+            z-index: 10;
+        }
+
+        /* Título Principal */
+        h1 {
+            font-family: var(--fonte-titulo);
+            color: var(--cor-texto-principal);
+            text-align: center;
+            margin-top: 30px;
+            margin-bottom: 30px;
+            font-weight: 800;
+            font-size: 3.5em;
+            letter-spacing: 2px;
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+            border-bottom: 3px solid var(--cor-borda);
+            padding-bottom: 15px;
+        }
+
+        /* =================================== */
+        /* 3. AJUSTES NO LOG (TABELA)          */
+        /* =================================== */
+
+        .tabela-transacoes th:nth-child(4), /* Coluna Status */
+        .tabela-transacoes td:nth-child(4) {
+            display: none; /* Oculta a coluna Status/Meta Batida */
+        }
+        
+        .sucesso-adicionado {
+            color: var(--cor-sucesso) !important;
+            font-weight: 700;
+            font-family: var(--fonte-titulo);
+            /* Proporções mantidas no tamanho da fonte padrão */
+        }
+        
+        /* Ajuste do botão Deletar na Tabela */
+        .btn-acao-tabela.deletar {
+            background-color: var(--cor-divida); /* Vermelho */
+            color: var(--cor-texto-principal);
+            font-weight: 700;
+        }
+        .btn-acao-tabela.deletar:hover {
+            background-color: #C53030;
+            box-shadow: 0 0 10px var(--cor-divida);
+        }
+
+        /* =================================== */
+        /* 4. REGRAS DE VISIBILIDADE (JS Controlado)*/
+        /* =================================== */
+        .btn-inativo-capital {
+            cursor: not-allowed !important;
+            opacity: 0.5;
+            background-color: var(--cor-borda) !important;
+            box-shadow: none !important;
+            transform: none !important;
+            border-left: 5px solid var(--cor-divida);
+        }
+
+        /* Manter o restante do CSS da V2.0 */
+        /* ... (O restante do CSS da V2.0 deve ser mantido aqui) ... */
+        
         h2 {
             font-family: var(--fonte-titulo);
             font-weight: 600;
@@ -83,7 +176,6 @@
             font-size: 1.8em;
         }
         
-        /* Box de Mensagem Profissional (Minimalista) */
         .motivacao-box {
             background-color: var(--cor-fundo-card);
             color: var(--cor-texto-secundario);
@@ -94,14 +186,13 @@
             font-size: 1em;
             border: 1px solid var(--cor-borda);
             box-shadow: var(--sombra-card);
-            backdrop-filter: blur(5px); /* Efeito Glass */
+            backdrop-filter: blur(5px); 
         }
         .motivacao-box i {
              color: var(--cor-primario);
              margin-right: 10px;
         }
         
-        /* LOCALIZADOR DE DATA (Centralizado e HUD) */
         #data-atual-info {
             display: flex;
             justify-content: center; 
@@ -125,9 +216,6 @@
             box-shadow: 0 0 15px rgba(0, 188, 212, 0.6);
         }
 
-        /* =================================== */
-        /* 2. CARD META DIÁRIA TOTAL (GRADIENTE)*/
-        /* =================================== */
         .meta-diaria-total {
             background: linear-gradient(135deg, #1A212E, var(--cor-meta-diaria));
             color: white;
@@ -144,7 +232,6 @@
             box-shadow: 0 15px 40px rgba(155, 89, 182, 0.7);
         }
         
-        /* Estilo para Meta Diária Concluída (Esmeralda) */
         .meta-diaria-concluida {
             background: linear-gradient(135deg, #0D3E35, var(--cor-sucesso));
             box-shadow: 0 10px 30px rgba(16, 185, 129, 0.5);
@@ -179,10 +266,6 @@
             font-family: var(--fonte-titulo);
         }
 
-
-        /* =================================== */
-        /* 3. DASHBOARD HEADER (CARDS)         */
-        /* =================================== */
 
         .dashboard-header {
             display: grid;
@@ -239,7 +322,6 @@
             color: var(--cor-divida);
         }
         
-        /* Progress Area */
         .progress-area p {
             font-size: 1em;
             margin-bottom: 8px;
@@ -262,10 +344,6 @@
             box-shadow: 0 0 10px var(--cor-sucesso);
         }
         
-        /* =================================== */
-        /* 4. BOTÕES E SEÇÕES GERAIS           */
-        /* =================================== */
-
         .section-header {
             display: flex;
             justify-content: space-between;
@@ -292,13 +370,12 @@
         }
 
         .btn-principal:hover {
-            background: #1DE9B6; /* Verde Neon */
+            background: #1DE9B6; 
             color: var(--cor-fundo-principal);
             box-shadow: 0 8px 20px rgba(29, 233, 182, 0.6);
             transform: translateY(-2px);
         }
 
-        /* Estilos de Tabela Otimizados (High Contrast) */
         .tabela-transacoes {
             width: 100%;
             border-collapse: collapse; 
@@ -319,7 +396,7 @@
             text-transform: uppercase;
             letter-spacing: 2px;
             font-family: var(--fonte-titulo);
-            background-color: #1A212E; /* Linha de cabeçalho sutil */
+            background-color: #1A212E; 
         }
 
         .tabela-transacoes tbody tr:hover {
@@ -345,21 +422,11 @@
             box-shadow: 0 0 10px var(--cor-sucesso);
         }
 
-        .btn-acao-tabela.deletar {
-            background-color: var(--cor-borda);
-            color: var(--cor-texto-principal);
-        }
-        .btn-acao-tabela.deletar:hover {
-            background-color: #4B5563;
-            color: white;
-        }
-
         .saldo-divida {
             font-weight: bold;
             color: var(--cor-divida);
         }
         
-        /* SEÇÃO OCULTÁVEL (Geral) - Glass */
         .toggle-section {
             border: 1px solid var(--cor-borda);
             border-radius: 12px;
@@ -403,12 +470,10 @@
             color: var(--cor-primario);
         }
 
-        /* Conteúdo Ocultável */
         .lista-container-ocultavel {
             padding: 25px;
         }
         
-        /* 5. Contas Fixas e Plano IA */
         .contas-fixas-container, .plano-quitacao {
              background-color: var(--cor-fundo-card);
              padding: 35px;
@@ -419,7 +484,6 @@
              backdrop-filter: blur(5px);
         }
         
-        /* FEEDBACK DE QUITAÇÃO DAS FIXAS (Dourado/Gold) */
         #feedback-fixas-quitadas {
              background: linear-gradient(90deg, #FFD700, #DAA520);
              text-align: center;
@@ -478,7 +542,6 @@
             border-radius: 4px;
         }
         
-        /* Estilos de inputs (High-Tech) */
         input[type="number"], input[type="text"], input[type="date"], input[type="password"] {
             width: 100%;
             padding: 14px;
@@ -498,7 +561,6 @@
             background-color: #1A212E;
         }
         
-        /* Plano IA Layout */
         #plano-ia-controls {
              display: flex; 
              align-items: center; 
@@ -534,7 +596,6 @@
              padding: 8px 0;
         }
         
-        /* Dicas de Quitação (Alerta Vermelho Fosco) */
         #dicas-quitacao {
              background-color: rgba(239, 68, 68, 0.1);
              padding: 25px;
@@ -567,42 +628,9 @@
              border-radius: 4px;
         }
         
-        /* Estilização para o filtro de receitas (HUD) */
         #filtro-receitas-batidas {
-             display: flex;
-             align-items: center;
-             gap: 15px;
-             margin-bottom: 25px;
-             padding: 15px;
-             border: 1px solid var(--cor-borda);
-             border-radius: 8px;
-             background-color: #1A212E;
+             display: none; /* Oculta a área de filtro de meta batida */
         }
-        #filtro-receitas-batidas button {
-             padding: 10px 18px;
-             background-color: var(--cor-primario);
-             color: var(--cor-fundo-principal);
-             border: none;
-             border-radius: 6px;
-             cursor: pointer;
-             font-weight: 600;
-             transition: all 0.2s;
-             box-shadow: 0 2px 5px rgba(0, 188, 212, 0.4);
-        }
-        #filtro-receitas-batidas button:hover {
-             background-color: #1DE9B6; 
-        }
-
-        /* Botão Filtro Ativo */
-        #filtro-receitas-batidas button.ativo {
-             background-color: var(--cor-sucesso);
-             color: var(--cor-fundo-principal);
-             box-shadow: 0 0 10px var(--cor-sucesso);
-        }
-        
-        /* =================================== */
-        /* 6. MODAIS (High Contrast)           */
-        /* =================================== */
 
         .modal {
             display: none; 
@@ -614,7 +642,7 @@
             height: 100%;
             overflow: auto;
             background-color: rgba(0,0,0,0.8); 
-            backdrop-filter: blur(10px); /* Blur Acentuado */
+            backdrop-filter: blur(10px); 
         }
 
         .modal-content {
@@ -684,7 +712,6 @@
             transform: translateY(-2px);
         }
         
-        /* Modal de Rastreio de Metas */
         #modal-rastreio-metas .modal-content {
             border-top: 5px solid var(--cor-meta-diaria);
         }
@@ -714,11 +741,7 @@
              font-weight: 700;
         }
         
-        /* =================================== */
-        /* 7. TELA DE LOGIN (High Tech)        */
-        /* =================================== */
         #login-screen {
-            /* ... (Manter o estilo anterior, mas com o novo tema) */
             display: flex;
             align-items: center;
             justify-content: center;
@@ -753,9 +776,6 @@
             text-shadow: 0 0 8px rgba(0, 188, 212, 0.6);
         }
         
-        /* ... (Resto do CSS de Login mantido, usando as novas variáveis) ... */
-
-        /* 8. RESPONSIVIDADE (Ajustes para o novo layout) */
         @media (max-width: 768px) {
             .container {
                 margin: 20px auto;
@@ -803,7 +823,7 @@
     
     <div id="login-screen">
         <div class="login-box">
-            <h2><i class="fas fa-fingerprint"></i> PROTOCOLO DE ACESSO (V2.0)</h2>
+            <h2><i class="fas fa-fingerprint"></i> PROTOCOLO DE ACESSO (V3.0)</h2>
             <p style="color: var(--cor-texto-secundario); margin-bottom: 25px;">Acesso restrito ao Painel de Gestão Estratégica.</p>
             <label for="password-input">CHAVE DE SEGURANÇA (Senha)</label>
             <input type="password" id="password-input" placeholder="01" required>
@@ -814,11 +834,17 @@
     
     <div id="main-content" style="display: none;">
         
-        <h1><i class="fas fa-cubes"></i> FINANCE PROTOCOL MANAGER</h1>
+        <div class="dynamic-banner">
+            <div class="banner-text" id="banner-text">
+                ⚡ PROJEÇÃO MÁXIMA | CORE FINANCIAL ⚡
+            </div>
+        </div>
+        
+        <h1><i class="fas fa-rocket"></i> PROJECT TITAN | CORE FINANCIAL</h1>
 
         <div class="container" id="data-atual-info">
             <button id="btn-data-atual">
-                <i class="fas fa-calendar-day"></i> DATA/SISTEMA: <span id="data-atual"></span>
+                <i class="fas fa-calendar-day"></i> RASTREIO DE METAS: <span id="data-atual"></span>
             </button>
         </div>
 
@@ -867,19 +893,13 @@
             
             <div id="historico-receitas-container" class="toggle-section">
                 <div class="section-toggle receitas" id="toggle-receitas">
-                    <h2><i class="fas fa-clipboard-list"></i> LOG: RECEITAS E RASTREIO DE METAS</h2>
+                    <h2><i class="fas fa-clipboard-list"></i> LOG: REGISTROS DE LANÇAMENTO (CAPITAL)</h2>
                     <i class="fas fa-chevron-down"></i>
                 </div>
                 
                 <div id="lista-receitas-container" class="lista-container-ocultavel" style="display: none;">
                     
-                    <div id="filtro-receitas-batidas">
-                         <p style="color: var(--cor-meta-diaria); font-weight: 600; font-family: var(--fonte-titulo); letter-spacing: 1px;">
-                             <i class="fas fa-filter"></i> Rastrear Meta Diária:
-                         </p>
-                         <button id="btn-filtro-tudo" class="ativo">TODOS OS REGISTROS</button>
-                         <button id="btn-filtro-batido">SOMENTE METAS BATIDAS</button>
-                    </div>
+                    <div id="filtro-receitas-batidas" style="display: none;"></div> 
                     
                     <table class="tabela-transacoes">
                         <thead>
@@ -887,8 +907,7 @@
                                 <th>DESCRIÇÃO</th>
                                 <th>VALOR (R$)</th>
                                 <th>DATA</th>
-                                <th>STATUS</th> 
-                                <th>AÇÃO</th>
+                                <th>STATUS</th> <th>AÇÃO</th>
                             </tr>
                         </thead>
                         <tbody id="lista-entradas">
@@ -1002,17 +1021,10 @@
     </div>
     
     <script>
-        // O CÓDIGO JAVASCRIPT COMPLETO DO PASSO ANTERIOR VAI AQUI.
-        // Como a lógica de negócio foi mantida, o JS é o mesmo, exceto pelos seletores de CSS, 
-        // que foram ajustados para as novas classes/IDs. (Por exemplo, na renderização do filtro ativo).
-
-        // APENAS AS FUNÇÕES E VARIÁVEIS CHAVE FORAM REPETIDAS AQUI PARA MOSTRAR A CONEXÃO COM O NOVO DESIGN.
-
         // ===========================================
-        // JAVASCRIPT: LÓGICA DE NEGÓCIO E CONEXÃO
+        // JAVASCRIPT: LÓGICA DE NEGÓCIO E CONEXÃO V3.0
         // ===========================================
 
-        // 1. DADOS FIXOS E VARIÁVEIS GLOBAIS (AS MESMAS DO PASSO ANTERIOR)
         const DADOS_CONTAS_FIXAS = [
             { nome: "Aluguel", valor: 850.00 },
             { nome: "Carro", valor: 1800.00 },
@@ -1027,7 +1039,6 @@
         const META_DIARIA_FIXAS = SOMA_CONTAS_FIXAS / DIAS_UTEIS_MES; 
 
         const DEBT_LIST_INITIAL = [
-             // ... Lista de dívidas (omitida para concisão, mas é a mesma) ...
             { id: 1, credor: "Itau visa", valorInicial: 200.00, valorAtual: 200.00 },
             { id: 2, credor: "Banco Inter", valorInicial: 120.00, valorAtual: 120.00 },
             { id: 3, credor: "Conect car", valorInicial: 60.00, valorAtual: 60.00 },
@@ -1052,8 +1063,7 @@
 
         
         let idDebtQuitting = null; 
-        let filtroReceitas = 'TUDO'; 
-
+        
         // Elementos DOM principais (MANTIDOS)
         const dataAtualEl = document.getElementById('data-atual');
         const metaDiariaCard = document.getElementById('meta-diaria-card');
@@ -1066,6 +1076,7 @@
         const feedbackFixasQuitadasEl = document.getElementById('feedback-fixas-quitadas');
         const listaContasFixasEl = document.getElementById('lista-contas-fixas');
         const somaFixasEl = document.getElementById('soma-fixas');
+        const totalLancadoEl = document.getElementById('total-lancado'); // Adicionado
         
         // Modais (MANTIDOS)
         const modalReceita = document.getElementById('modal-receita');
@@ -1082,102 +1093,30 @@
         
         // Login (MANTIDO)
         const LOGIN_PASSWORD = '01';
-
-        // ... (As funções utilitárias e de lógica 'carregarTransacoes', 'getTotais', 
-        // 'getMetaDiariaAtingida', 'verificarEstadoContasFixas', etc., devem ser mantidas aqui) ...
         
-        // ---------------------------------------------------------------------------------------------------------------------------------
-        // FUNÇÕES DE RENDERIZAÇÃO: AQUI OCORRERAM AJUSTES NO DOM PARA REFLETIR O NOVO DESIGN (Exemplo: Filtro de Botões Ativos)
-        // ---------------------------------------------------------------------------------------------------------------------------------
+        // Banner Dinâmico
+        const BANNER_MESSAGES = [
+            "⚡ TITAN INITIATED: Maximize o Seu Capital. 🚀",
+            "🔒 SECURITY PROTOCOL: Sua Liberdade Financeira é o Alvo.🎯",
+            "📈 ELEVATE YOUR GAME: Disciplina Gera Aceleração. 🔥",
+            "💰 CORE FOCUS: Zero Dívida. Alto Acúmulo. ✨"
+        ];
         
-        const renderizarTabelas = (transacoes, dividas) => {
-            const listaEntradasBody = document.getElementById('lista-entradas');
-            const listaDividasBody = document.getElementById('lista-dividas-quitar');
-            
-            // ... (Lógica de getTotais, ordenação e filtro) ...
-            const { totalDividasPendentes } = getTotais(transacoes, dividas);
-            const transacoesOrdenadas = transacoes.sort((a, b) => new Date(b.data) - new Date(a.data));
-            let receitasParaExibir = transacoesOrdenadas;
-            const receitasDiariasMap = getReceitasPorDia(transacoesOrdenadas); 
-            
-            // Lógica do Filtro
-            const btnFiltroTudo = document.getElementById('btn-filtro-tudo');
-            const btnFiltroBatido = document.getElementById('btn-filtro-batido');
-            
-            // Atualiza o estado visual do filtro
-            btnFiltroTudo.classList.remove('ativo');
-            btnFiltroBatido.classList.remove('ativo');
-            
-            if (filtroReceitas === 'BATIDO') {
-                const datasBatidas = Object.keys(receitasDiariasMap).filter(data => {
-                    const { atingido } = getMetaDiariaAtingida(transacoes, totalDividasPendentes, data);
-                    return atingido;
-                });
-                
-                receitasParaExibir = transacoesOrdenadas.filter(t => datasBatidas.includes(t.data));
-                btnFiltroBatido.classList.add('ativo');
+        const updateBanner = () => {
+             const bannerEl = document.getElementById('banner-text');
+             let index = 0;
+             setInterval(() => {
+                 bannerEl.textContent = BANNER_MESSAGES[index];
+                 index = (index + 1) % BANNER_MESSAGES.length;
+             }, 5000); // Troca a cada 5 segundos
+             // Inicializa
+             bannerEl.textContent = BANNER_MESSAGES[0];
+        }
 
-            } else {
-                 btnFiltroTudo.classList.add('ativo');
-            }
-            
-            // ... (Resto da renderização de tabelas e listeners de quitação/deleção) ...
-            // (O resto da função `renderizarTabelas` e todas as outras funções de lógica 
-            // `initDashboard`, `handleLogin`, etc., são as mesmas do passo anterior e devem ser incluídas aqui).
-             
-             // --- Renderização das Receitas ---
-            listaEntradasBody.innerHTML = '';
-            
-            if (receitasParaExibir.length === 0) {
-                 const mensagem = filtroReceitas === 'BATIDO' ? '<tr><td colspan="5" style="text-align: center; color: var(--cor-alerta);">Nenhum dia atingiu a Meta Diária Total neste período.</td></tr>' : '<tr><td colspan="5" style="text-align: center; color: var(--cor-texto-secundario);">Nenhuma receita lançada no log.</td></tr>';
-                 listaEntradasBody.innerHTML = mensagem;
-            } else {
-                receitasParaExibir.forEach((t, index) => {
-                    const { atingido } = getMetaDiariaAtingida(transacoes, totalDividasPendentes, t.data);
-                    
-                    const statusHTML = atingido 
-                        ? `<span style="color: var(--cor-sucesso); font-weight: 700;"><i class="fas fa-check"></i> BATIDO</span>` 
-                        : `<span style="color: var(--cor-alerta); font-weight: 700;"><i class="fas fa-clock"></i> PENDENTE</span>`;
-                        
-                    const row = listaEntradasBody.insertRow();
-                    row.innerHTML = `
-                        <td>${t.descricao || 'Lançamento Rápido'}</td>
-                        <td class="valor-caixa">${formatarMoeda(t.valor)}</td>
-                        <td>${formatarData(t.data)}</td>
-                        <td>${statusHTML}</td>
-                        <td><button class="btn-acao-tabela deletar" data-index="${transacoesOrdenadas.indexOf(t)}"><i class="fas fa-trash"></i></button></td>
-                    `;
-                });
-            }
-            
-            // --- Renderização das Dívidas ---
-            listaDividasBody.innerHTML = '';
-            const dividasAtivas = dividas.filter(d => d.valorAtual > 0.01);
-            
-            if (dividasAtivas.length === 0) {
-                 listaDividasBody.innerHTML = '<tr><td colspan="4" style="text-align: center; color: var(--cor-sucesso); font-weight: bold;">🎉 PROTOCOL COMPLETE: Todas as dívidas únicas foram quitadas!</td></tr>';
-            } else {
-                dividasAtivas.forEach((d) => {
-                    const row = listaDividasBody.insertRow();
-                    row.innerHTML = `
-                        <td>${d.credor}</td>
-                        <td style="color: var(--cor-texto-secundario);">${formatarMoeda(d.valorInicial)}</td>
-                        <td class="saldo-divida">${formatarMoeda(d.valorAtual)}</td>
-                        <td>
-                            <button class="btn-acao-tabela quitar" data-id="${d.id}">
-                                <i class="fas fa-hand-holding-usd"></i> PAGAR
-                            </button>
-                        </td>
-                    `;
-                });
-            }
-        };
 
-        // --- TODAS AS OUTRAS FUNÇÕES DE LÓGICA E LISTENERS DEVEM SER MANTIDAS INTACTAS AQUI ---
-        // (Devido ao limite de espaço, elas são omitidas, mas são idênticas às do passo anterior)
-        // ... (colar o restante do JS aqui) ...
-        
-        // Função de Quitação e Inicialização (Replicada para garantir a ordem)
+        // ===========================================
+        // FUNÇÕES UTILITÁRIAS
+        // ===========================================
         const carregarTransacoes = () => {
             const transacoes = localStorage.getItem('transacoes') || '[]';
             return JSON.parse(transacoes);
@@ -1242,9 +1181,9 @@
 
             const valorMensalNecessario = totalDividasPendentes / meses;
             const valorDiarioNecessario = valorMensalNecessario / 30; 
-            const valorSemanalNecessario = valorDiarioNecessario * 7;
 
             if (!isInit) {
+                 const valorSemanalNecessario = valorDiarioNecessario * 7;
                  let html = `
                     <p style="margin-bottom: 15px; color: var(--cor-texto-secundario);">Para quitar **${formatarMoeda(totalDividasPendentes)}** em **${meses} meses**:</p>
                     <p><i class="fas fa-calendar-alt" style="color: var(--cor-primario);"></i> Aporte Mensal Necessário: <strong>${formatarMoeda(valorMensalNecessario)}</strong></p>
@@ -1284,12 +1223,12 @@
                 ? (totalReceitas / totalDividasIniciais) * 100 
                 : (totalReceitas > 0 ? 100 : 0);
             
-            const excedenteReceitas = Math.max(0, totalReceitas - SOMA_CONTAS_FIXAS); 
             const saldoPendenteTotal = totalDividasPendentes; 
 
-            return { totalReceitas, totalDividasIniciais, totalDividasPendentes, progressoCapital, excedenteReceitas, saldoPendenteTotal };
+            return { totalReceitas, totalDividasIniciais, totalDividasPendentes, progressoCapital, saldoPendenteTotal };
         }
         
+        // ... (Função verificarEstadoContasFixas mantida, mas omitida por concisão) ...
         const verificarEstadoContasFixas = (totalReceitas) => {
              const hoje = getHojeString();
              const primeiroDiaMes = getPrimeiroDiaDoMes();
@@ -1322,15 +1261,74 @@
         }
 
 
+        // ===========================================
+        // FUNÇÕES DE RENDERIZAÇÃO E REGRA DE NEGÓCIO (AJUSTADAS)
+        // ===========================================
+        
+        const renderizarTabelas = (transacoes, dividas) => {
+            const listaEntradasBody = document.getElementById('lista-entradas');
+            const listaDividasBody = document.getElementById('lista-dividas-quitar');
+            const { totalReceitas, totalDividasPendentes } = getTotais(transacoes, dividas);
+            const transacoesOrdenadas = transacoes.sort((a, b) => new Date(b.data) - new Date(a.data));
+            
+            // --- Renderização das Receitas (LOG) ---
+            listaEntradasBody.innerHTML = '';
+            
+            if (transacoesOrdenadas.length === 0) {
+                 listaEntradasBody.innerHTML = '<tr><td colspan="4" style="text-align: center; color: var(--cor-texto-secundario);">Nenhuma receita lançada no log.</td></tr>';
+            } else {
+                transacoesOrdenadas.forEach((t, index) => {
+                    const descricaoHTML = `<span class="sucesso-adicionado">SALDO ADICIONADO COM SUCESSO</span>`;
+                        
+                    const row = listaEntradasBody.insertRow();
+                    row.innerHTML = `
+                        <td>${descricaoHTML}</td>
+                        <td class="valor-caixa">${formatarMoeda(t.valor)}</td>
+                        <td>${formatarData(t.data)}</td>
+                        <td></td> <td><button class="btn-acao-tabela deletar" data-index="${index}"><i class="fas fa-trash"></i> EXCLUIR</button></td>
+                    `;
+                });
+            }
+            
+            // --- Renderização das Dívidas (REGRAS DE QUITAÇÃO) ---
+            listaDividasBody.innerHTML = '';
+            const dividasAtivas = dividas.filter(d => d.valorAtual > 0.01);
+            
+            if (dividasAtivas.length === 0) {
+                 listaDividasBody.innerHTML = '<tr><td colspan="4" style="text-align: center; color: var(--cor-sucesso); font-weight: bold;">🎉 PROTOCOL COMPLETE: Todas as dívidas únicas foram quitadas!</td></tr>';
+            } else {
+                dividasAtivas.forEach((d) => {
+                    // **NOVA REGRA:** O botão Quitar só aparece se o Capital Acumulado for >= Saldo da Dívida
+                    const podeQuitar = totalReceitas >= d.valorAtual - 0.01;
+                    
+                    const botaoHTML = podeQuitar 
+                        ? `<button class="btn-acao-tabela quitar" data-id="${d.id}"><i class="fas fa-hand-holding-usd"></i> PAGAR</button>`
+                        : `<button class="btn-acao-tabela btn-inativo-capital" disabled title="Capital insuficiente para esta quitação.">${formatarMoeda(d.valorAtual)} PENDENTE</button>`;
+
+                    const row = listaDividasBody.insertRow();
+                    row.innerHTML = `
+                        <td>${d.credor}</td>
+                        <td style="color: var(--cor-texto-secundario);">${formatarMoeda(d.valorInicial)}</td>
+                        <td class="saldo-divida">${formatarMoeda(d.valorAtual)}</td>
+                        <td>${botaoHTML}</td>
+                    `;
+                });
+            }
+            
+            // Atualiza os Totais novamente após a renderização
+            atualizarDashboard(transacoes, dividas); 
+        };
+
         const atualizarDashboard = (transacoes, dividas) => {
             const { totalReceitas, totalDividasPendentes, progressoCapital, saldoPendenteTotal } = getTotais(transacoes, dividas);
 
             dataAtualEl.textContent = new Date().toLocaleDateString('pt-BR');
             somaFixasEl.textContent = formatarMoeda(SOMA_CONTAS_FIXAS).replace('R$', '').trim(); 
 
-            document.getElementById('total-lancado').textContent = formatarMoeda(totalReceitas);
-            saldoPendenteTotalEl.textContent = formatarMoeda(saldoPendenteTotal);
+            // **IMPORTANTE:** Atualiza o elemento de Capital Acumulado
+            totalLancadoEl.textContent = formatarMoeda(totalReceitas); 
             
+            saldoPendenteTotalEl.textContent = formatarMoeda(saldoPendenteTotal);
             totalDividasPendentesEl.textContent = formatarMoeda(totalDividasPendentes);
             
             const progressoExibido = Math.min(100, progressoCapital).toFixed(2);
@@ -1342,22 +1340,124 @@
             verificarEstadoContasFixas(totalReceitas);
         };
         
-        const renderizarMetaDiaria = (transacoes, totalDividasPendentes) => {
-            const { metaTotal, atingido, recebido } = getMetaDiariaAtingida(transacoes, totalDividasPendentes);
+        const adicionarReceita = () => {
+            const valor = parseFloat(valorInputReceita.value);
 
-            metaDiariaTotalEl.textContent = formatarMoeda(metaTotal);
-
-            if (atingido) {
-                metaDiariaCard.classList.add('meta-diaria-concluida');
-                metaDiariaIncentivoEl.innerHTML = `<i class="fas fa-check-circle"></i> TARGET CONCLUÍDO! (APORTE: ${formatarMoeda(recebido)})`;
-                metaDiariaIncentivoEl.style.display = 'block';
-            } else {
-                metaDiariaCard.classList.remove('meta-diaria-concluida');
-                const falta = Math.max(0, metaTotal - recebido);
-                metaDiariaIncentivoEl.innerHTML = `<i class="fas fa-arrow-up"></i> FALTAM ${formatarMoeda(falta)} PARA ATINGIR O TARGET DE HOJE.`;
-                metaDiariaIncentivoEl.style.display = 'block';
+            if (isNaN(valor) || valor <= 0) {
+                alert("ERRO: Valor de aporte inválido. Insira um valor positivo.");
+                return;
             }
+
+            const novaTransacao = {
+                tipo: 'CAIXA',
+                valor: valor.toFixed(2), 
+                descricao: 'SALDO ADICIONADO COM SUCESSO', // Nova descrição
+                data: getHojeString()
+            };
+
+            let transacoes = carregarTransacoes();
+            transacoes.push(novaTransacao);
+            salvarTransacoes(transacoes);
+            
+            initDashboard(); 
+            fecharModal(modalReceita);
+        };
+        
+        // **NOVA LÓGICA:** Iniciar Quitar (Direto no modal)
+        const iniciarQuitarDivida = (id) => {
+            const dividas = carregarDividas();
+            const divida = dividas.find(d => d.id === id); 
+            const transacoes = carregarTransacoes();
+            const { totalReceitas } = getTotais(transacoes, dividas);
+
+            if (!divida || divida.valorAtual <= 0.01) {
+                alert("STATUS: Dívida já quitada.");
+                return;
+            }
+            
+            // Verifica se o Capital Acumulado é suficiente ANTES de abrir o modal
+            if (totalReceitas < divida.valorAtual - 0.01) {
+                alert("ERRO DE PROTOCOLO: O Capital Acumulado não cobre o valor total desta dívida. O botão PAGAR está desativado.");
+                return;
+            }
+            
+            idDebtQuitting = id;
+            document.getElementById('nome-credor').textContent = divida.credor;
+            document.getElementById('saldo-quitacao').textContent = formatarMoeda(divida.valorAtual);
+            
+            // Sugere o valor total, mas dedução será total da dívida
+            valorPagamentoInput.value = divida.valorAtual.toFixed(2);
+            valorPagamentoInput.focus();
+            
+            modalQuitacao.style.display = 'block';
         }
+        
+        // **NOVA LÓGICA:** Registrar Pagamento (Dedução do Capital Acumulado)
+        const registrarPagamento = () => {
+            const valorPagamento = parseFloat(valorPagamentoInput.value);
+            const dividas = carregarDividas();
+            let divida = dividas.find(d => d.id === idDebtQuitting);
+            const transacoes = carregarTransacoes();
+            const { totalReceitas } = getTotais(transacoes, dividas);
+            
+            if (isNaN(valorPagamento) || valorPagamento <= 0) {
+                alert("ERRO: Insira um valor de pagamento válido e positivo.");
+                return;
+            }
+            
+            if (!divida) {
+                alert("ERRO: Dívida não encontrada no registro.");
+                return;
+            }
+            
+            let valorEfetivo = valorPagamento;
+            if (valorPagamento > divida.valorAtual + 0.01) {
+                valorEfetivo = divida.valorAtual; // Paga no máximo o que deve
+            } 
+            
+            // **NOVA REGRA CRÍTICA:** Verifica se o Capital Acumulado cobre o pagamento efetivo
+            if (totalReceitas < valorEfetivo - 0.01) {
+                 alert("ERRO CRÍTICO: O Capital Acumulado não é suficiente para realizar este pagamento. Corrija o valor ou injete mais capital.");
+                 return;
+            }
+            
+            // 1. DEDUÇÃO DO SALDO ACUMULADO (Simulado como um Lançamento de saída negativo)
+            const novaTransacaoSaida = {
+                tipo: 'SAIDA',
+                valor: (-valorEfetivo).toFixed(2), 
+                descricao: `Quitação: ${divida.credor}`, 
+                data: getHojeString()
+            };
+            transacoes.push(novaTransacaoSaida);
+            salvarTransacoes(transacoes);
+
+            // 2. ATUALIZAÇÃO DA DÍVIDA
+            divida.valorAtual = divida.valorAtual - valorEfetivo;
+            
+            if (divida.valorAtual < 0.01) {
+                divida.valorAtual = 0;
+                alert(`🎉 SUCESSO! Dívida com ${divida.credor} quitada! O valor de ${formatarMoeda(valorEfetivo)} foi deduzido do seu Capital Acumulado.`);
+            } else {
+                 alert(`SUCESSO! Pagamento de ${formatarMoeda(valorEfetivo)} registrado e deduzido do Capital Acumulado.`);
+            }
+            
+            salvarDividas(dividas);
+            initDashboard();
+            fecharModal(modalQuitacao);
+        }
+
+        // ... (Deletar Receita e outras funções mantidas, omitidas por concisão) ...
+        const deletarReceita = (index) => {
+             if (!confirm("ALERTA: Confirme a exclusão do registro de receita. Esta ação é irreversível.")) {
+                return;
+            }
+            
+            let transacoes = carregarTransacoes();
+            transacoes.splice(index, 1); 
+            
+            salvarTransacoes(transacoes);
+            initDashboard(); 
+        };
         
         const renderizarContasFixas = () => {
             listaContasFixasEl.innerHTML = '';
@@ -1395,7 +1495,7 @@
                         <span><i class="${statusIcone}" style="margin-right: 10px;"></i> ${formatarData(data)}</span>
                         <span class="${statusClasse}">
                             ${atingido ? 'META BATIDA' : 'PENDENTE'}
-                            (${formatarMoeda(recebido)} / ${formatarMoeda(metaTotal)})
+                            (Aporte: ${formatarMoeda(recebido)} / Target: ${formatarMoeda(metaTotal)})
                         </span>
                     </p>
                 `;
@@ -1450,6 +1550,11 @@
             renderizarDicasQuitacao(dividas); 
         };
         
+        
+        // ===========================================
+        // LISTENERS E EVENTOS
+        // ===========================================
+        
         const handleLogin = () => {
             const passwordInput = document.getElementById('password-input').value;
             const loginFeedback = document.getElementById('login-feedback');
@@ -1459,13 +1564,14 @@
                 document.getElementById('main-content').style.display = 'block';
                 localStorage.setItem('loggedIn', 'true');
                 initDashboard();
+                updateBanner(); // Inicia o banner dinâmico
             } else {
                 loginFeedback.textContent = 'ERRO: CHAVE DE SEGURANÇA INVÁLIDA.';
                 document.getElementById('password-input').value = '';
                 document.getElementById('password-input').focus();
             }
         };
-        
+
         const fecharModal = (modalEl) => {
             modalEl.style.display = 'none';
         };
@@ -1481,97 +1587,8 @@
                 button.classList.remove('aberto');
             }
         };
-        
-        const adicionarReceita = () => {
-            const valor = parseFloat(valorInputReceita.value);
-
-            if (isNaN(valor) || valor <= 0) {
-                alert("ERRO: Valor de aporte inválido. Insira um valor positivo.");
-                return;
-            }
-
-            const novaTransacao = {
-                tipo: 'CAIXA',
-                valor: valor.toFixed(2), 
-                descricao: 'Lançamento Rápido',
-                data: getHojeString()
-            };
-
-            let transacoes = carregarTransacoes();
-            transacoes.push(novaTransacao);
-            salvarTransacoes(transacoes);
-            
-            initDashboard(); 
-            fecharModal(modalReceita);
-        };
-        
-        const iniciarQuitarDivida = (id) => {
-            const dividas = carregarDividas();
-            const divida = dividas.find(d => d.id === id); 
-            
-            if (!divida || divida.valorAtual <= 0.01) {
-                alert("STATUS: Dívida já quitada.");
-                return;
-            }
-            
-            idDebtQuitting = id;
-            document.getElementById('nome-credor').textContent = divida.credor;
-            document.getElementById('saldo-quitacao').textContent = formatarMoeda(divida.valorAtual);
-            valorPagamentoInput.value = divida.valorAtual.toFixed(2);
-            valorPagamentoInput.focus();
-            
-            modalQuitacao.style.display = 'block';
-        }
-        
-        const registrarPagamento = () => {
-            const valorPagamento = parseFloat(valorPagamentoInput.value);
-            const dividas = carregarDividas();
-            let divida = dividas.find(d => d.id === idDebtQuitting);
-            
-            if (isNaN(valorPagamento) || valorPagamento <= 0) {
-                alert("ERRO: Insira um valor de pagamento válido e positivo.");
-                return;
-            }
-            
-            if (!divida) {
-                alert("ERRO: Dívida não encontrada no registro.");
-                return;
-            }
-            
-            let valorEfetivo = valorPagamento;
-            if (valorPagamento > divida.valorAtual + 0.01) {
-                 if (!confirm(`O valor de ${formatarMoeda(valorPagamento)} é maior que o saldo pendente de ${formatarMoeda(divida.valorAtual)}. Deseja aplicar o pagamento total (${formatarMoeda(divida.valorAtual)}) e concluir a dívida?`)) {
-                    return;
-                }
-                valorEfetivo = divida.valorAtual;
-            } 
-            
-            divida.valorAtual = divida.valorAtual - valorEfetivo;
-            
-            if (divida.valorAtual < 0.01) {
-                divida.valorAtual = 0;
-                alert(`🎉 SUCESSO! Dívida com ${divida.credor} quitada!`);
-            }
-            
-            salvarDividas(dividas);
-            initDashboard();
-            fecharModal(modalQuitacao);
-        }
-        
-        const deletarReceita = (index) => {
-             if (!confirm("ALERTA: Confirme a exclusão do registro de receita. Esta ação é irreversível.")) {
-                return;
-            }
-            
-            let transacoes = carregarTransacoes();
-            transacoes.splice(index, 1); 
-            
-            salvarTransacoes(transacoes);
-            initDashboard(); 
-        };
 
         
-        // Listeners
         document.getElementById('btn-login').addEventListener('click', handleLogin);
         document.getElementById('password-input').addEventListener('keypress', (e) => {
              if (e.key === 'Enter') {
@@ -1584,11 +1601,13 @@
                  document.getElementById('login-screen').style.display = 'none';
                  document.getElementById('main-content').style.display = 'block';
                  initDashboard();
+                 updateBanner(); // Inicia o banner dinâmico
              } else {
                  document.getElementById('login-screen').style.display = 'flex';
              }
         });
         
+        // Listener para abrir o modal de Rastreio de Metas (substitui o de data)
         document.getElementById('btn-data-atual').addEventListener('click', () => {
              const transacoes = carregarTransacoes();
              const dividas = carregarDividas();
@@ -1598,7 +1617,7 @@
              modalRastreioMetas.style.display = 'block';
         });
 
-
+        // Listeners Modais (Mantidos)
         document.getElementById('abrir-cadastro-receita').addEventListener('click', () => {
             valorInputReceita.value = '';
             modalReceita.style.display = 'block';
@@ -1621,19 +1640,23 @@
         toggleDividasBtn.addEventListener('click', () => toggleSection(listaDividasQuitarContainer, toggleDividasBtn));
         toggleReceitasBtn.addEventListener('click', () => toggleSection(listaReceitasContainer, toggleReceitasBtn));
         
-        document.getElementById('btn-filtro-tudo').addEventListener('click', () => {
-            filtroReceitas = 'TUDO';
-            renderizarTabelas(carregarTransacoes(), carregarDividas());
-        });
-        document.getElementById('btn-filtro-batido').addEventListener('click', () => {
-            filtroReceitas = 'BATIDO';
-            renderizarTabelas(carregarTransacoes(), carregarDividas());
-        });
-        
+        // Listener para Quitar/Deletar na Tabela
         document.addEventListener('click', (e) => {
             if (e.target.closest('.btn-acao-tabela.deletar')) {
-                const index = e.target.closest('.btn-acao-tabela.deletar').getAttribute('data-index');
-                deletarReceita(parseInt(index));
+                const button = e.target.closest('.btn-acao-tabela.deletar');
+                const index = button.getAttribute('data-index');
+                
+                // Precisa recalcular o índice real pois as transações são ordenadas
+                const transacoes = carregarTransacoes().sort((a, b) => new Date(b.data) - new Date(a.data));
+                const transacaoParaDeletar = transacoes[parseInt(index)];
+                
+                // Encontra o índice no array não ordenado (o original salvo no storage)
+                const transacoesSalvas = JSON.parse(localStorage.getItem('transacoes') || '[]');
+                const originalIndex = transacoesSalvas.findIndex(t => t.data === transacaoParaDeletar.data && t.valor === transacaoParaDeletar.valor);
+
+                if (originalIndex !== -1) {
+                    deletarReceita(originalIndex);
+                }
             }
             
             if (e.target.closest('.btn-acao-tabela.quitar')) {
