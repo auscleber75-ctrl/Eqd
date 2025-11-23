@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>PROJECT TITAN | CORE FINANCIAL [V4.0 - Layout Padronizado]</title>
+    <title>PROJECT TITAN | CORE FINANCIAL [V4.1 - Logout e Rastreio de Metas]</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -103,14 +103,69 @@
             font-family: var(--fonte-titulo);
             color: var(--cor-texto-principal);
             text-align: center;
-            margin-top: 30px;
-            margin-bottom: 30px;
             font-weight: 800;
             font-size: 3em; 
             letter-spacing: 2px;
             text-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
             padding-bottom: 15px;
         }
+        
+        /* Botões de Ação Geral (Cadastro, Sair) */
+        .btn-principal {
+            background-color: var(--cor-primario);
+            color: var(--cor-fundo-principal);
+            border: none;
+            padding: 10px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 700;
+            transition: all var(--transicao-rapida);
+            white-space: nowrap;
+        }
+        .btn-principal:hover {
+            background-color: #00A3B5;
+            box-shadow: 0 0 8px rgba(0, 188, 212, 0.7);
+        }
+        
+        /* Botão de Sair (NOVO) */
+        .btn-sair {
+            background-color: var(--cor-divida);
+            color: var(--cor-texto-principal);
+            border: none;
+            padding: 10px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 700;
+            transition: background-color var(--transicao-rapida);
+            margin-left: 20px;
+        }
+        .btn-sair:hover {
+            background-color: #CC3333;
+        }
+        
+        /* Botão de Rastreio de Metas (DATA) */
+        #data-atual-info {
+             text-align: center;
+             margin-top: 15px;
+             margin-bottom: 25px;
+        }
+        #btn-data-atual {
+             background-color: var(--cor-meta-diaria);
+             color: var(--cor-texto-principal);
+             border: none;
+             padding: 10px 20px;
+             border-radius: 6px;
+             cursor: pointer;
+             font-weight: 700;
+             font-family: var(--fonte-dados);
+             transition: all var(--transicao-rapida);
+             box-shadow: 0 2px 10px rgba(155, 89, 182, 0.5);
+        }
+        #btn-data-atual:hover {
+             background-color: #A96EC2;
+        }
+
+
         
         /* =================================== */
         /* 3. DASHBOARD E CARTÕES */
@@ -151,7 +206,7 @@
             background-color: rgba(16, 185, 129, 0.1) !important;
         }
 
-        /* Barra de Progresso (Correção Visual) */
+        /* Barra de Progresso */
         .progresso-bar-container {
             height: 10px;
             background-color: #1A212E; 
@@ -381,7 +436,9 @@
              background-color: #FF7777;
         }
         
-        /* ... (Módulos e outros estilos) ... */
+        /* =================================== */
+        /* 6. MODAIS E MÓDULO IA */
+        /* =================================== */
         
         .motivacao-box {
             background-color: #1A212E;
@@ -406,36 +463,50 @@
              margin-bottom: 20px;
              font-size: 1.4em;
         }
-        .ia-input-group {
-             display: flex;
-             justify-content: space-between;
-             align-items: center;
-             gap: 15px;
-             margin-bottom: 20px;
-        }
-        .ia-input-group label {
-             display: block;
-             margin-bottom: 5px;
-             font-size: 0.9em;
-             color: var(--cor-texto-secundario);
-        }
-        #resultado-plano-ia p, #dicas-quitacao p, #dicas-quitacao li {
-             margin-bottom: 5px;
-             font-size: 1em;
-             font-family: var(--fonte-dados);
-        }
-        #resultado-plano-ia strong {
-             color: var(--cor-primario);
-             font-weight: 700;
-        }
-        #dicas-quitacao h4 {
-             color: var(--cor-fixa);
-             margin-top: 15px;
-             margin-bottom: 8px;
-             font-size: 1.1em;
-        }
 
-
+        /* Modal de Relatório Diário (NOVO) */
+        .modal-relatorio-content {
+            background-color: var(--cor-fundo-card);
+            margin: 5% auto;
+            padding: 30px;
+            border-radius: 10px;
+            border: 1px solid var(--cor-meta-diaria); 
+            width: 90%;
+            max-width: 800px;
+            box-shadow: 0 0 20px rgba(155, 89, 182, 0.4);
+        }
+        .modal-relatorio-content h3 {
+            color: var(--cor-meta-diaria);
+            margin-bottom: 20px;
+            font-size: 1.6em;
+        }
+        .tabela-relatorio {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            font-family: var(--fonte-dados);
+        }
+        .tabela-relatorio th, .tabela-relatorio td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid var(--cor-borda);
+            font-size: 0.9em;
+        }
+        .tabela-relatorio th {
+            background-color: #1A212E;
+            color: var(--cor-meta-diaria);
+            text-transform: uppercase;
+        }
+        .meta-batida-status {
+            color: var(--cor-sucesso);
+            font-weight: 700;
+        }
+        .meta-nao-batida-status {
+            color: var(--cor-divida);
+            font-weight: 700;
+        }
+        
+        
         /* =================================== */
         /* 7. RESPONSIVIDADE (MOBILE FIRST) */
         /* =================================== */
@@ -453,12 +524,36 @@
                  grid-column: span 1;
             }
             
+            /* Título e Botão Sair */
+            .container:has(h1) {
+                 flex-direction: column;
+                 align-items: center;
+            }
+            .btn-sair {
+                 margin-top: 15px;
+                 margin-left: 0;
+            }
+            h1 {
+                 font-size: 2em;
+                 margin-top: 20px;
+            }
+            
             /* Modal de Cadastro: Otimização de Espaço Vertical */
             .modal-content {
                  margin: 5% auto !important; 
                  padding: 20px !important; 
                  width: 90% !important; 
                  max-width: 90% !important;
+            }
+            
+            /* Modal Relatório */
+            .modal-relatorio-content {
+                margin: 5% auto !important; 
+                width: 95% !important; 
+                padding: 15px !important;
+            }
+            .tabela-relatorio th, .tabela-relatorio td {
+                 font-size: 0.75em;
             }
             
             /* Tabelas em Mobile: Redução de Padding e Fontes */
@@ -498,22 +593,60 @@
             .plano-quitacao {
                  padding: 15px;
             }
-            
-            h1 {
-                 font-size: 2em;
-                 margin-top: 20px;
-                 margin-bottom: 20px;
-            }
-
         }
         
-        /* ... (Estilos de login e outros mantidos) ... */
+        /* Estilo para a tela de login */
+        .login-box {
+             background-color: var(--cor-fundo-card);
+             padding: 40px;
+             border-radius: 10px;
+             box-shadow: var(--sombra-card);
+             text-align: center;
+             max-width: 350px;
+             width: 90%;
+        }
+        #login-screen {
+             display: flex;
+             justify-content: center;
+             align-items: center;
+             height: 100vh;
+             width: 100%;
+             position: absolute;
+             top: 0;
+             left: 0;
+             background-color: var(--cor-fundo-principal);
+        }
+        .login-box h2 {
+             color: var(--cor-primario);
+             margin-bottom: 10px;
+             font-size: 1.8em;
+        }
+        .login-box label {
+             display: block;
+             text-align: left;
+             margin-top: 20px;
+             margin-bottom: 5px;
+             color: var(--cor-texto-principal);
+             font-weight: 600;
+        }
+        .login-box input {
+             width: 100%;
+             padding: 10px;
+             border-radius: 5px;
+             border: 1px solid var(--cor-borda);
+             background-color: #1A212E;
+             color: var(--cor-fixa);
+             font-family: var(--fonte-dados);
+        }
+        .login-box button {
+             margin-top: 25px;
+        }
         
     </style>
 </head>
 <body>
     
-    <div id="login-screen">
+    <div id="login-screen" style="display: none;">
         <div class="login-box">
             <h2><i class="fas fa-fingerprint"></i> PROJECT TITAN</h2>
             <p style="color: var(--cor-texto-secundario); margin-bottom: 25px;">Acesso restrito ao Painel de Gestão Estratégica.</p>
@@ -532,8 +665,9 @@
             </div>
         </div>
         
-        <div class="container">
+        <div class="container" style="display: flex; justify-content: space-between; align-items: center; margin-top: 30px;">
             <h1><i class="fas fa-terminal"></i> PROJECT TITAN</h1>
+            <button class="btn-sair" id="btn-logout"><i class="fas fa-sign-out-alt"></i> SAIR</button>
         </div>
 
         
@@ -695,6 +829,30 @@
         </main>
     </div>
 
+    <div id="modal-relatorio" class="modal" style="display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.7);">
+        <div class="modal-relatorio-content">
+            <span class="fechar-modal" id="fechar-modal-relatorio" style="color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer;">&times;</span>
+            <h3><i class="fas fa-chart-line"></i> RELATÓRIO DE PROGRESSO DIÁRIO</h3>
+            <p style="color: var(--cor-texto-secundario);">Histórico de metas diárias de aporte (Fixas + Quitação) versus o capital efetivamente lançado por dia.</p>
+            
+            <div class="tabela-wrapper">
+                <table class="tabela-relatorio">
+                    <thead>
+                        <tr>
+                            <th>DATA</th>
+                            <th>META TOTAL (R$)</th>
+                            <th>APORTADO (R$)</th>
+                            <th>STATUS</th>
+                        </tr>
+                    </thead>
+                    <tbody id="corpo-tabela-relatorio">
+                        </tbody>
+                </table>
+            </div>
+            
+        </div>
+    </div>
+
 
     <div id="modal-receita" class="modal" style="display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.7);">
         <div class="modal-content" style="background-color: var(--cor-fundo-card); margin: 15% auto; padding: 30px; border-radius: 10px; border: 1px solid var(--cor-primario); width: 80%; max-width: 400px; box-shadow: var(--sombra-card-hover);">
@@ -724,7 +882,7 @@
     
     <script>
         // ===========================================
-        // JAVASCRIPT: LÓGICA DE NEGÓCIO E CONEXÃO V4.0 (Layout Padronizado)
+        // JAVASCRIPT: LÓGICA DE NEGÓCIO E CONEXÃO V4.1
         // ===========================================
 
         const DIAS_UTEIS_MES = 22; 
@@ -732,7 +890,7 @@
         const SESSION_TIMEOUT_MS = 600000; // 10 minutos
         let sessionTimer;
 
-        // Dados Iniciais (Mantidos - Importante para resetar Contas Fixas)
+        // Dados Iniciais (Mantidos)
         const DEBT_LIST_INITIAL = [
              { id: 1, credor: "Itau visa", valorInicial: 200.00, valorAtual: 200.00 },
              { id: 2, credor: "Banco Inter", valorInicial: 120.00, valorAtual: 120.00 },
@@ -777,7 +935,7 @@
 
         const getHojeString = () => new Date().toISOString().slice(0, 10);
         
-        // --- Funções de Carregamento/Salvamento (Garantem que os dados são arrays) ---
+        // --- Funções de Carregamento/Salvamento ---
         
         const carregarContasFixas = () => {
             const fixas = localStorage.getItem('contasFixas');
@@ -855,6 +1013,14 @@
              if (sessionTimer) clearTimeout(sessionTimer);
              sessionTimer = setTimeout(resetSession, SESSION_TIMEOUT_MS);
         };
+        
+        // --- Botão de Sair/Logout (NOVO) ---
+        const resetTudoEVoltarLogin = () => {
+             if (sessionTimer) clearTimeout(sessionTimer);
+             localStorage.clear(); // LIMPA TUDO
+             window.location.reload(); // Recarrega para iniciar limpo
+        };
+
 
         // --- Funções de Contas Fixas ---
         
@@ -869,7 +1035,9 @@
                  return fixas;
             }
             
+            // Verifica se as fixas já foram resetadas hoje
             if (isHojePassouDiaQuinze() && localStorage.getItem('fixasResetadas') !== getHojeString()) {
+                // Se sim, reseta para o estado inicial de "não pago"
                 fixas = CONTAS_FIXAS_INITIAL.map(fixa => ({...fixa, pago: false}));
                 salvarContasFixas(fixas);
                 localStorage.setItem('fixasResetadas', getHojeString());
@@ -1084,7 +1252,6 @@
             const progressoExibido = Math.min(100, progressoCapital).toFixed(2);
             document.getElementById('progresso-capital-txt').textContent = `${progressoExibido}%`;
             
-            // CORREÇÃO BARRA DE PROGRESSO: Define a largura do elemento
             document.getElementById('progresso-bar').style.width = `${progressoExibido}%`; 
             
             verificarEstadoContasFixas(fixas);
@@ -1161,6 +1328,7 @@
             const listaEntradasBody = document.getElementById('lista-entradas');
             
             const transacoesEntrada = transacoes.filter(t => parseFloat(t.valor) > 0);
+            // Mapeia e adiciona um displayIndex antes de ordenar para garantir que a exclusão use o índice correto do array filtrado
             const transacoesOrdenadas = transacoesEntrada.map((t, index) => ({...t, displayIndex: index}))
                                                         .sort((a, b) => new Date(b.data) - new Date(a.data));
             
@@ -1170,7 +1338,6 @@
             } else {
                 transacoesOrdenadas.forEach((t) => {
                     const row = listaEntradasBody.insertRow();
-                    // Aplica as classes CSS para o verde e o vermelho
                     row.innerHTML = `
                         <td><span class="log-receita-descricao">SALDO ADICIONADO</span></td>
                         <td class="log-receita-valor">${formatarMoeda(t.valor)}</td>
@@ -1252,6 +1419,67 @@
              
              div.innerHTML = html;
         }
+        
+        // --- Funções de Relatório Diário (NOVO) ---
+
+        const calcularRelatorioDiario = (transacoes, dividas, fixas) => {
+            const receitasDiarias = getReceitasPorDia(transacoes);
+            const todasAsDatas = Array.from(new Set(Object.keys(receitasDiarias)));
+            
+            const somaFixas = getSomaFixas(fixas);
+            const metaDiariaFixas = getMetaDiariaFixas(somaFixas);
+            const totalDividasPendentes = dividas.filter(d => d.valorAtual > 0.01).reduce((sum, d) => sum + parseFloat(d.valorAtual), 0);
+            const metaQuitacaoDiaria = gerarPlanoQuitacaoIA(true, totalDividasPendentes); 
+            const metaTotalDiaria = metaDiariaFixas + metaQuitacaoDiaria;
+
+            const hoje = getHojeString();
+            if (!todasAsDatas.includes(hoje)) {
+                todasAsDatas.push(hoje);
+            }
+            
+            todasAsDatas.sort((a, b) => new Date(b) - new Date(a));
+            
+            const relatorio = todasAsDatas.map(data => {
+                const recebido = receitasDiarias[data] || 0;
+                const atingido = recebido >= metaTotalDiaria - 0.009;
+                
+                return {
+                    data: data,
+                    meta: metaTotalDiaria,
+                    aportado: recebido,
+                    atingido: atingido
+                };
+            });
+            
+            return relatorio;
+        }
+
+        const renderizarRelatorioDiario = (relatorio) => {
+            const corpoTabela = document.getElementById('corpo-tabela-relatorio');
+            corpoTabela.innerHTML = '';
+            
+            if (relatorio.length === 0) {
+                corpoTabela.innerHTML = '<tr><td colspan="4" style="text-align: center; color: var(--cor-texto-secundario);">Nenhum registro de meta diária.</td></tr>';
+                return;
+            }
+
+            relatorio.forEach(item => {
+                const row = corpoTabela.insertRow();
+                const statusClass = item.atingido ? 'meta-batida-status' : 'meta-nao-batida-status';
+                const statusText = item.atingido ? '<i class="fas fa-check-circle"></i> BATIDA' : '<i class="fas fa-times-circle"></i> FALHOU';
+
+                if (item.data === getHojeString()) {
+                     row.style.backgroundColor = 'rgba(155, 89, 182, 0.1)';
+                }
+
+                row.innerHTML = `
+                    <td>${new Date(item.data).toLocaleDateString('pt-BR')}</td>
+                    <td style="color: var(--cor-meta-diaria);">${formatarMoeda(item.meta)}</td>
+                    <td style="color: ${item.aportado > item.meta ? 'var(--cor-fixa)' : 'var(--cor-texto-principal)'}; font-weight: 700;">${formatarMoeda(item.aportado)}</td>
+                    <td><span class="${statusClass}">${statusText}</span></td>
+                `;
+            });
+        }
 
         // ===========================================
         // FUNÇÕES DE EVENTOS (LISTENERS)
@@ -1280,7 +1508,6 @@
             atualizarDashboard(transacoes, dividas, fixas);
             renderizarTabelas(transacoes, dividas, fixas); 
             
-            // Recalcula o plano IA com a informação de dívidas pendentes
             gerarPlanoQuitacaoIA(false, totalDividasPendentes); 
             renderizarMetaDiaria(transacoes, totalDividasPendentes, fixas);
             renderizarDicasQuitacao(dividas); 
@@ -1308,7 +1535,10 @@
                  }
              });
              
-             // --- Modals ---
+             // --- Botão de Sair (NOVO) ---
+             document.getElementById('btn-logout').addEventListener('click', resetTudoEVoltarLogin);
+
+             // --- Modals e Botões de Ação ---
              document.getElementById('abrir-cadastro-receita').addEventListener('click', abrirModalReceita);
              document.getElementById('fechar-modal-receita').addEventListener('click', fecharModalReceita);
              document.getElementById('fechar-modal-quitacao').addEventListener('click', fecharModalQuitacao);
@@ -1316,10 +1546,23 @@
              document.getElementById('btn-cadastrar-receita').addEventListener('click', cadastrarReceita);
              document.getElementById('btn-quitar-divida').addEventListener('click', realizarPagamentoDivida);
              
+             // --- Eventos do Relatório Diário (NOVO) ---
+             document.getElementById('btn-data-atual').addEventListener('click', () => {
+                  const transacoes = carregarTransacoes();
+                  const dividas = carregarDividas();
+                  const fixas = carregarContasFixas();
+                  const relatorio = calcularRelatorioDiario(transacoes, dividas, fixas);
+                  renderizarRelatorioDiario(relatorio);
+                  document.getElementById('modal-relatorio').style.display = 'block';
+             });
+             
+             document.getElementById('fechar-modal-relatorio').addEventListener('click', () => {
+                 document.getElementById('modal-relatorio').style.display = 'none';
+             });
+             
              // --- Toggles ---
              document.getElementById('toggle-receitas').addEventListener('click', (e) => {
                  const container = document.getElementById('lista-receitas-container');
-                 const icon = e.currentTarget.querySelector('i');
                  if (container.style.display === 'none' || container.style.display === '') {
                      container.style.display = 'block';
                      e.currentTarget.classList.add('aberto');
@@ -1330,7 +1573,6 @@
              });
              document.getElementById('toggle-fixas').addEventListener('click', (e) => {
                  const container = document.getElementById('lista-fixas-container');
-                 const icon = e.currentTarget.querySelector('i');
                  if (container.style.display === 'none' || container.style.display === '') {
                      container.style.display = 'block';
                      e.currentTarget.classList.add('aberto');
@@ -1341,7 +1583,6 @@
              });
              document.getElementById('toggle-dividas').addEventListener('click', (e) => {
                  const container = document.getElementById('lista-dividas-quitar-container');
-                 const icon = e.currentTarget.querySelector('i');
                  if (container.style.display === 'none' || container.style.display === '') {
                      container.style.display = 'block';
                      e.currentTarget.classList.add('aberto');
@@ -1398,7 +1639,6 @@
                  initDashboard();
              } else {
                  document.getElementById('login-screen').style.display = 'flex';
-                 // Configura o estilo inicial da caixa de login
                  const loginBox = document.querySelector('.login-box');
                  loginBox.style.border = `2px solid var(--cor-primario)`; 
                  loginBox.style.boxShadow = `var(--sombra-card-hover)`;
