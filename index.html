@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>PROJECT TITAN | CORE FINANCIAL [V4.4 - Cadastro e Perfil]</title>
+    <title>PROJECT TITAN | CORE FINANCIAL [V4.5 - Fix Login/Menu e Suporte]</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -558,7 +558,7 @@
         </div>
         
         <a href="javascript:void(0)" id="menu-perfil"><i class="fas fa-id-badge"></i> Perfil</a>
-        <a href="javascript:void(0)" id="menu-suporte"><i class="fas fa-headset"></i> Suporte</a>
+        <a href="https://wa.me/5521967074896" target="_blank" id="menu-suporte"><i class="fab fa-whatsapp"></i> Suporte</a>
         <button id="btn-logout-sidebar"><i class="fas fa-sign-out-alt"></i> SAIR E RESETAR DADOS</button>
     </div>
     
@@ -600,10 +600,10 @@
             <p style="color: var(--cor-texto-secundario); margin-bottom: 25px;">Acesso restrito ao Painel de Gestão Estratégica.</p>
             
             <label for="login-email-input">E-MAIL OU PRIMEIRO NOME</label>
-            <input type="text" id="login-email-input" placeholder="Seu Email ou Nome" required>
+            <input type="text" id="login-email-input" placeholder="Seu Email ou Nome" required autocomplete="off">
             
             <label for="login-password-input">CHAVE DE SEGURANÇA</label>
-            <input type="password" id="login-password-input" placeholder="Senha" required>
+            <input type="password" id="login-password-input" placeholder="Senha" required autocomplete="off">
             
             <button id="btn-login" class="btn-principal"><i class="fas fa-sign-in-alt"></i> AUTORIZAR ACESSO</button>
             <p id="login-feedback" class="error-message" style="margin-top: 15px;"></p>
@@ -879,7 +879,7 @@
     
     <script>
         // ===========================================
-        // JAVASCRIPT: LÓGICA DE NEGÓCIO E CONEXÃO V4.4
+        // JAVASCRIPT: LÓGICA DE NEGÓCIO E CONEXÃO V4.5
         // ===========================================
 
         const DIAS_UTEIS_MES = 22; 
@@ -1010,7 +1010,7 @@
              // Mantém o perfil do usuário, mas remove o login
              document.getElementById('login-screen').style.display = 'flex';
              document.getElementById('main-content').style.display = 'none';
-             document.getElementById('mySidebar').style.width = '0'; // **CORREÇÃO DE BUG**
+             document.getElementById('mySidebar').style.width = '0'; 
              if (sessionTimer) clearTimeout(sessionTimer);
              alert('Sessão expirada. Faça login novamente.');
         };
@@ -1225,8 +1225,10 @@
                  document.getElementById('reg-phone-input').value = '';
                  document.getElementById('reg-password-input').value = '';
                  fecharTelaCadastro();
-                 // Preenche o email no login
-                 document.getElementById('login-email-input').value = email;
+                 
+                 // Limpar campos de login após o cadastro (Refinamento V4.5)
+                 document.getElementById('login-email-input').value = '';
+                 document.getElementById('login-password-input').value = '';
             }, 1500);
         }
 
@@ -1257,6 +1259,10 @@
                  localStorage.setItem('loggedIn', 'true');
                  document.getElementById('login-screen').style.display = 'none';
                  document.getElementById('main-content').style.display = 'block';
+                 
+                 // **CORREÇÃO V4.5:** Garantir que o menu não esteja aberto ao fazer login.
+                 document.getElementById('mySidebar').style.width = '0'; 
+
                  startSessionTimer();
                  initDashboard();
              } else {
@@ -1668,6 +1674,12 @@
                 `;
             });
         }
+        const abrirModalQuitacao = (credor, valor) => {
+             document.getElementById('nome-credor').textContent = credor;
+             document.getElementById('saldo-quitacao').textContent = formatarMoeda(valor);
+             document.getElementById('valor-pagamento').value = valor.toFixed(2);
+             document.getElementById('modal-quitacao').style.display = 'block';
+        }
 
 
         // ===========================================
@@ -1677,6 +1689,10 @@
         document.addEventListener('DOMContentLoaded', () => {
              carregarUsuario(); // Inicializa o loggedUser
              
+             // **CORREÇÃO V4.5:** Limpar campos de login na inicialização para evitar sugestões.
+             document.getElementById('login-email-input').value = '';
+             document.getElementById('login-password-input').value = '';
+
              // --- Login e Cadastro ---
              document.getElementById('btn-login').addEventListener('click', realizarLogin);
              document.getElementById('link-abrir-cadastro').addEventListener('click', (e) => {
@@ -1693,11 +1709,9 @@
              
              // --- Opção de Perfil / Mudar Foto ---
              document.getElementById('menu-perfil').addEventListener('click', abrirModalPerfil);
-             // Trocar foto ao clicar na foto na sidebar
              document.getElementById('profile-pic-container').addEventListener('click', () => {
                  document.getElementById('photo-input').click();
              });
-             // Trocar foto ao clicar na foto no modal de perfil
              document.getElementById('perfil-pic-preview').addEventListener('click', () => {
                  document.getElementById('photo-input').click();
              });
@@ -1707,11 +1721,8 @@
                  document.getElementById('modal-perfil').style.display = 'none';
              });
 
-             // --- Opção de Suporte (Alerta simples) ---
-             document.getElementById('menu-suporte').addEventListener('click', () => {
-                 closeSidebar();
-                 alert('SUPORTE TITAN: Utilize o contato de emergência para problemas críticos. Versão 4.4.');
-             });
+             // --- Opção de Suporte (Agora é um link direto) ---
+             // A alteração foi feita diretamente no HTML: <a href="https://wa.me/5521967074896" target="_blank" id="menu-suporte">
 
              // --- Modals e Botões de Ação (Mantidos) ---
              const modalsToClose = ['modal-receita', 'modal-quitacao', 'modal-relatorio'];
@@ -1796,14 +1807,12 @@
              if (localStorage.getItem('loggedIn') === 'true') {
                  document.getElementById('login-screen').style.display = 'none';
                  document.getElementById('main-content').style.display = 'block';
+                 document.getElementById('mySidebar').style.width = '0'; // Garante que esteja fechado
                  startSessionTimer(); 
                  initDashboard();
              } else {
                  document.getElementById('login-screen').style.display = 'flex';
                  document.getElementById('main-content').style.display = 'none';
-                 // Preenche o campo de login com o nome ou email do usuário cadastrado se houver
-                 const user = carregarUsuario();
-                 document.getElementById('login-email-input').value = user.email || user.firstName;
              }
         });
         
