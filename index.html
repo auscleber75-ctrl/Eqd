@@ -309,6 +309,30 @@
              background-color: rgba(239, 68, 68, 0.1);
              border-left: 5px solid var(--cor-divida);
         }
+        
+        /* Novo Botão de Resetar Dados */
+        #btn-reset-data {
+             color: var(--cor-divida);
+             border-top: 1px solid var(--cor-borda);
+             margin-top: 10px;
+        }
+        #btn-reset-data:hover {
+             color: #FF7777;
+             background-color: rgba(239, 68, 68, 0.1);
+             border-left: 5px solid var(--cor-divida);
+        }
+        
+        /* Botão de Logout Simples */
+        #btn-logout-only {
+             color: var(--cor-alerta);
+             border-top: 1px solid var(--cor-borda);
+             margin-top: 10px;
+        }
+        #btn-logout-only:hover {
+             color: #FFEB80;
+             background-color: rgba(245, 158, 11, 0.1);
+             border-left: 5px solid var(--cor-alerta);
+        }
 
 
         
@@ -600,7 +624,8 @@
         <a href="javascript:void(0)" id="menu-perfil"><i class="fas fa-id-badge"></i> Perfil</a>
         <button id="btn-excluir-conta"><i class="fas fa-user-slash"></i> EXCLUIR CONTA</button>
         <a href="https://wa.me/5521967074896" target="_blank" id="menu-suporte"><i class="fab fa-whatsapp"></i> Suporte</a>
-        <button id="btn-logout-sidebar"><i class="fas fa-sign-out-alt"></i> SAIR E RESETAR DADOS</button>
+        <button id="btn-logout-only"><i class="fas fa-sign-out-alt"></i> SAIR (MANTER DADOS)</button>
+        <button id="btn-reset-data"><i class="fas fa-trash-restore"></i> RESETAR TUDO (APAGAR LOG)</button>
     </div>
     
     <input type="file" id="photo-input" accept="image/*" style="display: none;">
@@ -779,7 +804,7 @@
 
 
             
-            <div id="dividas-container" class="toggle-section" style="display: none;">
+            <div id="dividas-container" class="toggle-section" style="display: none;"> 
                 
                 <div class="section-header" style="margin-top: 0; margin-bottom: 20px;">
                     <h2 style="font-size: 1.5em; color: var(--cor-divida);"><i class="fas fa-radiation"></i> DÍVIDAS ÚNICAS (PROTOCOLO DE REDUÇÃO)</h2>
@@ -810,7 +835,7 @@
                 </div>
             </div>
             
-            <div id="plano-quitacao-master" class="plano-quitacao" style="margin-top: 50px; display: none;">
+            <div id="plano-quitacao-master" class="plano-quitacao" style="margin-top: 50px; display: none;"> 
                 <h3><i class="fas fa-brain"></i> MÓDULO IA: PLANO DE QUITAÇÃO ESTRATÉGICO</h3>
                 
                 <div id="plano-ia-controls" class="ia-input-group">
@@ -946,7 +971,7 @@
     
     <script>
         // ===========================================
-        // JAVASCRIPT: LÓGICA DE NEGÓCIO E CONEXÃO V4.9
+        // JAVASCRIPT: LÓGICA DE NEGÓCIO E CONEXÃO V4.9 (ATUALIZADO)
         // ===========================================
 
         const DIAS_UTEIS_MES = 22; 
@@ -955,7 +980,6 @@
         const DEFAULT_PASSWORD = '123'; 
         
         // Dados Iniciais
-        // A lista de dívidas inicia vazia.
         const CONTAS_FIXAS_INITIAL = [
             { id: 100, nome: "Carro", valor: 1800.00, pago: false },
             { id: 101, nome: "Aluguel", valor: 850.00, pago: false },
@@ -1056,6 +1080,15 @@
             return `${saudacao}, ${name}!`;
         };
         
+        // NOVO: Função para SAIR mantendo os dados
+        const logoutOnly = () => {
+             if (confirm('Deseja realmente sair? Seus dados de transações e dívidas serão mantidos para o próximo acesso.')) {
+                 localStorage.removeItem('loggedIn');
+                 if (sessionTimer) clearTimeout(sessionTimer);
+                 window.location.reload(); 
+             }
+        };
+        
         const resetSession = () => {
              localStorage.removeItem('loggedIn');
              document.getElementById('login-screen').style.display = 'flex';
@@ -1070,8 +1103,9 @@
              sessionTimer = setTimeout(resetSession, SESSION_TIMEOUT_MS);
         };
         
-        const resetTudoEVoltarLogin = () => {
-             if (confirm('ATENÇÃO: Isso irá limpar todo o LOG de transações e a lista de Contas Fixas (resetando para o padrão) e te desconectar. Você confirma?')) {
+        // NOVO: Função para RESETAR TODOS OS DADOS (excluindo perfil)
+        const resetAllData = () => {
+             if (confirm('ATENÇÃO: Isso irá limpar todo o LOG de transações, Contas Fixas, Dívidas e te desconectar. Você confirma?')) {
                  if (sessionTimer) clearTimeout(sessionTimer);
                  
                  // Mantém apenas o perfil
@@ -1351,7 +1385,7 @@
 
             atualizarDashboard(transacoes, dividas, fixas);
             renderizarTabelas(transacoes, dividas, fixas); 
-            verificarEstadoContasFixas(fixas); 
+            verificarEstadoContasFixas(fixas, dividas); // Passando dívidas
         };
         
         // --- Funções de Contas Fixas ---
@@ -1378,12 +1412,12 @@
         const pagarContaFixa = (id) => {
             let fixas = carregarContasFixas();
             const transacoes = carregarTransacoes();
-            const dividas = carregarDividas();
+            const dividas = carregarDividas(); // Carrega dívidas para o cálculo de capital
             const fixaIndex = fixas.findIndex(f => f.id === id);
             const fixa = fixas[fixaIndex];
             
             if (fixa && !fixa.pago) {
-                const { totalReceitas } = getTotais(transacoes, dividas);
+                const { totalReceitas } = getTotais(transacoes, dividas, fixas); // FIX: Passa 'fixas'
                 if (totalReceitas >= fixa.valor) {
                     fixa.pago = true;
                     salvarContasFixas(fixas);
@@ -1402,38 +1436,35 @@
         }
         
         // NOVO: Função que verifica o estado das fixas e controla a visibilidade das Dívidas
-        const verificarEstadoContasFixas = (fixas) => {
+        const verificarEstadoContasFixas = (fixas, dividas) => {
             const todasPagas = fixas.every(f => f.pago);
             const feedbackEl = document.getElementById('feedback-fixas-quitadas');
             const fixasToggle = document.getElementById('contas-fixas-toggle');
             const dividasContainer = document.getElementById('dividas-container');
             const planoQuitacao = document.getElementById('plano-quitacao-master');
             
-            const dividas = carregarDividas();
+            // Lógica para DÍVIDAS e PLANO DE QUITAÇÃO (Correção 4: Aparecer se houver dívidas)
             const totalDividasPendentes = dividas.reduce((sum, d) => sum + d.valorAtual, 0);
 
+            if (dividas.length > 0 && totalDividasPendentes > 0.01) {
+                 dividasContainer.style.display = 'block'; 
+                 planoQuitacao.style.display = 'block'; 
+                 gerarPlanoQuitacaoIA(false, totalDividasPendentes);
+                 renderizarDicasQuitacao(dividas);
+            } else {
+                 dividasContainer.style.display = 'none'; 
+                 planoQuitacao.style.display = 'none'; 
+                 document.getElementById('dicas-quitacao').innerHTML = '<p style="color: var(--cor-texto-secundario); font-weight: bold; margin-top: 15px;"><i class="fas fa-info-circle"></i> Cadastre sua primeira Dívida Única para ativar o Plano de Quitação Estratégico.</p>';
+            }
+
+
+            // Lógica para CONTAS FIXAS
             if (todasPagas) {
-                // ABRIR MÓDULO DE DÍVIDAS
                 feedbackEl.style.display = 'block';
                 fixasToggle.style.display = 'none'; 
-                dividasContainer.style.display = 'block';
-                
-                // Módulo IA só aparece se houver dívidas cadastradas
-                if (dividas.length > 0 && totalDividasPendentes > 0.01) {
-                     planoQuitacao.style.display = 'block';
-                     gerarPlanoQuitacaoIA(false, totalDividasPendentes);
-                     renderizarDicasQuitacao(dividas);
-                } else {
-                     planoQuitacao.style.display = 'none';
-                     document.getElementById('dicas-quitacao').innerHTML = '<p style="color: var(--cor-texto-secundario); font-weight: bold; margin-top: 15px;"><i class="fas fa-info-circle"></i> Cadastre sua primeira Dívida Única para ativar o Plano de Quitação Estratégico.</p>';
-                }
-                
             } else {
-                // MANTER FOCO NAS FIXAS
                 feedbackEl.style.display = 'none';
                 fixasToggle.style.display = 'block';
-                dividasContainer.style.display = 'none'; 
-                planoQuitacao.style.display = 'none'; 
             }
         }
         
@@ -1541,12 +1572,13 @@
              
              let dividas = localStorage.getItem('dividas') ? JSON.parse(localStorage.getItem('dividas')) : [];
              let transacoes = carregarTransacoes();
+             let fixas = carregarContasFixas(); // FIX: Carregar fixas
              
              const dividaIndex = dividas.findIndex(d => d.id === idDebtQuitting);
              const divida = dividas[dividaIndex];
              if (!divida) { alert('Erro: Dívida não encontrada.'); return; }
              
-             const { totalReceitas } = getTotais(transacoes, dividas);
+             const { totalReceitas } = getTotais(transacoes, dividas, fixas); // FIX: Passa 'fixas'
              
              if (tipo === 'total') {
                  // Quitação total: Valor é o saldo da dívida, limitado ao capital
@@ -1597,8 +1629,8 @@
              return receitasDiarias;
         }
         
-        // NOVO: Função central de cálculo de totais
-        const getTotais = (transacoes, dividas) => {
+        // NOVO: Função central de cálculo de totais (Recebe FIXAS para correção 5)
+        const getTotais = (transacoes, dividas, fixas) => {
             let totalReceitas = transacoes.reduce((sum, t) => sum + parseFloat(t.valor), 0); 
             totalReceitas = Math.max(0, totalReceitas);
 
@@ -1618,10 +1650,12 @@
             const progressoCapital = totalDividasIniciais > 0.01 
                 ? (totalPagoDividas / totalDividasIniciais) * 100 
                 : (totalDividasPendentes === 0 ? 100 : 0);
-            
-            const saldoPendenteTotal = totalDividasPendentes; 
+                
+            // CORREÇÃO 5: Saldo Pendente Total = Dívidas Pendentes + Contas Fixas Pendentes
+            const somaFixasPendentes = fixas.filter(f => !f.pago).reduce((sum, item) => sum + item.valor, 0);
+            const saldoPendenteTotal = totalDividasPendentes + somaFixasPendentes; 
 
-            return { totalReceitas, totalDividasIniciais, totalDividasPendentes, progressoCapital, saldoPendenteTotal };
+            return { totalReceitas, totalDividasIniciais, totalDividasPendentes, progressoCapital, saldoPendenteTotal, somaFixasPendentes };
         }
         
         const gerarPlanoQuitacaoIA = (isInit = false, totalDividasPendentes) => {
@@ -1651,13 +1685,13 @@
              return valorDiarioNecessario; 
         };
         const getMetaDiariaAtingida = (transacoes, dividas, fixas, dataAlvo = getHojeString()) => {
-            const somaFixas = getSomaFixas(fixas);
-            const metaDiariaFixas = somaFixas / DIAS_UTEIS_MES;
+            const somaFixasPendentes = getSomaFixas(fixas);
+            const metaDiariaFixas = somaFixasPendentes / DIAS_UTEIS_MES;
             const receitasDiarias = getReceitasPorDia(transacoes);
             
-            const todasPagas = fixas.every(f => f.pago);
+            // A meta de quitação diária só é calculada se houver dívidas pendentes
             const totalDividasPendentes = dividas.reduce((sum, d) => sum + d.valorAtual, 0);
-            const metaQuitacaoDiaria = todasPagas ? gerarPlanoQuitacaoIA(true, totalDividasPendentes) : 0; 
+            const metaQuitacaoDiaria = totalDividasPendentes > 0.01 ? gerarPlanoQuitacaoIA(true, totalDividasPendentes) : 0; 
 
             const metaTotalDiaria = metaDiariaFixas + metaQuitacaoDiaria;
             const recebido = receitasDiarias[dataAlvo] || 0;
@@ -1670,11 +1704,10 @@
             };
         }
         const atualizarDashboard = (transacoes, dividas, fixas) => {
-            const { totalReceitas, totalDividasPendentes, progressoCapital, saldoPendenteTotal } = getTotais(transacoes, dividas);
-            const somaFixas = getSomaFixas(fixas);
+            const { totalReceitas, totalDividasPendentes, progressoCapital, saldoPendenteTotal, somaFixasPendentes } = getTotais(transacoes, dividas, fixas); // FIX: Passa 'fixas'
             
             document.getElementById('data-atual').textContent = new Date().toLocaleDateString('pt-BR');
-            document.getElementById('soma-fixas').textContent = formatarMoeda(somaFixas).replace('R$', '').trim(); 
+            document.getElementById('soma-fixas').textContent = formatarMoeda(somaFixasPendentes).replace('R$', '').trim(); 
             document.getElementById('total-lancado').textContent = formatarMoeda(totalReceitas); 
             document.getElementById('saldo-pendente-total').textContent = formatarMoeda(saldoPendenteTotal);
             document.getElementById('total-dividas-pendentes').textContent = formatarMoeda(totalDividasPendentes);
@@ -1713,7 +1746,8 @@
         };
         const renderizarDívidas = (dividas) => {
             const container = document.getElementById('lista-dividas-quitar-tabela');
-            const { totalReceitas } = getTotais(carregarTransacoes(), dividas);
+            // FIX: Passa 'fixas' para calcular totalReceitas corretamente
+            const { totalReceitas } = getTotais(carregarTransacoes(), dividas, carregarContasFixas()); 
             if (!container) return;
             container.innerHTML = '';
             // Dividas já estão carregadas e filtradas para valorAtual > 0.01
@@ -1883,7 +1917,8 @@
              document.getElementById('valor-pagamento').value = valor.toFixed(2);
              
              // Define a ação do botão Quitação Total
-             const { totalReceitas } = getTotais(carregarTransacoes(), carregarDividas());
+             // FIX: Passa 'fixas' para calcular totalReceitas corretamente
+             const { totalReceitas } = getTotais(carregarTransacoes(), carregarDividas(), carregarContasFixas()); 
              const btnQuitarTotal = document.getElementById('btn-quitar-total');
              
              if (totalReceitas >= valor - 0.009) {
@@ -1921,7 +1956,10 @@
              // --- Menu Sidebar ---
              document.getElementById('menu-toggle').addEventListener('click', openSidebar);
              document.getElementById('close-sidebar').addEventListener('click', closeSidebar);
-             document.getElementById('btn-logout-sidebar').addEventListener('click', resetTudoEVoltarLogin);
+             
+             // NOVO: Botões de Logout/Reset
+             document.getElementById('btn-logout-only').addEventListener('click', logoutOnly);
+             document.getElementById('btn-reset-data').addEventListener('click', resetAllData);
              document.getElementById('btn-excluir-conta').addEventListener('click', excluirConta);
              
              // --- Opção de Perfil / Mudar Foto ---
@@ -1938,20 +1976,22 @@
                  document.getElementById('modal-perfil').style.display = 'none';
              });
 
-             // --- Modals e Botões de Ação ---
-             const modalsToClose = ['modal-receita', 'modal-quitacao', 'modal-divida'];
+             // --- Modals e Botões de Ação (Correção 1: Fechar Modal) ---
+             const modalsToClose = ['modal-receita', 'modal-quitacao', 'modal-divida', 'modal-relatorio', 'modal-perfil'];
              modalsToClose.forEach(id => {
                  const modal = document.getElementById(id);
                  if (modal) {
                      modal.style.display = 'none'; 
-                     const closeBtn = document.getElementById(`fechar-${id.replace('modal-', '')}`);
+                     // CORREÇÃO AQUI: Usa o ID completo do span fechar
+                     const closeBtn = document.getElementById(`fechar-${id}`); 
                      if (closeBtn) closeBtn.addEventListener('click', () => modal.style.display = 'none');
                  }
              });
              
-             document.getElementById('fechar-modal-relatorio').addEventListener('click', () => {
-                 document.getElementById('modal-relatorio').style.display = 'none';
-             });
+             // Os listeners dos botões de fechar dos modais já devem funcionar com a correção acima
+             // document.getElementById('fechar-modal-relatorio').addEventListener('click', () => {
+             //     document.getElementById('modal-relatorio').style.display = 'none';
+             // });
 
              document.getElementById('abrir-cadastro-receita').addEventListener('click', () => document.getElementById('modal-receita').style.display = 'block');
              document.getElementById('btn-cadastrar-receita').addEventListener('click', cadastrarReceita);
