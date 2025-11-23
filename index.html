@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>PROJECT TITAN | CORE FINANCIAL [V4.6 - Prioridade Fixas, Fix X e Bola de Neve]</title>
+    <title>PROJECT TITAN | CORE FINANCIAL [V4.7 - Dívidas Dinâmicas]</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -734,8 +734,14 @@
 
             
             <div id="dividas-container" class="toggle-section" style="display: none;">
+                
+                <div class="section-header" style="margin-top: 0; margin-bottom: 20px;">
+                    <h2 style="font-size: 1.5em; color: var(--cor-divida);"><i class="fas fa-radiation"></i> DÍVIDAS ÚNICAS (PROTOCOLO DE REDUÇÃO)</h2>
+                    <button id="abrir-cadastro-divida" class="btn-principal" style="background-color: var(--cor-divida);"><i class="fas fa-plus"></i> ADICIONAR DÍVIDA</button>
+                </div>
+                
                 <div class="section-toggle dividas" id="toggle-dividas">
-                    <h2><i class="fas fa-radiation"></i> DÍVIDAS ÚNICAS (PROTOCOLO DE REDUÇÃO)</h2>
+                    <h2><i class="fas fa-clipboard-list"></i> LOG: DÍVIDAS A QUITAR</h2>
                     <i class="fas fa-chevron-down"></i>
                 </div>
                 
@@ -818,6 +824,21 @@
         </div>
     </div>
     
+    <div id="modal-divida" class="modal">
+        <div class="modal-content" style="background-color: var(--cor-fundo-card); margin: 15% auto; padding: 30px; border-radius: 10px; border: 1px solid var(--cor-divida); width: 80%; max-width: 400px; box-shadow: 0 0 20px rgba(239, 68, 68, 0.5);">
+            <span class="fechar-modal" id="fechar-modal-divida" style="color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer;">&times;</span>
+            <h3 id="titulo-cadastro-divida" style="color: var(--cor-divida);"><i class="fas fa-hand-holding-usd"></i> CADASTRO DE DÍVIDA ÚNICA</h3>
+            
+            <label for="credor-input-divida" style="display: block; margin-top: 20px; color: var(--cor-texto-principal); font-weight: 600;">CREDOR/ORIGEM</label>
+            <input type="text" id="credor-input-divida" placeholder="Ex: Banco X" style="width: 100%; padding: 10px; margin-top: 8px; border-radius: 5px; border: 1px solid var(--cor-borda); background-color: #1A212E; color: var(--cor-fixa); font-family: var(--fonte-dados);">
+
+            <label for="valor-input-divida" style="display: block; margin-top: 20px; color: var(--cor-texto-principal); font-weight: 600;">VALOR TOTAL (R$)</label>
+            <input type="number" id="valor-input-divida" placeholder="0.00" min="0.01" step="0.01" style="width: 100%; padding: 10px; margin-top: 8px; border-radius: 5px; border: 1px solid var(--cor-borda); background-color: #1A212E; color: var(--cor-fixa); font-family: var(--fonte-dados);">
+            
+            <button class="btn-principal btn-ok" id="btn-cadastrar-divida" style="background-color: var(--cor-divida); margin-top: 25px;">REGISTRAR DÍVIDA <i class="fas fa-save"></i></button>
+        </div>
+    </div>
+    
     <div id="modal-quitacao" class="modal">
         <div class="modal-content" style="background-color: var(--cor-fundo-card); margin: 15% auto; padding: 30px; border-radius: 10px; border: 1px solid var(--cor-divida); width: 80%; max-width: 400px; box-shadow: 0 0 20px rgba(239, 68, 68, 0.5);">
             <span class="fechar-modal" id="fechar-modal-quitacao" style="color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer;">&times;</span>
@@ -875,7 +896,7 @@
     
     <script>
         // ===========================================
-        // JAVASCRIPT: LÓGICA DE NEGÓCIO E CONEXÃO V4.6
+        // JAVASCRIPT: LÓGICA DE NEGÓCIO E CONEXÃO V4.7
         // ===========================================
 
         const DIAS_UTEIS_MES = 22; 
@@ -883,29 +904,11 @@
         let sessionTimer;
         const DEFAULT_PASSWORD = '123'; 
 
-        // Dados Iniciais (Mantidos)
-        const DEBT_LIST_INITIAL = [
-             { id: 1, credor: "Itau visa", valorInicial: 200.00, valorAtual: 200.00 },
-             { id: 2, credor: "Banco Inter", valorInicial: 120.00, valorAtual: 120.00 },
-             { id: 3, credor: "Conect car", valorInicial: 60.00, valorAtual: 60.00 },
-             { id: 4, credor: "Vivo", valorInicial: 95.00, valorAtual: 95.00 },
-             { id: 5, credor: "Banco Pan", valorInicial: 265.00, valorAtual: 265.00 },
-             { id: 6, credor: "Karen", valorInicial: 300.00, valorAtual: 300.00 },
-             { id: 7, credor: "Claro", valorInicial: 300.00, valorAtual: 300.00 },
-             { id: 8, credor: "Bruno Carro", valorInicial: 400.00, valorAtual: 400.00 },
-             { id: 9, credor: "Mercado pago", valorInicial: 522.00, valorAtual: 522.00 },
-             { id: 10, credor: "Koin", valorInicial: 700.00, valorAtual: 700.00 },
-             { id: 11, credor: "Will bank", valorInicial: 700.00, valorAtual: 700.00 },
-             { id: 12, credor: "Picpay", valorInicial: 859.64, valorAtual: 859.64 },
-             { id: 13, credor: "Carol", valorInicial: 1000.00, valorAtual: 1000.00 },
-             { id: 14, credor: "Localiza", valorInicial: 1200.00, valorAtual: 1200.00 },
-             { id: 15, credor: "Light", valorInicial: 1450.00, valorAtual: 1450.00 },
-             { id: 16, credor: "Casa", valorInicial: 1650.00, valorAtual: 1650.00 },
-             { id: 17, credor: "Bradesco", valorInicial: 2000.00, valorAtual: 2000.00 },
-             { id: 18, credor: "Itau master", valorInicial: 2500.00, valorAtual: 2500.00 },
-             { id: 19, credor: "Carro", valorInicial: 3500.00, valorAtual: 3500.00 },
-             { id: 20, credor: "Ravi", valorInicial: 4570.00, valorAtual: 4570.00 },
-        ].sort((a, b) => a.valorAtual - b.valorAtual);
+        // Dados Iniciais (Ajustados na V4.7)
+        // **NOTA:** A lista de dívidas inicia vazia, mas o TOTAL INICIAL foi mantido para que o Módulo IA e o Progresso de Quitação (100%) funcionem corretamente.
+        const TOTAL_DEBT_INITIAL = 22841.64; // Soma de todos os valores iniciais removidos.
+
+        const DEBT_LIST_INITIAL = []; // Lista de dívidas começa vazia
         
         const CONTAS_FIXAS_INITIAL = [
             { id: 100, nome: "Carro", valor: 1800.00, pago: false },
@@ -961,7 +964,7 @@
                 salvarDividas(DEBT_LIST_INITIAL);
                 return DEBT_LIST_INITIAL;
             }
-            const loadedDebts = JSON.parse(dividas).map(d => ({ ...d, id: parseInt(d.id) }));
+            const loadedDebts = JSON.parse(dividas).map(d => ({ ...d, id: parseInt(d.id), valorAtual: parseFloat(d.valorAtual) })); // Garante que valorAtual é float
             loadedDebts.sort((a, b) => a.valorAtual - b.valorAtual);
             return loadedDebts;
         }
@@ -1346,13 +1349,18 @@
                 feedbackEl.style.display = 'block';
                 fixasToggle.style.display = 'none'; 
                 dividasContainer.style.display = 'block';
-                planoQuitacao.style.display = 'block';
                 
-                // Inicializa o plano IA e as dicas de quitação
+                // Módulo IA só aparece se houver dívidas cadastradas
                 const dividas = carregarDividas();
                 const { totalDividasPendentes } = getTotais(carregarTransacoes(), dividas);
-                gerarPlanoQuitacaoIA(false, totalDividasPendentes);
-                renderizarDicasQuitacao(dividas);
+                if (dividas.length > 0) {
+                     planoQuitacao.style.display = 'block';
+                     gerarPlanoQuitacaoIA(false, totalDividasPendentes);
+                     renderizarDicasQuitacao(dividas);
+                } else {
+                     planoQuitacao.style.display = 'none';
+                     document.getElementById('dicas-quitacao').innerHTML = '<p style="color: var(--cor-texto-secundario); font-weight: bold; margin-top: 15px;"><i class="fas fa-info-circle"></i> Cadastre sua primeira Dívida Única para ativar o Plano de Quitação Estratégico.</p>';
+                }
                 
             } else {
                 // MANTER FOCO NAS FIXAS
@@ -1401,6 +1409,39 @@
             }
         }
         
+        // NOVO: Função para adicionar dívida
+        const adicionarDivida = () => {
+            const credorInput = document.getElementById('credor-input-divida');
+            const valorInput = document.getElementById('valor-input-divida');
+            const credor = credorInput.value.trim();
+            const valor = parseFloat(valorInput.value);
+            
+            if (!credor || isNaN(valor) || valor <= 0) {
+                 alert('Por favor, preencha o Credor e um Valor positivo válido.');
+                 return;
+            }
+            
+            let dividas = carregarDividas();
+            // Gera um ID sequencial para a nova dívida
+            const novoId = dividas.length > 0 ? Math.max(...dividas.map(d => d.id)) + 1 : 1; 
+            
+            const novaDivida = {
+                id: novoId,
+                credor: credor,
+                valorInicial: valor,
+                valorAtual: valor
+            };
+            
+            dividas.push(novaDivida);
+            salvarDividas(dividas);
+            
+            credorInput.value = '';
+            valorInput.value = '';
+            document.getElementById('modal-divida').style.display = 'none';
+            
+            initDashboard(); 
+        }
+
         // --- Funções de Quitação de Dívida (Mantidas) ---
         const realizarPagamentoDivida = () => {
              const valorInput = document.getElementById('valor-pagamento');
@@ -1438,7 +1479,7 @@
              initDashboard();
         }
         
-        // --- Lógica de Negócio e Dashboard (Mantidas) ---
+        // --- Lógica de Negócio e Dashboard (Ajuste no getTotais) ---
         const getSomaFixas = (fixas) => fixas.filter(f => !f.pago).reduce((sum, item) => sum + item.valor, 0);
         const getMetaDiariaFixas = (somaFixas) => somaFixas / DIAS_UTEIS_MES;
         const getReceitasPorDia = (transacoes) => {
@@ -1453,10 +1494,15 @@
             let totalReceitas = transacoes.reduce((sum, t) => sum + parseFloat(t.valor), 0); 
             totalReceitas = Math.max(0, totalReceitas);
 
-            const totalDividasIniciais = DEBT_LIST_INITIAL.reduce((sum, d) => sum + d.valorInicial, 0);
+            // Usa a constante do total inicial para métrica de progresso
+            const totalDividasIniciais = TOTAL_DEBT_INITIAL; 
+            
+            // Calcula o saldo pendente a partir das dívidas CADASTrADAs
             const totalDividasPendentes = dividas.filter(d => d.valorAtual > 0.01).reduce((sum, d) => sum + parseFloat(d.valorAtual), 0);
             
-            const totalPagoDividas = totalDividasIniciais - totalDividasPendentes;
+            // O total que você "já pagou" (baseado na sua métrica de 100%) é a diferença.
+            const totalPagoDividas = TOTAL_DEBT_INITIAL - totalDividasPendentes; 
+            
             const progressoCapital = totalDividasIniciais > 0.01 
                 ? (totalPagoDividas / totalDividasIniciais) * 100 
                 : (totalDividasPendentes === 0 ? 100 : 0);
@@ -1493,7 +1539,7 @@
         };
         const getMetaDiariaAtingida = (transacoes, totalDividasPendentes, fixas, dataAlvo = getHojeString()) => {
             const somaFixas = getSomaFixas(fixas);
-            const metaDiariaFixas = getMetaDiariaFixas(somaFixas);
+            const metaDiariaFixas = somaFixas / DIAS_UTEIS_MES;
             const receitasDiarias = getReceitasPorDia(transacoes);
             
             const todasPagas = fixas.every(f => f.pago);
@@ -1558,7 +1604,7 @@
             container.innerHTML = '';
             const dividasPendentes = dividas.filter(d => d.valorAtual > 0.01);
             if (dividasPendentes.length === 0) {
-                container.innerHTML = '<tr><td colspan="3" style="text-align: center; color: var(--cor-sucesso); font-weight: bold;">Todas as dívidas únicas foram liquidadas!</td></tr>';
+                container.innerHTML = '<tr><td colspan="3" style="text-align: center; color: var(--cor-sucesso); font-weight: bold;">Nenhuma dívida única cadastrada. Adicione uma para começar o protocolo.</td></tr>';
                 return;
             }
             dividasPendentes.forEach((divida) => {
@@ -1669,14 +1715,15 @@
             const somaFixas = CONTAS_FIXAS_INITIAL.reduce((sum, item) => sum + item.valor, 0);
             const metaDiariaFixas = somaFixas / DIAS_UTEIS_MES;
             const meses = parseInt(document.getElementById('meses-plano').value) || 5;
-            const metaQuitacaoDiaria = (DEBT_LIST_INITIAL.reduce((s,d) => s + d.valorInicial, 0) / meses) / DIAS_UTEIS_MES; 
+            // Usa o TOTAL_DEBT_INITIAL
+            const metaQuitacaoDiaria = (TOTAL_DEBT_INITIAL / meses) / DIAS_UTEIS_MES; 
             const metaTotalDiaria = metaDiariaFixas + metaQuitacaoDiaria;
             
             const hoje = getHojeString();
             if (!todasAsDatas.includes(hoje)) { todasAsDatas.push(hoje); }
             todasAsDatas.sort((a, b) => new Date(b) - new Date(a));
             
-            const relatorio = todasAsDatas.map(data => {
+            const relatorio = todasAsDates.map(data => {
                 const recebido = receitasDiarias[data] || 0;
                 const atingido = recebido >= metaTotalDiaria - 0.009;
                 return {
@@ -1756,7 +1803,7 @@
              });
 
              // --- Modals e Botões de Ação ---
-             const modalsToClose = ['modal-receita', 'modal-quitacao'];
+             const modalsToClose = ['modal-receita', 'modal-quitacao', 'modal-divida']; // Adicionado modal-divida
              modalsToClose.forEach(id => {
                  const modal = document.getElementById(id);
                  if (modal) {
@@ -1774,6 +1821,15 @@
              document.getElementById('abrir-cadastro-receita').addEventListener('click', () => document.getElementById('modal-receita').style.display = 'block');
              document.getElementById('btn-cadastrar-receita').addEventListener('click', cadastrarReceita);
              document.getElementById('btn-quitar-divida').addEventListener('click', realizarPagamentoDivida);
+             
+             // NOVO V4.7: Cadastro de Dívida
+             document.getElementById('abrir-cadastro-divida').addEventListener('click', () => {
+                 document.getElementById('credor-input-divida').value = '';
+                 document.getElementById('valor-input-divida').value = '';
+                 document.getElementById('modal-divida').style.display = 'block';
+             });
+             document.getElementById('btn-cadastrar-divida').addEventListener('click', adicionarDivida);
+
              
              // --- Eventos do Relatório Diário ---
              document.getElementById('btn-data-atual').addEventListener('click', () => {
