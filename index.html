@@ -7,7 +7,7 @@
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&family=Roboto+Mono:wght{400;700}&display=swap" rel="stylesheet">
 
     <style>
         /* =================================== */
@@ -95,19 +95,27 @@
              margin-right: 8px;
         }
         
-        /* LOCALIZADOR DE DATA */
+        /* LOCALIZADOR DE DATA (NOVO: Centralizado e Interativo) */
         #data-atual-info {
+            display: flex;
+            justify-content: center; /* Centralizado */
+            margin-bottom: 20px;
+        }
+        #data-atual-info button {
             background-color: var(--cor-fundo-card);
             padding: 10px 20px;
             border-radius: 8px;
-            text-align: right;
-            margin-bottom: 20px;
             font-size: 0.9em;
             font-weight: 600;
             color: var(--cor-secundario);
             border: 1px solid var(--cor-borda);
+            cursor: pointer;
+            transition: background-color 0.2s, border-color 0.2s;
         }
-
+        #data-atual-info button:hover {
+            background-color: #EFEFEF;
+            border-color: var(--cor-primario);
+        }
 
         /* =================================== */
         /* 2. CARD META DIÁRIA TOTAL (DESTAQUE)*/
@@ -636,6 +644,36 @@
         #filtro-receitas-batidas button:hover {
              background-color: #2563EB;
         }
+        
+        /* NOVO: Modal de Rastreio de Metas Diárias */
+        #modal-rastreio-metas .modal-content {
+            max-width: 600px;
+            border-top: 4px solid var(--cor-meta-diaria);
+        }
+        #modal-rastreio-metas h3 {
+             color: var(--cor-meta-diaria);
+        }
+        #lista-dias-rastreio {
+             max-height: 400px;
+             overflow-y: auto;
+             padding-right: 15px;
+        }
+        #lista-dias-rastreio p {
+             padding: 10px 0;
+             border-bottom: 1px dashed var(--cor-borda);
+             display: flex;
+             justify-content: space-between;
+             align-items: center;
+             font-size: 0.95em;
+        }
+        .status-batido {
+             color: var(--cor-sucesso);
+             font-weight: 700;
+        }
+        .status-pendente {
+             color: var(--cor-divida);
+             font-weight: 700;
+        }
 
 
         /* =================================== */
@@ -777,7 +815,9 @@
         <h1><i class="fas fa-chart-line"></i> Painel de Gestão Estratégica</h1>
 
         <div class="container" id="data-atual-info">
-            <i class="fas fa-calendar-alt"></i> Data do Sistema: <span id="data-atual"></span>
+            <button id="btn-data-atual">
+                <i class="fas fa-calendar-alt"></i> Data do Sistema: <span id="data-atual"></span>
+            </button>
         </div>
 
         <div class="motivacao-box container" id="motivacao-diaria">
@@ -802,7 +842,7 @@
             <div class="progress-area" id="meta-area">
                 <p class="rotulo"><i class="fas fa-bullseye"></i> Status de Quitação Única</p>
                 <p style="margin-bottom: 5px; color: var(--cor-secundario);">Dívidas Únicas Pendentes: <span id="total-dividas-pendentes" style="font-weight: 700; color: var(--cor-divida);">R$ 0,00</span></p>
-                <p>Excedente de Aporte (pós Fixas): <span id="valor-excedente" style="font-weight: 700; color: var(--cor-sucesso);">R$ 0,00</span></p>
+                <p>Progresso de Quitação com Capital: <span id="progresso-capital-txt" style="font-weight: 700; color: var(--cor-sucesso);">0.00%</span></p>
                 
                 <div class="progresso-bar-container">
                     <div id="progresso-bar" class="progresso" style="width: 0%;"></div>
@@ -944,6 +984,20 @@
         </div>
     </div>
     
+    <div id="modal-rastreio-metas" class="modal">
+        <div class="modal-content">
+            <span class="fechar-modal" id="fechar-modal-rastreio">&times;</span>
+            
+            <h3><i class="fas fa-check-double"></i> Rastreio de Metas Diárias (Log)</h3>
+            
+            <div id="lista-dias-rastreio">
+                <p>Carregando dados...</p>
+            </div>
+            
+            <div style="clear: both;"></div> 
+        </div>
+    </div>
+    
     <script>
         // ===========================================
         // JAVASCRIPT: LÓGICA DE NEGÓCIO E CORREÇÕES
@@ -955,7 +1009,8 @@
             { nome: "Carro", valor: 1800.00 },
             { nome: "Luz", valor: 250.00 },
             { nome: "Internet Movel", valor: 120.00 },
-            { nome: "Wifi", valor: 100.00 }
+            { nome: "Wifi", valor: 100.00 },
+            { nome: "Academia", valor: 300.00 } // NOVO: Academia
         ];
         
         const SOMA_CONTAS_FIXAS = DADOS_CONTAS_FIXAS.reduce((sum, item) => sum + item.valor, 0); 
@@ -963,7 +1018,6 @@
         const META_DIARIA_FIXAS = SOMA_CONTAS_FIXAS / DIAS_UTEIS_MES; 
 
         // DÍVIDAS INICIAIS (para inicializar localStorage se estiver vazio)
-        // Manteve-se a ordem de prioridade (menor para maior)
         const DEBT_LIST_INITIAL = [
             { id: 1, credor: "Itau visa", valorInicial: 200.00, valorAtual: 200.00 },
             { id: 2, credor: "Banco Inter", valorInicial: 120.00, valorAtual: 120.00 },
@@ -989,7 +1043,7 @@
 
         
         let idDebtQuitting = null; 
-        let filtroReceitas = 'TUDO'; // NOVO: Estado do filtro
+        let filtroReceitas = 'TUDO'; 
 
         // Elementos DOM principais
         const dataAtualEl = document.getElementById('data-atual');
@@ -997,12 +1051,25 @@
         const metaDiariaTotalEl = document.getElementById('meta-diaria-total-el');
         const metaDiariaIncentivoEl = document.getElementById('meta-diaria-incentivo');
         const totalDividasPendentesEl = document.getElementById('total-dividas-pendentes'); 
-        const valorExcedenteEl = document.getElementById('valor-excedente'); 
+        const progressoCapitalTxtEl = document.getElementById('progresso-capital-txt'); // NOVO: Progresso
         const saldoPendenteTotalEl = document.getElementById('saldo-pendente-total');
         const contasFixasCard = document.getElementById('contas-fixas-card');
         const feedbackFixasQuitadasEl = document.getElementById('feedback-fixas-quitadas');
         const listaContasFixasEl = document.getElementById('lista-contas-fixas');
         const somaFixasEl = document.getElementById('soma-fixas');
+        
+        // Modais
+        const modalReceita = document.getElementById('modal-receita');
+        const modalQuitacao = document.getElementById('modal-quitacao');
+        const modalRastreioMetas = document.getElementById('modal-rastreio-metas'); // NOVO MODAL
+        const valorInputReceita = document.getElementById('valor-input-receita');
+        const btnCadastrarReceita = document.getElementById('btn-cadastrar-receita');
+        const valorPagamentoInput = document.getElementById('valor-pagamento');
+        const btnQuitarDivida = document.getElementById('btn-quitar-divida');
+        const toggleDividasBtn = document.getElementById('toggle-dividas');
+        const toggleReceitasBtn = document.getElementById('toggle-receitas');
+        const listaDividasQuitarContainer = document.getElementById('lista-dividas-quitar-container');
+        const listaReceitasContainer = document.getElementById('lista-receitas-container');
 
 
         // 2. FUNÇÕES DE UTILIDADE (LOCAL STORAGE & FORMATO)
@@ -1023,14 +1090,12 @@
                 salvarDividas(DEBT_LIST_INITIAL);
                 return DEBT_LIST_INITIAL;
             }
-            // Garante que a lista esteja ordenada ao carregar
             const loadedDebts = JSON.parse(dividas);
             loadedDebts.sort((a, b) => a.valorAtual - b.valorAtual);
             return loadedDebts;
         }
         
         const salvarDividas = (dividas) => {
-             // Garante que a lista seja salva ordenada
              dividas.sort((a, b) => a.valorAtual - b.valorAtual);
              localStorage.setItem('dividas', JSON.stringify(dividas));
         }
@@ -1070,16 +1135,20 @@
             let totalReceitas = 0;
             transacoes.forEach(t => totalReceitas += parseFloat(t.valor));
 
+            let totalDividasIniciais = DEBT_LIST_INITIAL.reduce((sum, d) => sum + d.valorInicial, 0);
             let totalDividasPendentes = 0;
             dividas.filter(d => d.valorAtual > 0.01).forEach(d => totalDividasPendentes += parseFloat(d.valorAtual));
             
-            // 1. O excedente é o que sobra APÓS pagar as Contas Fixas
+            // NOVO REQUISITO: O progresso da quitação conta do ZERO (Capital Total vs. Dívida Pendente)
+            const progressoCapital = totalDividasIniciais > 0.01 
+                ? (totalReceitas / totalDividasIniciais) * 100 
+                : (totalReceitas > 0 ? 100 : 0);
+            
+            // Excedente é mantido apenas para a verificação de contas fixas, mas não é usado no dashboard de progresso
             const excedenteReceitas = Math.max(0, totalReceitas - SOMA_CONTAS_FIXAS); 
+            const saldoPendenteTotal = totalDividasPendentes; 
 
-            // 2. O Saldo Pendente Total (Dívidas Únicas) é o que falta no excedente
-            const saldoPendenteTotal = Math.max(0, totalDividasPendentes - excedenteReceitas);
-
-            return { totalReceitas, totalDividasPendentes, excedenteReceitas, saldoPendenteTotal };
+            return { totalReceitas, totalDividasIniciais, totalDividasPendentes, progressoCapital, excedenteReceitas, saldoPendenteTotal };
         }
         
         // Calcula se a Meta Diária (Fixas + Quitação) foi atingida em uma data específica
@@ -1102,7 +1171,6 @@
         
         // Verifica se a meta de Contas Fixas foi atingida e atualiza localStorage
         const verificarEstadoContasFixas = (totalReceitas) => {
-             // ... Lógica anterior mantida (ocultar/mostrar o card de Contas Fixas)
              const hoje = getHojeString();
              const primeiroDiaMes = getPrimeiroDiaDoMes();
              const fixasQuitadasEm = localStorage.getItem('fixasQuitadasEm');
@@ -1138,7 +1206,7 @@
         // -------------------------------------------------------
 
         const atualizarDashboard = (transacoes, dividas) => {
-            const { totalReceitas, totalDividasPendentes, excedenteReceitas, saldoPendenteTotal } = getTotais(transacoes, dividas);
+            const { totalReceitas, totalDividasPendentes, progressoCapital, saldoPendenteTotal } = getTotais(transacoes, dividas);
 
             dataAtualEl.textContent = new Date().toLocaleDateString('pt-BR');
             somaFixasEl.textContent = formatarMoeda(SOMA_CONTAS_FIXAS).replace('R$', '').trim(); 
@@ -1147,11 +1215,13 @@
             saldoPendenteTotalEl.textContent = formatarMoeda(saldoPendenteTotal);
             
             totalDividasPendentesEl.textContent = formatarMoeda(totalDividasPendentes);
-            valorExcedenteEl.textContent = formatarMoeda(excedenteReceitas);
+            
+            // NOVO: Progresso com base no Capital Total vs Dívida Inicial
+            const progressoExibido = Math.min(100, progressoCapital).toFixed(2);
+            progressoCapitalTxtEl.textContent = `${progressoExibido}%`;
 
             const progressoBar = document.getElementById('progresso-bar');
-            const progressoPercentual = totalDividasPendentes > 0.01 ? (excedenteReceitas / totalDividasPendentes) * 100 : (excedenteReceitas > 0 ? 100 : 0);
-            progressoBar.style.width = `${Math.min(100, progressoPercentual)}%`;
+            progressoBar.style.width = `${progressoExibido}%`;
             
             verificarEstadoContasFixas(totalReceitas);
         };
@@ -1188,6 +1258,38 @@
             
             listaContasFixasEl.innerHTML = html;
         }
+        
+        // NOVO: Renderiza o Pop-up de Rastreio de Metas
+        const renderizarRastreioMetas = (transacoes, totalDividasPendentes) => {
+            const listaDiasRastreio = document.getElementById('lista-dias-rastreio');
+            const receitasDiariasMap = getReceitasPorDia(transacoes);
+            const datasRegistradas = Object.keys(receitasDiariasMap).sort((a, b) => new Date(b) - new Date(a));
+            
+            if (datasRegistradas.length === 0) {
+                 listaDiasRastreio.innerHTML = '<p style="text-align: center; color: var(--cor-secundario);">Nenhum lançamento de receita registrado.</p>';
+                 return;
+            }
+            
+            let html = '';
+            datasRegistradas.forEach(data => {
+                const { metaTotal, atingido, recebido } = getMetaDiariaAtingida(transacoes, totalDividasPendentes, data);
+                const statusClasse = atingido ? 'status-batido' : 'status-pendente';
+                const statusIcone = atingido ? 'fas fa-check-circle' : 'fas fa-times-circle';
+                
+                html += `
+                    <p>
+                        <span><i class="${statusIcone}" style="margin-right: 10px;"></i> ${formatarData(data)}</span>
+                        <span class="${statusClasse}">
+                            ${atingido ? 'META BATIDA' : 'PENDENTE'}
+                            (${formatarMoeda(recebido)} / ${formatarMoeda(metaTotal)})
+                        </span>
+                    </p>
+                `;
+            });
+            
+            listaDiasRastreio.innerHTML = html;
+        }
+
 
         const renderizarTabelas = (transacoes, dividas) => {
             const listaEntradasBody = document.getElementById('lista-entradas');
@@ -1202,16 +1304,15 @@
             const transacoesOrdenadas = transacoes.sort((a, b) => new Date(b.data) - new Date(a.data));
             
             let receitasParaExibir = transacoesOrdenadas;
-            const receitasDiariasMap = getReceitasPorDia(transacoesOrdenadas); // Receitas por dia
+            const receitasDiariasMap = getReceitasPorDia(transacoesOrdenadas); 
             
-            // NOVO: Filtragem
+            // Filtragem
             if (filtroReceitas === 'BATIDO') {
                 const datasBatidas = Object.keys(receitasDiariasMap).filter(data => {
                     const { atingido } = getMetaDiariaAtingida(transacoes, totalDividasPendentes, data);
                     return atingido;
                 });
                 
-                // Filtra as transações, mantendo apenas as que pertencem aos dias batidos
                 receitasParaExibir = transacoesOrdenadas.filter(t => datasBatidas.includes(t.data));
             }
             
@@ -1219,8 +1320,6 @@
                  const mensagem = filtroReceitas === 'BATIDO' ? '<tr><td colspan="5" style="text-align: center; color: var(--cor-alerta);">Nenhum dia atingiu a Meta Diária Total neste período.</td></tr>' : '<tr><td colspan="5" style="text-align: center; color: var(--cor-secundario);">Nenhuma receita lançada no log.</td></tr>';
                  listaEntradasBody.innerHTML = mensagem;
             } else {
-                // Para exibir o status por dia, precisamos agrupar e marcar. 
-                // Simplificaremos o display usando o status da meta para CADA LINHA do dia.
                 receitasParaExibir.forEach((t, index) => {
                     const { atingido } = getMetaDiariaAtingida(transacoes, totalDividasPendentes, t.data);
                     
@@ -1277,7 +1376,6 @@
             }
 
             const valorMensalNecessario = totalDividasPendentes / meses;
-            // Usamos 30 dias para simplificar a meta diária (cálculo mais agressivo/constante)
             const valorDiarioNecessario = valorMensalNecessario / 30; 
             const valorSemanalNecessario = valorDiarioNecessario * 7;
 
@@ -1326,7 +1424,7 @@
         }
 
         // 5. TELA DE LOGIN
-        const LOGIN_PASSWORD = '12345'; 
+        const LOGIN_PASSWORD = '01'; // NOVO: Senha alterada
 
         const handleLogin = () => {
             const passwordInput = document.getElementById('password-input').value;
@@ -1385,9 +1483,17 @@
              }
         });
         
-        // ... (Outras funções e listeners de Modal/Ações mantidas e adaptadas) ...
-        
-        // 4.1. Adicionar Receita (Mantida)
+        // Listener do botão de Data (NOVO: Abre o Pop-up)
+        document.getElementById('btn-data-atual').addEventListener('click', () => {
+             const transacoes = carregarTransacoes();
+             const dividas = carregarDividas();
+             const { totalDividasPendentes } = getTotais(transacoes, dividas);
+             
+             renderizarRastreioMetas(transacoes, totalDividasPendentes); 
+             modalRastreioMetas.style.display = 'block';
+        });
+
+        // 4.1. Adicionar Receita 
         const adicionarReceita = () => {
             const valor = parseFloat(valorInputReceita.value);
 
@@ -1411,7 +1517,7 @@
             fecharModal(modalReceita);
         };
         
-        // 4.2. Iniciar Quitação (Abre o modal)
+        // 4.2. Iniciar Quitação 
         const iniciarQuitarDivida = (id) => {
             const dividas = carregarDividas();
             const divida = dividas.find(d => d.id === id); 
@@ -1430,7 +1536,7 @@
             modalQuitacao.style.display = 'block';
         }
         
-        // 4.3. Registrar Pagamento (Mantida)
+        // 4.3. Registrar Pagamento 
         const registrarPagamento = () => {
             const valorPagamento = parseFloat(valorPagamentoInput.value);
             const dividas = carregarDividas();
@@ -1466,7 +1572,7 @@
             fecharModal(modalQuitacao);
         }
         
-        // 4.4. Deletar Receita (Mantida)
+        // 4.4. Deletar Receita 
         const deletarReceita = (index) => {
              if (!confirm("ALERTA: Confirme a exclusão do registro de receita. Esta ação é irreversível.")) {
                 return;
@@ -1508,6 +1614,8 @@
         document.getElementById('fechar-modal-quitacao').addEventListener('click', () => fecharModal(modalQuitacao));
         btnQuitarDivida.addEventListener('click', registrarPagamento);
         
+        document.getElementById('fechar-modal-rastreio').addEventListener('click', () => fecharModal(modalRastreioMetas)); // NOVO FECHAR
+
         document.getElementById('btn-gerar-plano').addEventListener('click', () => {
             const { totalDividasPendentes } = getTotais(carregarTransacoes(), carregarDividas());
             gerarPlanoQuitacaoIA(false, totalDividasPendentes); 
@@ -1517,7 +1625,7 @@
         toggleDividasBtn.addEventListener('click', () => toggleSection(listaDividasQuitarContainer, toggleDividasBtn));
         toggleReceitasBtn.addEventListener('click', () => toggleSection(listaReceitasContainer, toggleReceitasBtn));
         
-        // NOVO: Listeners de Filtro de Receitas
+        // Listeners de Filtro de Receitas
         document.getElementById('btn-filtro-tudo').addEventListener('click', () => {
             filtroReceitas = 'TUDO';
             renderizarTabelas(carregarTransacoes(), carregarDividas());
@@ -1546,6 +1654,9 @@
             }
             if (event.target === modalQuitacao) {
                 fecharModal(modalQuitacao);
+            }
+            if (event.target === modalRastreioMetas) { // NOVO
+                fecharModal(modalRastreioMetas);
             }
         });
     </script>
