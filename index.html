@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PROJECT TITAN | CORE FINANCIAL [V3.1]</title>
+    <title>PROJECT TITAN | CORE FINANCIAL [V3.2]</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -821,7 +821,7 @@
     
     <div id="login-screen">
         <div class="login-box">
-            <h2><i class="fas fa-fingerprint"></i> PROTOCOLO DE ACESSO (V3.1)</h2>
+            <h2><i class="fas fa-fingerprint"></i> PROTOCOLO DE ACESSO (V3.2)</h2>
             <p style="color: var(--cor-texto-secundario); margin-bottom: 25px;">Acesso restrito ao Painel de Gestão Estratégica.</p>
             <label for="password-input">CHAVE DE SEGURANÇA (Senha)</label>
             <input type="password" id="password-input" placeholder="01" required>
@@ -1023,7 +1023,7 @@
     
     <script>
         // ===========================================
-        // JAVASCRIPT: LÓGICA DE NEGÓCIO E CONEXÃO V3.1
+        // JAVASCRIPT: LÓGICA DE NEGÓCIO E CONEXÃO V3.2
         // ===========================================
 
         const DADOS_CONTAS_FIXAS = [
@@ -1033,7 +1033,7 @@
             { nome: "Luz", valor: 250.00 },
             { nome: "Internet Movel", valor: 120.00 },
             { nome: "Wifi", valor: 100.00 }
-        ].sort((a, b) => b.valor - a.valor); // **NOVO: ORDENAÇÃO POR VALOR DECRESCENTE**
+        ].sort((a, b) => b.valor - a.valor); // ORDENAÇÃO POR VALOR DECRESCENTE
         
         const SOMA_CONTAS_FIXAS = DADOS_CONTAS_FIXAS.reduce((sum, item) => sum + item.valor, 0); // Total: 3420.00
         const DIAS_UTEIS_MES = 22; 
@@ -1098,7 +1098,7 @@
         // Banner Dinâmico
         const BANNER_MESSAGES = [
             "⚡ TITAN INITIATED: Maximize o Seu Capital. 🚀",
-            "🔒 SECURITY PROTOCOL: Sua Liberdade Financeira é o Alvo.🎯",
+            "🔒 SECURITY PROTOCOL: Sua Liberdade Financeira é o Alvo. 🎯",
             "📈 ELEVATE YOUR GAME: Disciplina Gera Aceleração. 🔥",
             "💰 CORE FOCUS: Zero Dívida. Alto Acúmulo. ✨"
         ];
@@ -1164,7 +1164,10 @@
              const receitasDiarias = {};
              transacoes.forEach(t => {
                  const data = t.data;
-                 receitasDiarias[data] = (receitasDiarias[data] || 0) + parseFloat(t.valor);
+                 // Ignora saídas (valores negativos) ao calcular metas diárias de entrada
+                 if(parseFloat(t.valor) > 0) {
+                     receitasDiarias[data] = (receitasDiarias[data] || 0) + parseFloat(t.valor);
+                 }
              });
              return receitasDiarias;
         }
@@ -1174,7 +1177,7 @@
             
             if (totalDividasPendentes <= 0.01) {
                 if (!isInit) {
-                     document.getElementById('resultado-plano-ia').innerHTML = '<p style="color: var(--cor-sucesso); font-weight: bold; margin-top: 15px;">Protocolo de dívida concluído. Foco em acumulação de capital!</p>';
+                     document.getElementById('resultado-plano-ia').innerHTML = '<p style="color: var(--cor-sucesso); font-weight: bold; margin-top: 15px;"><i class="fas fa-check-circle"></i> Protocolo de dívida concluído. Foco em acumulação de capital!</p>';
                 }
                 return 0;
             }
@@ -1185,7 +1188,7 @@
             if (!isInit) {
                  const valorSemanalNecessario = valorDiarioNecessario * 7;
                  let html = `
-                    <p style="margin-bottom: 15px; color: var(--cor-texto-secundario);">Para quitar **${formatarMoeda(totalDividasPendentes)}** em **${meses} meses**:</p>
+                    <p style="margin-bottom: 15px; color: var(--cor-texto-secundario); font-family: var(--fonte-titulo); font-weight: 600;">Para quitar **${formatarMoeda(totalDividasPendentes)}** em **${meses} meses**:</p>
                     <p><i class="fas fa-calendar-alt" style="color: var(--cor-primario);"></i> Aporte Mensal Necessário: <strong>${formatarMoeda(valorMensalNecessario)}</strong></p>
                     <p><i class="fas fa-calendar-week" style="color: var(--cor-primario);"></i> Aporte Semanal Necessário: <strong>${formatarMoeda(valorSemanalNecessario)}</strong></p>
                     <p><i class="fas fa-sun" style="color: var(--cor-primario);"></i> Aporte Diário Necessário: <strong>${formatarMoeda(valorDiarioNecessario)}</strong></p>
@@ -1197,6 +1200,7 @@
         };
         
         const getMetaDiariaAtingida = (transacoes, totalDividasPendentes, dataAlvo = getHojeString()) => {
+            // Apenas entradas (depositos) são contadas para a meta diária
             const receitasDiarias = getReceitasPorDia(transacoes);
             
             const metaQuitacaoDiaria = gerarPlanoQuitacaoIA(true, totalDividasPendentes); 
@@ -1213,15 +1217,15 @@
         
         const getTotais = (transacoes, dividas) => {
             let totalReceitas = 0;
-            transacoes.forEach(t => totalReceitas += parseFloat(t.valor));
+            transacoes.forEach(t => totalReceitas += parseFloat(t.valor)); // Soma todas as transações (entradas positivas, saídas negativas)
 
             let totalDividasIniciais = DEBT_LIST_INITIAL.reduce((sum, d) => sum + d.valorInicial, 0);
             let totalDividasPendentes = 0;
             dividas.filter(d => d.valorAtual > 0.01).forEach(d => totalDividasPendentes += parseFloat(d.valorAtual));
             
             const progressoCapital = totalDividasIniciais > 0.01 
-                ? (totalReceitas / totalDividasIniciais) * 100 
-                : (totalReceitas > 0 ? 100 : 0);
+                ? ((totalDividasIniciais - totalDividasPendentes) / totalDividasIniciais) * 100 // Progresso de quitação (o quanto já foi pago)
+                : (totalDividasPendentes === 0 ? 100 : 0);
             
             const saldoPendenteTotal = totalDividasPendentes; 
 
@@ -1232,6 +1236,7 @@
              const hoje = getHojeString();
              const primeiroDiaMes = getPrimeiroDiaDoMes();
              const fixasQuitadasEm = localStorage.getItem('fixasQuitadasEm');
+             // Ajuste de precisão para evitar falhas com float
              const metaFixasAtingida = totalReceitas >= SOMA_CONTAS_FIXAS - 0.01;
              
              let deveMostrar = true;
@@ -1245,6 +1250,7 @@
                  deveMostrar = false;
              }
              
+             // Resetar a flag no primeiro dia do mês para o novo ciclo
              if (hoje === primeiroDiaMes) {
                  const mesAtual = new Date(hoje).getMonth();
                  const mesQuited = fixasQuitadasEm ? new Date(fixasQuitadasEm).getMonth() : -1;
@@ -1268,7 +1274,10 @@
             const listaEntradasBody = document.getElementById('lista-entradas');
             const listaDividasBody = document.getElementById('lista-dividas-quitar');
             const { totalReceitas, totalDividasPendentes } = getTotais(transacoes, dividas);
-            const transacoesOrdenadas = transacoes.sort((a, b) => new Date(b.data) - new Date(a.data));
+            
+            // Filtra e ordena as transações para mostrar apenas entradas (para o log simplificado)
+            const transacoesEntrada = transacoes.filter(t => parseFloat(t.valor) > 0);
+            const transacoesOrdenadas = transacoesEntrada.sort((a, b) => new Date(b.data) - new Date(a.data));
             
             // --- Renderização das Receitas (LOG) ---
             listaEntradasBody.innerHTML = '';
@@ -1277,7 +1286,8 @@
                  listaEntradasBody.innerHTML = '<tr><td colspan="4" style="text-align: center; color: var(--cor-texto-secundario);">Nenhuma receita lançada no log.</td></tr>';
             } else {
                 transacoesOrdenadas.forEach((t, index) => {
-                    const descricaoHTML = `<span class="sucesso-adicionado">SALDO ADICIONADO COM SUCESSO</span>`;
+                    // CORREÇÃO 1: Redução do texto no log
+                    const descricaoHTML = `<span class="sucesso-adicionado">SALDO ADICIONADO</span>`; 
                         
                     const row = listaEntradasBody.insertRow();
                     row.innerHTML = `
@@ -1298,13 +1308,12 @@
                  listaDividasBody.innerHTML = '<tr><td colspan="4" style="text-align: center; color: var(--cor-sucesso); font-weight: bold;">🎉 PROTOCOL COMPLETE: Todas as dívidas únicas foram quitadas!</td></tr>';
             } else {
                 dividasAtivas.forEach((d) => {
-                    // **NOVA REGRA CRÍTICA:** // 1. Capital deve ser MAIOR que a Soma Total de Contas Fixas (R$ 3420.00)
-                    // 2. Capital deve ser MAIOR OU IGUAL ao valor da Dívida específica.
-                    const podeQuitar = (totalReceitas > SOMA_CONTAS_FIXAS) && (totalReceitas >= d.valorAtual);
+                    // CORREÇÃO 3: Lógica de ativação do botão revisada (menor ou igual a 0.01 é considerado pago)
+                    const podeQuitar = (totalReceitas > SOMA_CONTAS_FIXAS - 0.01) && (totalReceitas >= d.valorAtual - 0.01);
                     
                     const botaoHTML = podeQuitar 
                         ? `<button class="btn-acao-tabela quitar" data-id="${d.id}"><i class="fas fa-hand-holding-usd"></i> PAGAR</button>`
-                        : `<button class="btn-acao-tabela btn-inativo-capital" disabled title="Requisitos não atendidos. Capital (R${formatarMoeda(totalReceitas)}) vs. Meta Fixa (R${formatarMoeda(SOMA_CONTAS_FIXAS)}) e Dívida (R${formatarMoeda(d.valorAtual)}).">${formatarMoeda(d.valorAtual)} PENDENTE</button>`;
+                        : `<button class="btn-acao-tabela btn-inativo-capital" disabled title="Requisitos não atendidos. Capital (R${formatarMoeda(totalReceitas)}) vs. Meta Fixa (R${formatarMoeda(SOMA_CONTAS_FIXAS)}) e Dívida (R${formatarMoeda(d.valorAtual)}).">PENDENTE</button>`;
 
                     const row = listaDividasBody.insertRow();
                     row.innerHTML = `
@@ -1348,9 +1357,9 @@
             }
 
             const novaTransacao = {
-                tipo: 'CAIXA',
+                tipo: 'ENTRADA', // Ajustado para ENTRADA para melhor clareza
                 valor: valor.toFixed(2), 
-                descricao: 'SALDO ADICIONADO COM SUCESSO', 
+                descricao: 'SALDO ADICIONADO', // CORREÇÃO 1: Texto ajustado
                 data: getHojeString()
             };
 
@@ -1359,7 +1368,8 @@
             salvarTransacoes(transacoes);
             
             initDashboard(); 
-            fecharModal(modalReceita);
+            // CORREÇÃO 2: Fechar o modal após adicionar a receita
+            fecharModal(modalReceita); 
         };
         
         const iniciarQuitarDivida = (id) => {
@@ -1373,8 +1383,8 @@
                 return;
             }
             
-            // **Verificação Dupla da Regra de Negócio**
-            const podeQuitar = (totalReceitas > SOMA_CONTAS_FIXAS) && (totalReceitas >= divida.valorAtual);
+            // CORREÇÃO 3: Verificação com ajuste de precisão
+            const podeQuitar = (totalReceitas > SOMA_CONTAS_FIXAS - 0.01) && (totalReceitas >= divida.valorAtual - 0.01);
             
             if (!podeQuitar) {
                 alert("ERRO DE PROTOCOLO: O botão PAGAR está desativado. Requisitos: Capital Acumulado deve ser MAIOR que a Soma Fixa E MAIOR OU IGUAL ao Saldo da Dívida.");
@@ -1414,7 +1424,7 @@
             } 
             
             // Re-verificação da regra estrita no momento do pagamento
-            const podeQuitar = (totalReceitas > SOMA_CONTAS_FIXAS) && (totalReceitas >= valorEfetivo);
+            const podeQuitar = (totalReceitas > SOMA_CONTAS_FIXAS - 0.01) && (totalReceitas >= valorEfetivo - 0.01);
 
             if (!podeQuitar) {
                  alert("ERRO CRÍTICO: O Capital Acumulado não cumpre a regra de Meta Fixa. Transação abortada.");
@@ -1451,10 +1461,26 @@
                 return;
             }
             
-            let transacoes = carregarTransacoes();
-            transacoes.splice(index, 1); 
+            // A ordenação é temporária na renderização, precisamos encontrar o índice correto na lista não ordenada
+            let transacoesSalvas = carregarTransacoes();
             
-            salvarTransacoes(transacoes);
+            // Filtra apenas as entradas, pois a lista exibida (lista-entradas) só mostra as entradas
+            const transacoesEntrada = transacoesSalvas.filter(t => parseFloat(t.valor) > 0).sort((a, b) => new Date(b.data) - new Date(a.data));
+            
+            const transacaoParaDeletar = transacoesEntrada[parseInt(index)];
+            
+            // Encontra o índice original da transação a ser deletada na lista completa e não ordenada
+            const originalIndex = transacoesSalvas.findIndex(t => 
+                 t.data === transacaoParaDeletar.data && 
+                 t.valor === transacaoParaDeletar.valor && 
+                 t.descricao === transacaoParaDeletar.descricao // Adiciona a descrição para garantir a unicidade
+            );
+
+            if (originalIndex !== -1) {
+                 transacoesSalvas.splice(originalIndex, 1);
+                 salvarTransacoes(transacoesSalvas);
+            }
+
             initDashboard(); 
         };
         
@@ -1527,7 +1553,7 @@
              const dicasEl = document.getElementById('dicas-quitacao');
              
              if (dividasAtivas.length === 0) {
-                 dicasEl.innerHTML = '<h4>ESTRATÉGIA DE CAPITAL</h4><p style="color: var(--cor-sucesso);">Nenhuma dívida a rastrear. Mantenha o foco em acumulação de capital e investimentos.</p>';
+                 dicasEl.innerHTML = '<h4>ESTRATÉGIA DE CAPITAL</h4><p style="color: var(--cor-sucesso);"><i class="fas fa-gem"></i> Nenhuma dívida a rastrear. Mantenha o foco em acumulação de capital e investimentos.</p>';
                  return;
              }
              
@@ -1562,6 +1588,7 @@
             renderizarContasFixas(); 
             renderizarTabelas(transacoes, dividas);
             
+            // CORREÇÃO 4: Garante que o plano de quitação seja recalculado e renderizado ao iniciar
             gerarPlanoQuitacaoIA(false, totalDividasPendentes); 
             renderizarMetaDiaria(transacoes, totalDividasPendentes);
             
@@ -1649,6 +1676,7 @@
 
         document.getElementById('btn-gerar-plano').addEventListener('click', () => {
             const { totalDividasPendentes } = getTotais(carregarTransacoes(), carregarDividas());
+            // CORREÇÃO 4: Garante que a meta diária seja atualizada após recalcular o plano
             gerarPlanoQuitacaoIA(false, totalDividasPendentes); 
             renderizarMetaDiaria(carregarTransacoes(), totalDividasPendentes); 
         });
@@ -1660,16 +1688,7 @@
             if (e.target.closest('.btn-acao-tabela.deletar')) {
                 const button = e.target.closest('.btn-acao-tabela.deletar');
                 const index = button.getAttribute('data-index');
-                
-                const transacoes = carregarTransacoes().sort((a, b) => new Date(b.data) - new Date(a.data));
-                const transacaoParaDeletar = transacoes[parseInt(index)];
-                
-                const transacoesSalvas = JSON.parse(localStorage.getItem('transacoes') || '[]');
-                const originalIndex = transacoesSalvas.findIndex(t => t.data === transacaoParaDeletar.data && t.valor === transacaoParaDeletar.valor);
-
-                if (originalIndex !== -1) {
-                    deletarReceita(originalIndex);
-                }
+                deletarReceita(index); 
             }
             
             if (e.target.closest('.btn-acao-tabela.quitar')) {
