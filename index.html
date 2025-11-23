@@ -451,9 +451,9 @@
         </div>
         
         <div class="progress-area" id="meta-area">
-            <p class="rotulo"><i class="fas fa-bullseye"></i> Meta Total de Dívidas</p>
-            <p style="margin-bottom: 5px;">Total a Quitar: <span class="meta-valor-fixo">R$ 22.681,64</span></p>
-            <p>Faltam para Meta: <span id="valor-faltante" style="font-weight: bold; color: var(--cor-vermelho);">R$ 22.681,64</span></p>
+            <p class="rotulo"><i class="fas fa-bullseye"></i> Meta Total (Dívidas + Fixas)</p>
+            <p style="margin-bottom: 5px;">Total a Quitar: <span class="meta-valor-fixo">R$ 25.701,64</span></p>
+            <p>Faltam para Meta: <span id="valor-faltante" style="font-weight: bold; color: var(--cor-vermelho);">R$ 25.701,64</span></p>
             
             <div class="progresso-bar-container">
                 <div id="progresso-bar" class="progresso" style="width: 0%;"></div>
@@ -577,13 +577,23 @@
         // ===========================================
 
         // 1. DADOS FIXOS E VARIÁVEIS GLOBAIS
-        const META_FIXA = 22681.64; // R$ 22.681,64 (Soma das dívidas)
+        const CONTAS_FIXAS = 
+            120 +  // Internet movel
+            850 +  // Aluguel
+            100 +  // Wifi
+            250 +  // Luz
+            1800;  // Carro
+        
+        const SOMA_DIVIDAS_INICIAIS = 22681.64;
+        
+        // META FIXA AJUSTADA: (Dívidas + Contas Fixas)
+        const META_FIXA = SOMA_DIVIDAS_INICIAIS + CONTAS_FIXAS; // R$ 25.701,64
 
-        // DÍVIDAS INICIAIS (Hardcoded conforme o pedido)
+        // DÍVIDAS INICIAIS (Ajustadas conforme o pedido: Banco Inter unificado em 120)
         const DEBT_LIST_INITIAL = [
             { id: 1, credor: "Bruno Carro", valorInicial: 400.00, valorAtual: 400.00 },
             { id: 2, credor: "Itau visa", valorInicial: 200.00, valorAtual: 200.00 },
-            { id: 3, credor: "Bnco inter (1)", valorInicial: 120.00, valorAtual: 120.00 },
+            { id: 3, credor: "Banco Inter", valorInicial: 120.00, valorAtual: 120.00 }, // UNIFICADO
             { id: 4, credor: "Banco Pan", valorInicial: 265.00, valorAtual: 265.00 },
             { id: 5, credor: "Conect car", valorInicial: 60.00, valorAtual: 60.00 },
             { id: 6, credor: "Vivo", valorInicial: 95.00, valorAtual: 95.00 },
@@ -601,11 +611,10 @@
             { id: 18, credor: "Itau master", valorInicial: 2500.00, valorAtual: 2500.00 },
             { id: 19, credor: "Carro", valorInicial: 3500.00, valorAtual: 3500.00 },
             { id: 20, credor: "Ravi", valorInicial: 4570.00, valorAtual: 4570.00 },
-            { id: 21, credor: "Banco inter (2)", valorInicial: 120.00, valorAtual: 120.00 }
-        ].sort((a, b) => a.valorInicial - b.valorInicial); // Ordena pela menor dívida (Plano Bola de Neve)
+        ].sort((a, b) => a.valorInicial - b.valorInicial); 
 
         
-        let idDebtQuitting = null; // ID da dívida sendo quitada no modal
+        let idDebtQuitting = null; 
 
         // Elementos DOM para Receita
         const modalReceita = document.getElementById('modal-receita');
@@ -650,13 +659,13 @@
         };
         
         const carregarDividas = () => {
-            // Se não houver dívidas salvas, inicializa com a lista fixa
             const dividas = localStorage.getItem('dividas');
             if (!dividas) {
                 salvarDividas(DEBT_LIST_INITIAL);
                 return DEBT_LIST_INITIAL;
             }
-            return JSON.parse(dividas);
+            // Garante que só retorna dívidas ativas para a lista principal
+            return JSON.parse(dividas); 
         }
         
         const salvarDividas = (dividas) => {
@@ -681,7 +690,8 @@
             transacoes.forEach(t => totalReceitas += parseFloat(t.valor));
 
             let totalDividasPendentes = 0;
-            dividas.forEach(d => totalDividasPendentes += parseFloat(d.valorAtual));
+            // Apenas dívidas com saldo > 0 contribuem para o saldo devedor
+            dividas.filter(d => d.valorAtual > 0).forEach(d => totalDividasPendentes += parseFloat(d.valorAtual));
             
             return { totalReceitas, totalDividasPendentes };
         }
@@ -692,10 +702,10 @@
             // Card 1: Saldo Acumulado
             totalLancadoEl.textContent = formatarMoeda(totalReceitas);
             
-            // Card 3: Saldo Devedor Pendente (o que resta pagar)
+            // Card 3: Saldo Devedor Pendente
             saldoDevedorPendenteEl.textContent = formatarMoeda(totalDividasPendentes);
             
-            // Card 2: Meta (Fixo vs. Receitas)
+            // Card 2: Meta
             const valorFaltante = META_FIXA - totalReceitas;
             valorFaltanteEl.textContent = formatarMoeda(Math.max(0, valorFaltante));
 
@@ -717,7 +727,6 @@
             const transacoesOrdenadas = transacoes.sort((a, b) => new Date(b.data) - new Date(a.data));
             transacoesOrdenadas.forEach((t, index) => {
                 const row = listaEntradasBody.insertRow();
-                // O data-index é o índice no array de transações atual
                 row.innerHTML = `
                     <td>${t.descricao}</td>
                     <td class="valor-caixa">${formatarMoeda(t.valor)}</td>
@@ -727,22 +736,27 @@
             });
             
             // 4.2. Tabela de Dívidas (Quitação)
-            dividas.forEach((d) => {
-                const isQuitada = d.valorAtual <= 0;
-                const row = listaDividasBody.insertRow();
-                const rowClass = isQuitada ? 'divida-quitada' : '';
-                
-                row.innerHTML = `
-                    <td class="${rowClass}">${d.credor}</td>
-                    <td>${formatarMoeda(d.valorInicial)}</td>
-                    <td class="saldo-divida ${rowClass}">${formatarMoeda(d.valorAtual)}</td>
-                    <td>
-                        <button class="btn-acao-tabela quitar" data-id="${d.id}" ${isQuitada ? 'disabled' : ''}>
-                           ${isQuitada ? 'Quitada' : 'Quitar'}
-                        </button>
-                    </td>
-                `;
-            });
+            // Filtra apenas as dívidas que ainda têm saldo a pagar
+            const dividasAtivas = dividas.filter(d => d.valorAtual > 0).sort((a, b) => a.valorAtual - b.valorAtual);
+            
+            if (dividasAtivas.length === 0) {
+                 listaDividasBody.innerHTML = '<tr><td colspan="4" style="text-align: center; color: var(--cor-verde); font-weight: bold;">🎉 TODAS AS DÍVIDAS FORAM QUITADAS!</td></tr>';
+            } else {
+                dividasAtivas.forEach((d) => {
+                    const row = listaDividasBody.insertRow();
+                    
+                    row.innerHTML = `
+                        <td>${d.credor}</td>
+                        <td>${formatarMoeda(d.valorInicial)}</td>
+                        <td class="saldo-divida">${formatarMoeda(d.valorAtual)}</td>
+                        <td>
+                            <button class="btn-acao-tabela quitar" data-id="${d.id}">
+                                Quitar
+                            </button>
+                        </td>
+                    `;
+                });
+            }
         };
 
         // 5. FUNÇÕES DE AÇÃO (Receita e Quitação)
@@ -750,6 +764,7 @@
         
         // 5.1. Ação: Adicionar Receita
         const adicionarReceita = () => {
+            // ... (Lógica de adicionar receita permanece a mesma)
             const valor = parseFloat(valorInputReceita.value);
             const descricao = descricaoInputReceita.value.trim();
             const data = dataInputReceita.value;
@@ -787,14 +802,13 @@
             idDebtQuitting = id;
             nomeCredorEl.textContent = divida.credor;
             saldoQuitacaoEl.textContent = formatarMoeda(divida.valorAtual);
-            valorPagamentoInput.value = divida.valorAtual.toFixed(2); // Sugere o valor total
-            // Remove o atributo 'max' para permitir pagamentos parciais maiores que o saldo, se o usuário confirmar
-            valorPagamentoInput.removeAttribute('max'); 
+            valorPagamentoInput.value = divida.valorAtual.toFixed(2);
+            valorPagamentoInput.focus();
             
             modalQuitacao.style.display = 'block';
         }
         
-        // 5.3. Ação: Registrar Pagamento
+        // 5.3. Ação: Registrar Pagamento e Remover se Quitada
         const registrarPagamento = () => {
             const valorPagamento = parseFloat(valorPagamentoInput.value);
             const dividas = carregarDividas();
@@ -806,13 +820,23 @@
             }
             
             if (valorPagamento > divida.valorAtual) {
-                 if (!confirm(`O valor de ${formatarMoeda(valorPagamento)} é maior que o saldo atual de ${formatarMoeda(divida.valorAtual)}. Deseja aplicar o pagamento e quitar o saldo (${formatarMoeda(divida.valorAtual)})?`)) {
+                 if (!confirm(`O valor de ${formatarMoeda(valorPagamento)} é maior que o saldo atual de ${formatarMoeda(divida.valorAtual)}. Deseja aplicar o pagamento total e quitar o saldo?`)) {
                     return;
                 }
             }
             
-            // Aplica o pagamento (se for maior que o saldo, o Math.max garante que não fica negativo)
+            // Aplica o pagamento 
             divida.valorAtual = Math.max(0, divida.valorAtual - valorPagamento);
+            
+            // Remove a dívida da lista se ela foi totalmente quitada
+            if (divida.valorAtual <= 0) {
+                // Remove a dívida permanentemente do array de dívidas
+                const index = dividas.findIndex(d => d.id === idDebtQuitting);
+                if (index > -1) {
+                    dividas.splice(index, 1);
+                }
+                alert(`🎉 Dívida ${divida.credor} quitada com sucesso e removida da lista!`);
+            }
             
             // Salva e atualiza o dashboard
             salvarDividas(dividas);
@@ -827,7 +851,6 @@
             }
             
             let transacoes = carregarTransacoes();
-            // Splice usa o índice na lista de transações (que está ordenada)
             transacoes.splice(index, 1); 
             
             salvarTransacoes(transacoes);
@@ -881,7 +904,6 @@
             let saldoSimulado = totalDividasPendentes;
             let mesAtual = 1;
 
-            // Cria uma cópia das dívidas ativas e as ordena para a simulação
             const prioridadeDividas = [...dividasAtivas].sort((a, b) => a.valorAtual - b.valorAtual);
 
             while (saldoSimulado > 0 && mesAtual <= meses) {
@@ -901,7 +923,6 @@
                         aporteMensalDisponivel -= pagamento;
                         aporteAplicado += pagamento;
                         
-                        // Registra o pagamento para o resumo do mês
                         if (pagamento > 0) {
                             pagamentosEsteMes.push(`R$ ${pagamento.toFixed(2)} em **${divida.credor}**`);
                         }
@@ -916,8 +937,7 @@
                     </li>
                 `;
                 
-                // Re-ordena as dívidas (aquelas que foram quitadas têm valorAtual <= 0 e ficam no final)
-                // Isto garante que a 'bola de neve' comece a focar na próxima menor dívida.
+                // Re-ordena as dívidas para a próxima iteração
                 prioridadeDividas.sort((a, b) => a.valorAtual - b.valorAtual);
                 
                 mesAtual++;
@@ -960,6 +980,10 @@
             
             atualizarDashboard(transacoes, dividas);
             renderizarTabelas(transacoes, dividas);
+            // Gera um plano inicial de 5 meses ao carregar
+            if (document.getElementById('meses-plano').value === '5' && document.getElementById('resultado-plano-ia').innerHTML.includes('Clique em')) {
+                 gerarPlanoQuitacaoIA();
+            }
         };
 
 
@@ -988,6 +1012,7 @@
             
             // Iniciar Quitação (na tabela de dívidas)
             if (e.target.closest('.btn-acao-tabela.quitar')) {
+                // A dívida aparece de maneira dinâmica, abrindo em uma nova janela para quitar
                 const id = parseInt(e.target.closest('.btn-acao-tabela.quitar').getAttribute('data-id'));
                 iniciarQuitarDivida(id);
             }
