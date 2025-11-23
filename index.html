@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>PROJECT TITAN | CORE FINANCIAL [V4.1 - Logout e Rastreio de Metas]</title>
+    <title>PROJECT TITAN | CORE FINANCIAL [V4.2 - Layout Otimizado]</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -15,7 +15,7 @@
         :root {
             /* Fundo Escuro Classudo */
             --cor-fundo-principal: #0E1117; 
-            --cor-fundo-card: rgba(20, 25, 33, 0.7); 
+            --cor-fundo-card: rgba(20, 25, 33, 0.9); /* Mais opaco para destaque */
             --cor-borda: #2C3540; 
             --cor-texto-principal: #F0F6FC; 
             --cor-texto-secundario: #8B949E; 
@@ -67,7 +67,7 @@
         }
         
         /* =================================== */
-        /* 2. BANNER E TÍTULO */
+        /* 2. BANNER E TÍTULO (Ajustado) */
         /* =================================== */
 
         .dynamic-banner {
@@ -99,15 +99,22 @@
             100% { transform: translateX(-100%); }
         }
 
+        .header-content {
+             display: flex;
+             justify-content: space-between;
+             align-items: center;
+             padding: 0 25px;
+             max-width: 1300px; 
+             margin: 30px auto 0;
+        }
+
         h1 {
             font-family: var(--fonte-titulo);
             color: var(--cor-texto-principal);
-            text-align: center;
             font-weight: 800;
             font-size: 3em; 
             letter-spacing: 2px;
             text-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
-            padding-bottom: 15px;
         }
         
         /* Botões de Ação Geral (Cadastro, Sair) */
@@ -127,7 +134,7 @@
             box-shadow: 0 0 8px rgba(0, 188, 212, 0.7);
         }
         
-        /* Botão de Sair (NOVO) */
+        /* Botão de Sair (Melhor Localizado) */
         .btn-sair {
             background-color: var(--cor-divida);
             color: var(--cor-texto-principal);
@@ -137,13 +144,12 @@
             cursor: pointer;
             font-weight: 700;
             transition: background-color var(--transicao-rapida);
-            margin-left: 20px;
         }
         .btn-sair:hover {
             background-color: #CC3333;
         }
         
-        /* Botão de Rastreio de Metas (DATA) */
+        /* Botão de Rastreio de Metas (DATA - Removida Descrição) */
         #data-atual-info {
              text-align: center;
              margin-top: 15px;
@@ -153,16 +159,18 @@
              background-color: var(--cor-meta-diaria);
              color: var(--cor-texto-principal);
              border: none;
-             padding: 10px 20px;
+             padding: 12px 25px;
              border-radius: 6px;
              cursor: pointer;
              font-weight: 700;
              font-family: var(--fonte-dados);
+             font-size: 1.1em; /* Um pouco maior */
              transition: all var(--transicao-rapida);
              box-shadow: 0 2px 10px rgba(155, 89, 182, 0.5);
         }
         #btn-data-atual:hover {
              background-color: #A96EC2;
+             box-shadow: 0 0 15px rgba(155, 89, 182, 0.8);
         }
 
 
@@ -171,13 +179,14 @@
         /* 3. DASHBOARD E CARTÕES */
         /* =================================== */
         
-        /* Target Diário (Centralização e Estilo Base) */
+        /* Target Diário (Estilo Base) */
         .meta-diaria-total {
             text-align: center;
-            padding: 20px;
+            padding: 25px;
             border-radius: 10px;
             margin-bottom: 25px;
             background-color: var(--cor-fundo-card);
+            box-shadow: var(--sombra-card);
             transition: all var(--transicao-rapida);
         }
         .meta-diaria-total > div {
@@ -186,11 +195,12 @@
             align-items: center;
         }
         #meta-diaria-total-el {
-            font-size: 2.2em;
+            font-size: 2.5em; /* Maior destaque */
             font-weight: 800;
             color: var(--cor-meta-diaria);
             font-family: var(--fonte-dados);
             margin-top: 5px;
+            line-height: 1.2;
         }
         .destaque-conclusao {
             font-size: 1em;
@@ -208,18 +218,18 @@
 
         /* Barra de Progresso */
         .progresso-bar-container {
-            height: 10px;
+            height: 12px; /* Ligeiramente mais alta */
             background-color: #1A212E; 
-            border-radius: 5px;
+            border-radius: 6px;
             overflow: hidden;
-            margin-top: 8px;
+            margin-top: 10px;
             border: 1px solid var(--cor-borda);
         }
 
         .progresso {
             height: 100%;
             background: linear-gradient(90deg, #444444 0%, var(--cor-sucesso) 100%); 
-            border-radius: 5px;
+            border-radius: 6px;
             transition: width 0.6s ease-out; 
         }
 
@@ -235,6 +245,10 @@
             border-radius: 10px;
             box-shadow: var(--sombra-card);
             border-left: 5px solid var(--cor-primario);
+            transition: all var(--transicao-rapida);
+        }
+        .info-card:hover {
+            box-shadow: var(--sombra-card-hover);
         }
         .info-card .rotulo {
             color: var(--cor-texto-secundario);
@@ -314,6 +328,7 @@
         .lista-container-ocultavel {
             padding-top: 15px;
             padding-bottom: 15px;
+            background-color: var(--cor-fundo-card); /* Fundo sutil */
         }
         
         .alerta-nota {
@@ -323,17 +338,29 @@
              border-left: 5px solid var(--cor-alerta);
              color: var(--cor-alerta);
              font-size: 0.9em;
-             margin-bottom: 15px;
+             margin: 15px 15px 15px 15px;
         }
         
+        .motivacao-box {
+            background-color: var(--cor-fundo-ia);
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            font-style: italic;
+            color: var(--cor-texto-secundario);
+            margin-bottom: 25px;
+            border: 1px solid var(--cor-borda);
+        }
 
+        
         /* =================================== */
-        /* 5. TABELAS E BOTÕES DE AÇÃO (LOG, FIXAS E DÍVIDAS) */
+        /* 5. TABELAS E BOTÕES DE AÇÃO */
         /* =================================== */
 
         .tabela-wrapper {
              overflow-x: auto; 
              width: 100%;
+             padding: 0 15px;
         }
 
         /* Estilo Base da Tabela (Compartilhado) */
@@ -352,6 +379,7 @@
             padding: 12px 8px; 
             text-align: left;
             border-bottom: 1px solid var(--cor-borda);
+            background-color: #1A212E; /* Linhas escuras para contraste */
         }
         .tabela-transacoes-log th, .tabela-fixas-log th, .tabela-dividas-log th {
             background-color: #1A212E;
@@ -360,15 +388,16 @@
             font-weight: 700;
             font-size: 0.9em;
             white-space: nowrap;
+            background-color: #13171F; /* Fundo do cabeçalho mais escuro */
         }
 
         /* LOG DE RECEITAS: Cores Dinâmicas */
         .log-receita-descricao {
-            color: var(--cor-sucesso); /* Descrição em Verde */
+            color: var(--cor-sucesso); 
             font-weight: 600;
         }
         .log-receita-valor {
-            color: var(--cor-sucesso) !important; /* Valor em Verde */
+            color: var(--cor-sucesso) !important; 
             font-weight: 700;
         }
         .btn-acao-tabela {
@@ -380,7 +409,7 @@
             transition: color var(--transicao-rapida);
         }
         .btn-acao-tabela.deletar-log {
-            color: var(--cor-divida); /* Botão de exclusão em Vermelho */
+            color: var(--cor-divida); 
         }
         .btn-acao-tabela.deletar-log:hover {
             color: var(--cor-alerta);
@@ -403,15 +432,9 @@
             background-color: #00FFC6;
             box-shadow: 0 0 5px var(--cor-fixa);
         }
-        .btn-acao-tabela.pago {
-            background-color: var(--cor-sucesso);
-            cursor: not-allowed;
-            opacity: 1;
-        }
-        .btn-acao-tabela.inativo {
-            background-color: var(--cor-borda);
-            cursor: not-allowed;
-            opacity: 0.4;
+        /* Contas Fixas pagas (agora elas somem, mas se fosse para mostrar) */
+        .conta-paga {
+            display: none; /* Alteração: fazer a linha desaparecer */
         }
 
         /* BOTÃO DE AÇÃO DA TABELA DÍVIDAS (QUITAÇÃO) */
@@ -437,33 +460,93 @@
         }
         
         /* =================================== */
-        /* 6. MODAIS E MÓDULO IA */
+        /* 6. MODAIS E MÓDULO IA (Destaque Aprimorado) */
         /* =================================== */
         
-        .motivacao-box {
-            background-color: #1A212E;
-            padding: 15px;
-            border-radius: 8px;
-            text-align: center;
-            font-style: italic;
-            color: var(--cor-texto-secundario);
-            margin-bottom: 25px;
-            border: 1px solid var(--cor-borda);
-        }
-        
+        /* MÓDULO IA */
         .plano-quitacao {
              background-color: var(--cor-fundo-ia);
-             padding: 20px;
+             padding: 30px; /* Maior padding */
              border-radius: 10px;
              border: 2px solid var(--cor-destaque-ia);
-             box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+             box-shadow: 0 0 20px rgba(255, 215, 0, 0.4);
+             margin-top: 50px;
+             transition: all var(--transicao-rapida);
+        }
+        .plano-quitacao:hover {
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.6);
         }
         .plano-quitacao h3 {
              color: var(--cor-destaque-ia);
-             margin-bottom: 20px;
-             font-size: 1.4em;
+             margin-bottom: 25px;
+             font-size: 1.6em; /* Mais destaque */
+             display: flex;
+             align-items: center;
+             gap: 10px;
         }
 
+        .ia-input-group {
+             display: flex;
+             gap: 20px;
+             align-items: flex-end; /* Alinha o botão com o input */
+             margin-bottom: 25px;
+        }
+        .ia-input-group label {
+            color: var(--cor-texto-principal);
+            font-weight: 600;
+            display: block;
+            margin-bottom: 8px;
+        }
+        .ia-input-group input {
+             padding: 10px;
+             border-radius: 4px;
+             border: 1px solid var(--cor-destaque-ia);
+             background: #1A212E;
+             color: var(--cor-fixa);
+             font-family: var(--fonte-dados);
+             width: 100px;
+             text-align: center;
+        }
+        .ia-input-group button {
+             padding: 10px 20px;
+             background-color: var(--cor-destaque-ia);
+             color: var(--cor-fundo-principal);
+             font-weight: 700;
+             border-radius: 4px;
+             border: none;
+             cursor: pointer;
+             transition: all var(--transicao-rapida);
+        }
+        .ia-input-group button:hover {
+             background-color: #FFEB80;
+             box-shadow: 0 0 10px var(--cor-destaque-ia);
+        }
+        
+        #resultado-plano-ia {
+            background-color: #0E1117;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid var(--cor-destaque-ia);
+            margin-bottom: 25px;
+            font-family: var(--fonte-dados);
+        }
+        #resultado-plano-ia p {
+            margin: 8px 0;
+            color: var(--cor-texto-principal);
+        }
+        #resultado-plano-ia strong {
+            color: var(--cor-fixa);
+        }
+        
+        #dicas-quitacao {
+             padding: 15px;
+             border-top: 1px dashed var(--cor-borda);
+        }
+        #dicas-quitacao h4 {
+             color: var(--cor-primario);
+             margin-bottom: 15px;
+        }
+        
         /* Modal de Relatório Diário (NOVO) */
         .modal-relatorio-content {
             background-color: var(--cor-fundo-card);
@@ -525,9 +608,10 @@
             }
             
             /* Título e Botão Sair */
-            .container:has(h1) {
+            .header-content {
                  flex-direction: column;
                  align-items: center;
+                 margin-top: 20px;
             }
             .btn-sair {
                  margin-top: 15px;
@@ -535,7 +619,7 @@
             }
             h1 {
                  font-size: 2em;
-                 margin-top: 20px;
+                 text-align: center;
             }
             
             /* Modal de Cadastro: Otimização de Espaço Vertical */
@@ -557,6 +641,9 @@
             }
             
             /* Tabelas em Mobile: Redução de Padding e Fontes */
+            .tabela-wrapper {
+                 padding: 0 5px;
+            }
             .tabela-transacoes-log, .tabela-fixas-log, .tabela-dividas-log {
                  font-size: 0.8em;
                  min-width: 100%;
@@ -580,18 +667,22 @@
             .tabela-dividas-log th:nth-child(3), .tabela-dividas-log td:nth-child(3) { width: 20%; text-align: center; } 
             
             /* Plano IA */
+            .plano-quitacao {
+                 padding: 20px;
+            }
             .ia-input-group {
                  flex-direction: column;
                  align-items: flex-start;
+                 gap: 15px;
             }
             .ia-input-group > div {
                  width: 100%;
             }
+            .ia-input-group input {
+                 width: 100%;
+            }
             .ia-input-group button {
                  width: 100% !important;
-            }
-            .plano-quitacao {
-                 padding: 15px;
             }
         }
         
@@ -665,15 +756,15 @@
             </div>
         </div>
         
-        <div class="container" style="display: flex; justify-content: space-between; align-items: center; margin-top: 30px;">
+        <div class="header-content">
             <h1><i class="fas fa-terminal"></i> PROJECT TITAN</h1>
             <button class="btn-sair" id="btn-logout"><i class="fas fa-sign-out-alt"></i> SAIR</button>
         </div>
 
         
         <div class="container" id="data-atual-info">
-            <button id="btn-data-atual">
-                <i class="fas fa-calendar-day"></i> RASTREIO DE METAS: <span id="data-atual"></span>
+            <button id="btn-data-atual" title="Clique para ver o Relatório de Metas">
+                <i class="fas fa-calendar-day"></i> <span id="data-atual"></span>
             </button>
         </div>
 
@@ -747,7 +838,7 @@
             
             <div id="feedback-fixas-quitadas" class="motivacao-box" style="display: none; margin-top: 40px; border: 2px solid var(--cor-sucesso);">
                  <i class="fas fa-medal" style="color: var(--cor-sucesso);"></i> PROTOCOLO DE CONTAS FIXAS CONCLUÍDO! <i class="fas fa-medal" style="color: var(--cor-sucesso);"></i>
-                 <p style="color: var(--cor-texto-principal); font-weight: 600;">Contas Fixas liquidadas para este ciclo. Foco total em reduzir o Saldo Pendente.</p>
+                 <p style="color: var(--cor-texto-principal); font-weight: 600; font-style: normal; margin-top: 5px;">Contas Fixas liquidadas para este ciclo. Foco total em reduzir o Saldo Pendente.</p>
             </div>
 
             
@@ -787,7 +878,7 @@
                 
                 <div id="lista-dividas-quitar-container" class="lista-container-ocultavel" style="display: none;">
                     <p class="alerta-nota">
-                        <i class="fas fa-exclamation-triangle"></i> NOTA: O botão "PAGAR" só é ativado quando o Capital Acumulado é $\ge$ Saldo da Dívida.
+                        <i class="fas fa-exclamation-triangle"></i> NOTA: O botão "QUITAÇÃO" só é ativado quando o Capital Acumulado é $\ge$ Saldo da Dívida.
                      </p>
                      <div class="tabela-wrapper">
                          <table class="tabela-dividas-log">
@@ -805,15 +896,15 @@
                 </div>
             </div>
             
-            <div class="plano-quitacao container" style="margin-left: 0; margin-right: 0; padding-left: 30px; padding-right: 30px; margin-top: 50px;">
-                <h3><i class="fas fa-brain"></i> PLANO DE QUITAÇÃO ESTRATÉGICO (MÓDULO IA)</h3>
+            <div class="plano-quitacao" style="margin-top: 50px;">
+                <h3><i class="fas fa-brain"></i> MÓDULO IA: PLANO DE QUITAÇÃO ESTRATÉGICO</h3>
                 
                 <div id="plano-ia-controls" class="ia-input-group">
                     <div>
-                         <label for="meses-plano">TARGET: Meses para Quitar Dívidas ÚNICAS:</label>
-                         <input type="number" id="meses-plano" value="5" min="1" max="60" style="padding: 8px; border-radius: 4px; border: 1px solid var(--cor-borda); background: #1A212E; color: var(--cor-fixa); width: 80px;">
+                         <label for="meses-plano">TARGET: Meses para Quitar Dívidas ÚNICAS</label>
+                         <input type="number" id="meses-plano" value="5" min="1" max="60">
                     </div>
-                    <button id="btn-gerar-plano" class="btn-principal" style="margin-top: 0; padding: 10px 15px; width: auto;">
+                    <button id="btn-gerar-plano" class="btn-principal" style="margin-top: 0;">
                         <i class="fas fa-redo-alt"></i> RECALCULAR PLANO
                     </button>
                 </div>
@@ -833,9 +924,9 @@
         <div class="modal-relatorio-content">
             <span class="fechar-modal" id="fechar-modal-relatorio" style="color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer;">&times;</span>
             <h3><i class="fas fa-chart-line"></i> RELATÓRIO DE PROGRESSO DIÁRIO</h3>
-            <p style="color: var(--cor-texto-secundario);">Histórico de metas diárias de aporte (Fixas + Quitação) versus o capital efetivamente lançado por dia.</p>
+            <p style="color: var(--cor-texto-secundario); font-size: 0.9em;">Histórico de metas diárias de aporte (Fixas + Quitação) versus o capital efetivamente lançado por dia.</p>
             
-            <div class="tabela-wrapper">
+            <div class="tabela-wrapper" style="padding: 0;">
                 <table class="tabela-relatorio">
                     <thead>
                         <tr>
@@ -882,7 +973,7 @@
     
     <script>
         // ===========================================
-        // JAVASCRIPT: LÓGICA DE NEGÓCIO E CONEXÃO V4.1
+        // JAVASCRIPT: LÓGICA DE NEGÓCIO E CONEXÃO V4.2
         // ===========================================
 
         const DIAS_UTEIS_MES = 22; 
@@ -942,7 +1033,13 @@
             if (!fixas) return CONTAS_FIXAS_INITIAL;
             
             const loadedFixas = JSON.parse(fixas);
-            return loadedFixas.map(f => ({ ...f, id: parseInt(f.id) }));
+            // Garante que o estado pago/não pago está correto ao carregar
+            const currentFixas = CONTAS_FIXAS_INITIAL.map(initialFixa => {
+                const loadedFixa = loadedFixas.find(f => f.id === initialFixa.id);
+                return { ...initialFixa, pago: loadedFixa ? loadedFixa.pago : false };
+            }).sort((a, b) => b.valor - a.valor); // Mantém a ordem inicial
+            
+            return currentFixas;
         };
         
         const salvarContasFixas = (fixas) => localStorage.setItem('contasFixas', JSON.stringify(fixas));
@@ -970,7 +1067,7 @@
              localStorage.setItem('dividas', JSON.stringify(dividas));
         }
 
-        const getSomaFixas = (fixas) => fixas.reduce((sum, item) => sum + item.valor, 0);
+        const getSomaFixas = (fixas) => fixas.filter(f => !f.pago).reduce((sum, item) => sum + item.valor, 0);
         const getMetaDiariaFixas = (somaFixas) => somaFixas / DIAS_UTEIS_MES;
 
         const getReceitasPorDia = (transacoes) => {
@@ -1014,10 +1111,10 @@
              sessionTimer = setTimeout(resetSession, SESSION_TIMEOUT_MS);
         };
         
-        // --- Botão de Sair/Logout (NOVO) ---
+        // --- Botão de Sair/Logout ---
         const resetTudoEVoltarLogin = () => {
              if (sessionTimer) clearTimeout(sessionTimer);
-             localStorage.clear(); // LIMPA TUDO
+             localStorage.clear(); // LIMPA TUDO (incluindo fixas/dívidas para reset)
              window.location.reload(); // Recarrega para iniciar limpo
         };
 
@@ -1030,12 +1127,12 @@
             let fixas = carregarContasFixas();
             
             if (fixas.length === 0) {
-                 fixas = CONTAS_FIXAS_INITIAL;
-                 salvarContasFixas(fixas);
-                 return fixas;
+                 // Caso inicial, se o localStorage estiver vazio
+                 salvarContasFixas(CONTAS_FIXAS_INITIAL);
+                 return CONTAS_FIXAS_INITIAL;
             }
             
-            // Verifica se as fixas já foram resetadas hoje
+            // Verifica se as fixas já foram resetadas este ciclo (reseta no dia 16)
             if (isHojePassouDiaQuinze() && localStorage.getItem('fixasResetadas') !== getHojeString()) {
                 // Se sim, reseta para o estado inicial de "não pago"
                 fixas = CONTAS_FIXAS_INITIAL.map(fixa => ({...fixa, pago: false}));
@@ -1050,7 +1147,8 @@
             const transacoes = carregarTransacoes();
             const dividas = carregarDividas();
             
-            const fixa = fixas.find(f => f.id === id);
+            const fixaIndex = fixas.findIndex(f => f.id === id);
+            const fixa = fixas[fixaIndex];
             
             if (fixa && !fixa.pago) {
                 const { totalReceitas } = getTotais(transacoes, dividas);
@@ -1067,7 +1165,7 @@
                     transacoes.push(novaTransacao);
                     salvarTransacoes(transacoes);
                     
-                    initDashboard(); // Atualiza tudo
+                    initDashboard(); // Atualiza tudo (e remove a linha da tabela)
                 } else {
                     alert(`Capital insuficiente (${formatarMoeda(totalReceitas)}) para pagar ${fixa.nome} (${formatarMoeda(fixa.valor)})`);
                 }
@@ -1077,11 +1175,14 @@
         const verificarEstadoContasFixas = (fixas) => {
             const todasPagas = fixas.every(f => f.pago);
             const feedbackEl = document.getElementById('feedback-fixas-quitadas');
+            const toggleSection = document.getElementById('contas-fixas-toggle');
             
             if (todasPagas) {
                 feedbackEl.style.display = 'block';
+                toggleSection.style.display = 'none'; // Oculta a aba inteira
             } else {
                 feedbackEl.style.display = 'none';
+                toggleSection.style.display = 'block';
             }
         }
 
@@ -1267,27 +1368,31 @@
 
             container.innerHTML = ''; 
             
-            fixas.forEach((fixa) => {
-                const isPago = fixa.pago;
-                const btnClass = isPago ? 'pago' : 'pagar-fixa';
-                const btnText = isPago ? '<i class="fas fa-check"></i> PAGO' : 'PAGAR';
+            // Renderiza apenas as contas que AINDA NÃO FORAM PAGAS
+            const fixasPendentes = fixas.filter(f => !f.pago);
+
+            fixasPendentes.forEach((fixa) => {
+                const isPago = fixa.pago; // Sempre falso aqui, mas mantido por segurança
+                const btnClass = 'pagar-fixa';
+                const btnText = 'PAGAR';
                 
                 const row = container.insertRow();
-                
-                if (isPago) {
-                    row.style.opacity = '0.6';
-                }
+                row.id = `fixa-row-${fixa.id}`; // Adiciona ID para facilitar a remoção
                 
                 row.innerHTML = `
                     <td><span style="color: var(--cor-texto-principal);">${fixa.nome}</span></td>
                     <td><span style="color: var(--cor-fixa); font-weight: 700;">${formatarMoeda(fixa.valor)}</span></td>
                     <td style="text-align: center;">
-                        <button class="btn-acao-tabela ${btnClass}" data-id="${fixa.id}" ${isPago ? 'disabled' : ''}>
+                        <button class="btn-acao-tabela ${btnClass}" data-id="${fixa.id}">
                             ${btnText}
                         </button>
                     </td>
                 `;
             });
+            
+            if(fixasPendentes.length === 0) {
+                 container.innerHTML = '<tr><td colspan="3" style="text-align: center; color: var(--cor-texto-secundario); opacity: 0.6;">Todas as contas fixas foram liquidadas neste ciclo.</td></tr>';
+            }
         };
 
 
@@ -1371,7 +1476,7 @@
                  
                  metaDiariaIncentivoEl.innerHTML = `
                      <i class="fas fa-medal"></i> **META DIÁRIA BATIDA!** <i class="fas fa-medal"></i>
-                     <p style="color: var(--cor-fixa); font-size: 0.9em; margin-top: 5px;">Capital Extra Acumulado: ${formatarMoeda(recebido - metaTotal)}</p>
+                     <p style="color: var(--cor-fixa); font-size: 0.9em; margin-top: 5px; font-style: normal;">Capital Extra Acumulado: ${formatarMoeda(recebido - metaTotal)}</p>
                  `;
                  metaDiariaIncentivoEl.style.color = 'var(--cor-sucesso)';
              } else {
@@ -1397,23 +1502,23 @@
              }
              
              let html = `
-                 <h4>ESTRATÉGIA: BOLA DE NEVE (MENOR PARA MAIOR)</h4>
-                 <p style="margin-bottom: 10px; color: var(--cor-texto-secundario); font-size: 0.9em;">
-                    Priorize as menores dívidas para criar impulso rápido no protocolo de quitação.
+                 <h4><i class="fas fa-meteor"></i> ESTRATÉGIA: BOLA DE NEVE (MENOR PARA MAIOR)</h4>
+                 <p style="margin-bottom: 15px; color: var(--cor-texto-secundario); font-size: 0.9em;">
+                    Priorize as **menores dívidas** para criar impulso rápido no protocolo de quitação.
                  </p>
              `;
              
              dividasPendentes.slice(0, 3).forEach((d, index) => {
                  html += `
-                     <p>
-                         **PRIORIDADE ${index + 1}:** ${d.credor} (Saldo: ${formatarMoeda(d.valorAtual)})
+                     <p style="font-family: var(--fonte-dados); margin-bottom: 5px;">
+                         **PRIORIDADE ${index + 1}:** ${d.credor} (Saldo: <span style="color: var(--cor-divida);">${formatarMoeda(d.valorAtual)}</span>)
                      </p>
                  `;
              });
              
              html += `
                  <p style="margin-top: 15px; font-weight: 700; color: var(--cor-alerta);">
-                     **Ação:** Direcione todo o excedente para a dívida **PRIORIDADE 1**.
+                     **Ação Estratégica:** Direcione todo o excedente para a dívida **PRIORIDADE 1**.
                  </p>
              `;
              
@@ -1426,10 +1531,14 @@
             const receitasDiarias = getReceitasPorDia(transacoes);
             const todasAsDatas = Array.from(new Set(Object.keys(receitasDiarias)));
             
-            const somaFixas = getSomaFixas(fixas);
-            const metaDiariaFixas = getMetaDiariaFixas(somaFixas);
+            const somaFixas = CONTAS_FIXAS_INITIAL.reduce((sum, item) => sum + item.valor, 0); // Usa a soma total para meta histórica
+            const metaDiariaFixas = somaFixas / DIAS_UTEIS_MES;
+            
+            // Re-calcula a meta de quitação diária para a data atual, mas usa como base a histórica
             const totalDividasPendentes = dividas.filter(d => d.valorAtual > 0.01).reduce((sum, d) => sum + parseFloat(d.valorAtual), 0);
-            const metaQuitacaoDiaria = gerarPlanoQuitacaoIA(true, totalDividasPendentes); 
+            const meses = parseInt(document.getElementById('meses-plano').value) || 5;
+            const metaQuitacaoDiaria = (DEBT_LIST_INITIAL.reduce((s,d) => s + d.valorInicial, 0) / meses) / DIAS_UTEIS_MES; // Usa o valor total INICIAL
+            
             const metaTotalDiaria = metaDiariaFixas + metaQuitacaoDiaria;
 
             const hoje = getHojeString();
@@ -1441,6 +1550,7 @@
             
             const relatorio = todasAsDatas.map(data => {
                 const recebido = receitasDiarias[data] || 0;
+                // Atingido é checado contra a meta histórica total (fixas iniciais + quitação inicial)
                 const atingido = recebido >= metaTotalDiaria - 0.009;
                 
                 return {
@@ -1535,7 +1645,7 @@
                  }
              });
              
-             // --- Botão de Sair (NOVO) ---
+             // --- Botão de Sair ---
              document.getElementById('btn-logout').addEventListener('click', resetTudoEVoltarLogin);
 
              // --- Modals e Botões de Ação ---
@@ -1546,7 +1656,7 @@
              document.getElementById('btn-cadastrar-receita').addEventListener('click', cadastrarReceita);
              document.getElementById('btn-quitar-divida').addEventListener('click', realizarPagamentoDivida);
              
-             // --- Eventos do Relatório Diário (NOVO) ---
+             // --- Eventos do Relatório Diário ---
              document.getElementById('btn-data-atual').addEventListener('click', () => {
                   const transacoes = carregarTransacoes();
                   const dividas = carregarDividas();
@@ -1629,6 +1739,9 @@
                   const { totalDividasPendentes } = getTotais(carregarTransacoes(), dividas);
                   gerarPlanoQuitacaoIA(false, totalDividasPendentes);
                   renderizarDicasQuitacao(dividas);
+                  // Atualiza a meta diária após recalcular o plano
+                  const fixas = carregarContasFixas();
+                  renderizarMetaDiaria(carregarTransacoes(), totalDividasPendentes, fixas);
              });
 
              // --- Inicialização da Tela ---
