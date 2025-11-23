@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>PROJECT TITAN | CORE FINANCIAL [V3.5]</title>
+    <title>PROJECT TITAN | CORE FINANCIAL [V3.6 - Mobile Optimized]</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Space+Mono:wght+400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -27,6 +27,8 @@
             --cor-meta-diaria: #9B59B6; /* Roxo Profundo */
             --cor-alerta: #F59E0B; /* Amarelo */
             --cor-fixa: #1DE9B6; /* Verde Neon para Fixas */
+            --cor-fundo-ia: #151A23; /* Fundo mais escuro para IA */
+            --cor-destaque-ia: #FFD700; /* Dourado para IA/Prioridade */
 
             /* Tipografia */
             --fonte-titulo: 'Inter', sans-serif;
@@ -76,7 +78,6 @@
             text-align: right;
             border-bottom: 2px solid var(--cor-fixa);
             box-shadow: 0 5px 20px rgba(29, 233, 182, 0.3);
-            /* Garante que o banner não cause scroll horizontal excessivo */
             overflow: hidden; 
         }
         
@@ -163,7 +164,7 @@
             margin-bottom: 10px;
         }
 
-        /* Destaque de valores (uso de !important para sobrepor) */
+        /* Destaque de valores */
         .info-card .valor, .valor-divida, .valor-caixa {
             font-size: 2.5em !important; 
             font-family: var(--fonte-dados);
@@ -236,7 +237,7 @@
         
         .section-toggle {
             background-color: rgba(26, 33, 46, 0.9); 
-            padding: 20px 30px; /* Padding levemente menor */
+            padding: 20px 30px; 
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -250,7 +251,7 @@
         }
         .section-toggle h2 {
             margin: 0;
-            font-size: 1.3em; /* Fonte menor para toggle */
+            font-size: 1.3em; 
             font-family: var(--fonte-titulo);
         }
         .section-toggle.dividas h2 {
@@ -305,6 +306,29 @@
             font-size: 0.9em;
         }
         
+        /* Botões Principais (INJETAR VALOR, RECALCULAR PLANO) */
+        .btn-principal {
+            background-color: var(--cor-primario);
+            color: var(--cor-fundo-principal);
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 700;
+            transition: all var(--transicao-rapida);
+            text-transform: uppercase;
+            box-shadow: 0 0 15px rgba(0, 188, 212, 0.4);
+        }
+        .btn-principal:hover {
+            background-color: #38C7E4;
+            box-shadow: 0 0 20px rgba(0, 188, 212, 0.7);
+        }
+        .btn-principal i {
+            margin-right: 8px;
+        }
+
+
         /* Botão Pagar Conta Fixa */
         .btn-pagar-fixa {
             background-color: var(--cor-fixa);
@@ -318,6 +342,7 @@
             transition: all var(--transicao-rapida);
             margin-left: 10px;
             opacity: 1;
+            white-space: nowrap; /* Não quebra no mobile */
         }
         .btn-pagar-fixa:hover {
              background-color: #00FFC6;
@@ -326,7 +351,7 @@
         .btn-pagar-fixa.pago {
              background-color: var(--cor-sucesso);
              cursor: not-allowed;
-             opacity: 0.5;
+             opacity: 0.7; /* Aumenta opacidade para destaque visual */
         }
         .btn-pagar-fixa.inativo {
              background-color: var(--cor-borda);
@@ -351,8 +376,15 @@
         /* 5. TABELAS E BOTÕES DE AÇÃO */
         /* =================================== */
 
+        .tabela-wrapper {
+             /* Permite scroll horizontal em mobile se a tabela for muito larga */
+             overflow-x: auto; 
+             width: 100%;
+        }
+
         .tabela-transacoes { 
             width: 100%; 
+            min-width: 500px; /* Garante que a tabela tenha um mínimo para o scroll */
             border-collapse: collapse;
             font-family: var(--fonte-dados);
         }
@@ -367,6 +399,7 @@
             text-transform: uppercase;
             font-weight: 700;
             font-size: 0.9em;
+            white-space: nowrap;
         }
 
         /* Estilo para Botões de Ação na Tabela (UNIFORMIZADO) */
@@ -380,7 +413,7 @@
             font-size: 0.8em;
             font-weight: 700;
             transition: all var(--transicao-rapida);
-            white-space: nowrap; /* Garante que o texto e ícone fiquem na mesma linha */
+            white-space: nowrap; 
             box-shadow: 0 2px 5px rgba(0,0,0,0.3);
         }
         .btn-acao-tabela:hover {
@@ -390,7 +423,7 @@
             background-color: var(--cor-divida);
         }
         .btn-acao-tabela.quitar {
-            background-color: var(--cor-divida); /* Mantido vermelho para ênfase na quitação */
+            background-color: var(--cor-divida); 
         }
         .btn-acao-tabela.btn-inativo-capital {
             background-color: var(--cor-borda);
@@ -399,9 +432,98 @@
             opacity: 0.6;
             box-shadow: none;
         }
+        
+        /* =================================== */
+        /* 6. MÓDULO IA (DESTAQUE) */
+        /* =================================== */
+        
+        .plano-quitacao {
+             margin-top: 50px; 
+             padding: 30px; 
+             background-color: var(--cor-fundo-ia); 
+             border-radius: 12px; 
+             box-shadow: 0 0 25px rgba(0, 188, 212, 0.3), inset 0 0 0 2px var(--cor-primario);
+             border: 1px solid var(--cor-primario);
+        }
+        
+        .plano-quitacao h3 {
+             color: var(--cor-primario);
+             font-weight: 700;
+             font-size: 1.5em;
+             margin-bottom: 20px;
+             text-shadow: 0 0 5px rgba(0, 188, 212, 0.5);
+        }
+        
+        .ia-input-group {
+            display: flex; 
+            gap: 20px; 
+            align-items: flex-end; 
+            margin-top: 15px; 
+            margin-bottom: 25px;
+        }
+        
+        .ia-input-group label {
+             font-weight: 600;
+             color: var(--cor-texto-principal);
+        }
+        
+        /* Resultado do Plano (Aportes) */
+        #resultado-plano-ia {
+            border-left: 5px solid var(--cor-destaque-ia); 
+            padding-left: 20px; 
+            margin-top: 25px;
+            background-color: #1A212E;
+            padding: 15px;
+            border-radius: 6px;
+        }
+        #resultado-plano-ia p {
+            margin: 8px 0;
+            font-family: var(--fonte-dados);
+            font-weight: 700;
+        }
+        #resultado-plano-ia strong {
+             color: var(--cor-destaque-ia);
+             font-size: 1.1em;
+        }
+        
+        /* Dicas de Quitação (Bola de Neve) */
+        #dicas-quitacao {
+             margin-top: 30px; 
+             padding-top: 20px; 
+             border-top: 1px dashed var(--cor-borda);
+        }
+        #dicas-quitacao h4 {
+            color: var(--cor-sucesso);
+            font-size: 1.2em;
+            margin-bottom: 15px;
+        }
+        #dicas-quitacao li {
+             background-color: #1A212E;
+             padding: 10px;
+             margin-bottom: 8px;
+             border-left: 3px solid var(--cor-destaque-ia);
+             border-radius: 4px;
+             font-size: 0.95em;
+        }
+        #dicas-quitacao ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        /* Estilo para a NOTA de alerta */
+        .plano-quitacao .alerta-nota {
+             color: var(--cor-alerta); 
+             font-weight: bold; 
+             margin-bottom: 20px; 
+             background-color: rgba(245, 158, 11, 0.1);
+             padding: 10px;
+             border-radius: 4px;
+             border-left: 3px solid var(--cor-alerta);
+        }
+
 
         /* =================================== */
-        /* 6. RESPONSIVIDADE (MOBILE FIRST) */
+        /* 7. RESPONSIVIDADE (MOBILE FIRST) */
         /* =================================== */
 
         /* Mobile Padrão (Telas até 768px) */
@@ -409,7 +531,6 @@
             
             /* Global */
             .dynamic-banner {
-                /* ALTERAÇÃO CRUCIAL 2: Manter o banner visível, confiando na meta-tag para evitar zoom */
                 display: block; 
             }
             .container {
@@ -424,7 +545,7 @@
             
             /* Dashboard: Empilhamento */
             .dashboard-header {
-                grid-template-columns: 1fr; /* Colunas empilhadas */
+                grid-template-columns: 1fr; 
                 gap: 20px;
                 margin-bottom: 30px;
             }
@@ -452,11 +573,16 @@
                 font-size: 0.9em !important;
             }
 
-            /* Seções e Botões de Ação */
+            /* Seção de Ação */
             .section-header {
-                flex-direction: column;
+                display: flex;
+                flex-direction: column; 
                 align-items: stretch;
                 gap: 15px;
+            }
+            .section-header h2 {
+                 margin-bottom: 0; 
+                 font-size: 1.5em; 
             }
             .btn-principal {
                 width: 100%; /* Botão de ação full width */
@@ -471,23 +597,52 @@
                 gap: 15px;
             }
             .contas-fixas-container li {
+                flex-direction: column;
+                align-items: flex-start;
                 font-size: 0.9em;
+                gap: 10px;
+            }
+            .contas-fixas-container li span {
+                 font-weight: bold;
             }
             .btn-pagar-fixa {
-                padding: 5px 10px;
-                font-size: 0.75em;
+                padding: 6px 12px;
+                font-size: 0.8em;
+                margin-left: 0;
             }
 
-            /* Tabela Ajuste (Menor Fonte) */
+            /* Tabela Ajuste (Scroll Horizontal) */
             .tabela-transacoes {
-                font-size: 0.8em; 
+                font-size: 0.85em; 
             }
             .tabela-transacoes th, .tabela-transacoes td {
                 padding: 8px;
             }
             .btn-acao-tabela {
-                font-size: 0.7em;
-                padding: 4px 8px;
+                font-size: 0.75em;
+                padding: 5px 10px;
+            }
+            
+            /* Módulo IA (Ajuste de Input/Botão) */
+            .ia-input-group {
+                 flex-direction: column;
+                 align-items: stretch;
+            }
+            .ia-input-group > div {
+                 width: 100%;
+            }
+            .ia-input-group input {
+                 width: 100% !important;
+                 text-align: center;
+                 font-size: 1.2em;
+            }
+            #btn-gerar-plano {
+                 width: 100%;
+            }
+            
+            /* Modal de Cadastro (ajuste para visualização) */
+            .modal-content {
+                 margin: 5% auto !important; /* Move para cima em mobile */
             }
         }
         
@@ -586,18 +741,20 @@
                 </div>
                 
                 <div id="lista-receitas-container" class="lista-container-ocultavel" style="display: none;">
-                    <table class="tabela-transacoes">
-                        <thead>
-                            <tr>
-                                <th>DESCRIÇÃO</th>
-                                <th>VALOR (R$)</th>
-                                <th>DATA</th>
-                                <th>AÇÃO</th>
-                            </tr>
-                        </thead>
-                        <tbody id="lista-entradas">
-                            </tbody>
-                    </table>
+                    <div class="tabela-wrapper">
+                        <table class="tabela-transacoes">
+                            <thead>
+                                <tr>
+                                    <th>DESCRIÇÃO</th>
+                                    <th>VALOR (R$)</th>
+                                    <th>DATA</th>
+                                    <th>AÇÃO</th>
+                                </tr>
+                            </thead>
+                            <tbody id="lista-entradas">
+                                </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
             
@@ -614,7 +771,7 @@
                 </div>
                 
                 <div id="lista-fixas-container" class="lista-container-ocultavel" style="display: none;">
-                     <p style="color: var(--cor-alerta); font-weight: bold; margin-bottom: 20px;">
+                     <p class="alerta-nota">
                         <i class="fas fa-exclamation-triangle"></i> NOTA: Ao clicar em 'PAGAR', o valor será deduzido imediatamente do Capital Acumulado.
                      </p>
                      <div id="contas-fixas-card" class="contas-fixas-container">
@@ -633,42 +790,44 @@
                 </div>
                 
                 <div id="lista-dividas-quitar-container" class="lista-container-ocultavel" style="display: none;">
-                    <p style="color: var(--cor-alerta); font-weight: bold; margin-bottom: 20px;">
+                    <p class="alerta-nota">
                         <i class="fas fa-exclamation-triangle"></i> NOTA: O botão "PAGAR" só é ativado quando o Capital Acumulado é $\ge$ Saldo da Dívida.
                      </p>
-                    <table class="tabela-transacoes">
-                        <thead>
-                            <tr>
-                                <th>CREDOR</th>
-                                <th>VALOR INICIAL</th>
-                                <th>SALDO ATUAL (R$)</th>
-                                <th>AÇÃO</th>
-                            </tr>
-                        </thead>
-                        <tbody id="lista-dividas-quitar">
-                            </tbody>
-                    </table>
+                     <div class="tabela-wrapper">
+                        <table class="tabela-transacoes">
+                            <thead>
+                                <tr>
+                                    <th>CREDOR</th>
+                                    <th>VALOR INICIAL</th>
+                                    <th>SALDO ATUAL (R$)</th>
+                                    <th>AÇÃO</th>
+                                </tr>
+                            </thead>
+                            <tbody id="lista-dividas-quitar">
+                                </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
             
-            <div class="plano-quitacao" style="margin-top: 50px; padding: 30px; background-color: var(--cor-fundo-card); border-radius: 12px; box-shadow: var(--sombra-card); border: 1px solid var(--cor-borda);">
+            <div class="plano-quitacao container" style="margin-left: 0; margin-right: 0; padding-left: 30px; padding-right: 30px; margin-top: 50px;">
                 <h3><i class="fas fa-brain"></i> PLANO DE QUITAÇÃO ESTRATÉGICO (MÓDULO IA)</h3>
                 
-                <div id="plano-ia-controls" style="display: flex; gap: 20px; align-items: flex-end; margin-top: 15px; margin-bottom: 25px;">
+                <div id="plano-ia-controls" class="ia-input-group">
                     <div>
-                         <label for="meses-plano" style="margin-bottom: 5px; display: block; color: var(--cor-texto-principal); font-weight: 600;">TARGET: Meses para Quitar Dívidas ÚNICAS:</label>
-                         <input type="number" id="meses-plano" value="5" min="1" max="60" style="padding: 8px; border-radius: 4px; border: 1px solid var(--cor-borda); background: #1A212E; color: var(--cor-texto-principal); width: 80px;">
+                         <label for="meses-plano">TARGET: Meses para Quitar Dívidas ÚNICAS:</label>
+                         <input type="number" id="meses-plano" value="5" min="1" max="60" style="padding: 8px; border-radius: 4px; border: 1px solid var(--cor-borda); background: #1A212E; color: var(--cor-fixa); width: 80px;">
                     </div>
                     <button id="btn-gerar-plano" class="btn-principal" style="margin-top: 0; padding: 10px 15px; width: auto;">
                         <i class="fas fa-redo-alt"></i> RECALCULAR PLANO
                     </button>
                 </div>
                 
-                <div id="resultado-plano-ia" style="border-left: 3px solid var(--cor-primario); padding-left: 15px; margin-top: 20px;">
+                <div id="resultado-plano-ia">
                     <p style="color: var(--cor-texto-secundario);">Aguardando cálculo...</p>
                     </div>
                 
-                <div id="dicas-quitacao" style="margin-top: 30px; padding-top: 20px; border-top: 1px dashed var(--cor-borda);">
+                <div id="dicas-quitacao">
                      </div>
             </div>
             
@@ -704,7 +863,7 @@
     
     <script>
         // ===========================================
-        // JAVASCRIPT: LÓGICA DE NEGÓCIO E CONEXÃO V3.5 (OTIMIZADA)
+        // JAVASCRIPT: LÓGICA DE NEGÓCIO E CONEXÃO V3.6 (OTIMIZADA)
         // ===========================================
 
         const DIAS_UTEIS_MES = 22; 
@@ -945,15 +1104,15 @@
 
              const valorMensalNecessario = totalDividasPendentes / meses;
              // Usamos 30 dias como estimativa para cálculo de aporte diário
-             const valorDiarioNecessario = valorMensalNecessario / 30; 
+             const valorDiarioNecessario = valorMensalNecessario / DIAS_UTEIS_MES; 
 
              if (!isInit) {
-                  const valorSemanalNecessario = valorDiarioNecessario * 7;
+                  const valorSemanalNecessario = valorDiarioNecessario * 5; // 5 dias úteis
                   let html = `
                      <p style="margin-bottom: 15px; color: var(--cor-texto-secundario); font-family: var(--fonte-titulo); font-weight: 600;">Para quitar **${formatarMoeda(totalDividasPendentes)}** em **${meses} meses**:</p>
-                     <p><i class="fas fa-calendar-alt" style="color: var(--cor-primario);"></i> Aporte Mensal Necessário: <strong>${formatarMoeda(valorMensalNecessario)}</strong></p>
-                     <p><i class="fas fa-calendar-week" style="color: var(--cor-primario);"></i> Aporte Semanal Necessário: <strong>${formatarMoeda(valorSemanalNecessario)}</strong></p>
-                     <p><i class="fas fa-sun" style="color: var(--cor-primario);"></i> Aporte Diário Necessário: <strong>${formatarMoeda(valorDiarioNecessario)}</strong></p>
+                     <p><i class="fas fa-calendar-alt" style="color: var(--cor-destaque-ia);"></i> Aporte Mensal Necessário: <strong>${formatarMoeda(valorMensalNecessario)}</strong></p>
+                     <p><i class="fas fa-calendar-week" style="color: var(--cor-destaque-ia);"></i> Aporte Semanal (5 dias úteis): <strong>${formatarMoeda(valorSemanalNecessario)}</strong></p>
+                     <p><i class="fas fa-sun" style="color: var(--cor-destaque-ia);"></i> Aporte Diário (por dia útil): <strong>${formatarMoeda(valorDiarioNecessario)}</strong></p>
                   `;
                   document.getElementById('resultado-plano-ia').innerHTML = html;
              }
@@ -1017,7 +1176,7 @@
             const { totalReceitas } = getTotais(transacoes, carregarDividas());
             
             let html = `
-                <li>TARGET DIÁRIO (FIXAS / ${DIAS_UTEIS_MES} dias): <span class="diaria-fixa-destaque">${formatarMoeda(metaDiariaFixas)}</span></li>
+                <li>TARGET DIÁRIO (FIXAS / ${DIAS_UTEIS_MES} dias úteis): <span class="diaria-fixa-destaque">${formatarMoeda(metaDiariaFixas)}</span></li>
                 <li>TOTAL GERAL FIXAS MÊS (META): <span style="color: var(--cor-fixa);">${formatarMoeda(somaFixas)}</span></li>
             `;
             
@@ -1125,21 +1284,26 @@
              
              let html = `
                  <h4>ESTRATÉGIA: BOLA DE NEVE (MENOR PARA MAIOR)</h4>
-                 <p style="font-size: 0.9em; margin-bottom: 10px; color: var(--cor-texto-secundario);">
+                 <p style="font-size: 0.9em; margin-bottom: 15px; color: var(--cor-texto-secundario);">
                     Priorize as menores dívidas para criar impulso rápido no protocolo de quitação.
                  </p>
-                 <ul style="list-style: none; padding-left: 10px;">
+                 <ul style="list-style: none; padding-left: 0;">
              `;
              
              // Cria uma cópia e ordena para garantir que as 3 exibidas sejam as 3 menores
              dividasAtivas.slice().sort((a, b) => a.valorAtual - b.valorAtual).slice(0, 3).forEach((d, index) => {
-                 html += `<li>**PRIORIDADE ${index + 1}:** ${d.credor} (Saldo: ${formatarMoeda(d.valorAtual)})</li>`;
+                 html += `
+                    <li>
+                        <i class="fas fa-arrow-right" style="color: var(--cor-destaque-ia); margin-right: 5px;"></i>
+                        **PRIORIDADE ${index + 1}:** ${d.credor} (Saldo: <span style="color: var(--cor-divida);">${formatarMoeda(d.valorAtual)}</span>)
+                    </li>
+                 `;
              });
              
              html += `
                  </ul>
-                 <p style="font-size: 0.85em; margin-top: 15px; color: var(--cor-alerta);">
-                    *Ação: Direcione todo o excedente para a dívida **PRIORIDADE 1**.*
+                 <p style="font-size: 0.85em; margin-top: 15px; color: var(--cor-alerta); font-weight: bold;">
+                    <i class="fas fa-exclamation-triangle"></i> Ação: Direcione todo o excedente para a dívida **PRIORIDADE 1**.
                  </p>
              `;
              dicasEl.innerHTML = html;
@@ -1284,7 +1448,7 @@
              transacoes.push(novaTransacaoSaida);
              salvarTransacoes(transacoes);
 
-             // 2. ATUALIZAÇÃO DA DÍVIDA
+             // 2. ATUALIZAÇÃO da DÍVIDA
              divida.valorAtual = divida.valorAtual - valorEfetivo;
              divida.valorAtual = Math.max(0, divida.valorAtual); // Garante que não fique negativo
             
