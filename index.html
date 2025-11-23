@@ -3,30 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Painel de Quitação Estratégica</title>
+    <title>Debt-Zero Protocol | Painel de Quitação Estratégica</title>
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Orbitron:wght@600;800&display=swap" rel="stylesheet">
 
     <style>
         /* =================================== */
-        /* 1. VARIÁVEIS CSS E BASE             */
+        /* 1. VARIÁVEIS CSS E BASE (FUTURISTA) */
         /* =================================== */
         :root {
-            /* Cores - Schema Profissional Escuro */
-            --cor-fundo-principal: #121212; 
-            --cor-fundo-card: #1e1e1e; 
-            --cor-borda: #333333;
-            --cor-texto-principal: #e0e0e0;
-            --cor-verde: #4CAF50; /* Sucesso/Entrada */
-            --cor-vermelho: #E53935; /* Perigo/Dívida */
-            --cor-azul: #2196F3; /* Primário/Ação */
-            --cor-amarelo: #FFB300; /* Destaque/Alerta */
-            --cor-roxo: #7209b7; /* Fixo/Meta Diária */
-            --cor-cinza-claro: #9e9e9e; /* Rótulos/Secundário */
+            /* Cores - Schema Cyber Dark Mode */
+            --cor-fundo-principal: #0A0A10; /* Fundo Ultra Escuro */
+            --cor-fundo-card: #1C1C24; /* Base dos Componentes */
+            --cor-borda: #3E3E4F; /* Separadores/Bordas */
+            --cor-texto-principal: #E0E0FF; /* Texto Branco/Azulado */
+            
+            /* Cores de Destaque */
+            --cor-verde-neon: #39FF14; /* Sucesso/Entrada */
+            --cor-vermelho-alerta: #FF44AA; /* Perigo/Dívida (Magenta Neon) */
+            --cor-azul-energia: #00BFFF; /* Primário/Ação (Deep Sky Blue) */
+            --cor-roxo-data: #BF00FF; /* Meta Diária/Data */
+            --cor-amarelo-alerta: #FFD700; /* Alerta */
+            --cor-cinza-claro: #9AA0B3; /* Rótulos/Secundário */
 
             /* Tipografia */
-            --fonte-titulo: 'Roboto', sans-serif;
-            --fonte-corpo: 'Open Sans', sans-serif;
+            --fonte-titulo: 'Orbitron', sans-serif;
+            --fonte-corpo: 'Space Mono', monospace; 
+            
+            /* Efeitos */
+            --sombra-neon: 0 0 5px rgba(57, 255, 20, 0.5), 0 0 10px rgba(0, 191, 255, 0.5);
+            --sombra-card: 0 4px 15px rgba(0, 0, 0, 0.5);
+            --transicao-rapida: 0.2s ease-in-out;
         }
 
         * {
@@ -40,72 +49,93 @@
             background-color: var(--cor-fundo-principal);
             color: var(--cor-texto-principal);
             line-height: 1.6;
+            min-height: 100vh;
         }
 
         .container {
             max-width: 1200px;
-            margin: 30px auto;
+            margin: 40px auto;
             padding: 0 20px;
         }
         
-        h2 {
+        h1 {
             font-family: var(--fonte-titulo);
-            font-weight: 500;
-            color: var(--cor-texto-principal);
-            margin-bottom: 20px;
+            color: var(--cor-azul-energia);
+            text-align: center;
+            margin-bottom: 25px;
+            text-shadow: 0 0 7px rgba(0, 191, 255, 0.7);
         }
 
-        /* Motivação */
+        h2 {
+            font-family: var(--fonte-titulo);
+            font-weight: 600;
+            color: var(--cor-texto-principal);
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+        
+        /* Motivação - Mais discreto e técnico */
         .motivacao-box {
-            background-color: #262626;
-            color: var(--cor-amarelo);
+            background-color: var(--cor-fundo-card);
+            color: var(--cor-cinza-claro);
             text-align: center;
-            padding: 18px;
+            padding: 15px;
             border-radius: 8px;
-            margin-bottom: 25px;
-            font-style: italic;
-            font-size: 1.05em;
+            margin-bottom: 30px;
+            font-size: 0.9em;
             border: 1px solid var(--cor-borda);
+            box-shadow: var(--sombra-card);
+        }
+        .motivacao-box i {
+             color: var(--cor-roxo-data);
+             margin-right: 8px;
         }
 
         /* =================================== */
         /* 2. CARD META DIÁRIA TOTAL (DESTAQUE)*/
         /* =================================== */
         .meta-diaria-total {
-            background: linear-gradient(135deg, var(--cor-roxo), #9c27b0);
+            background: linear-gradient(135deg, #1C0030, var(--cor-roxo-data));
             color: white;
-            padding: 20px 30px;
-            border-radius: 10px;
+            padding: 30px;
+            border-radius: 12px;
             text-align: center;
-            margin-bottom: 30px;
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
-            transition: background 0.5s ease-in-out;
+            margin-bottom: 40px;
+            box-shadow: 0 0 20px rgba(191, 0, 255, 0.5); /* Sombra Roxa */
+            transition: var(--transicao-rapida);
+            border: 2px solid var(--cor-roxo-data);
         }
         
-        /* NOVO: Estilo para Meta Diária Concluída */
+        /* Estilo para Meta Diária Concluída */
         .meta-diaria-concluida {
-            background: linear-gradient(135deg, var(--cor-verde), #2e7d32);
+            background: linear-gradient(135deg, #00300A, var(--cor-verde-neon));
+            box-shadow: 0 0 20px rgba(57, 255, 20, 0.5); /* Sombra Verde Neon */
+            border: 2px solid var(--cor-verde-neon);
         }
 
         .meta-diaria-total p {
-            font-size: 1.1em;
+            font-size: 1em;
             font-weight: 400;
             margin: 0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: rgba(255, 255, 255, 0.8);
         }
         .meta-diaria-total span {
-            font-size: 2.5em;
-            font-weight: 700;
+            font-size: 3em;
+            font-weight: 800;
             display: block;
-            margin-top: 5px;
+            margin-top: 10px;
             font-family: var(--fonte-titulo);
+            text-shadow: var(--sombra-neon);
         }
         
-        /* Estilos do Destaque */
         .meta-diaria-total .destaque-conclusao {
             display: block;
-            font-size: 1.3em;
-            font-weight: 600;
-            margin-top: 10px;
+            font-size: 1.4em;
+            font-weight: 700;
+            margin-top: 15px;
+            color: white;
         }
         .meta-diaria-total .destaque-conclusao i {
             margin-right: 8px;
@@ -120,65 +150,76 @@
         .dashboard-header {
             display: grid;
             grid-template-columns: repeat(3, 1fr); 
-            gap: 25px;
+            gap: 30px;
             margin-bottom: 40px;
         }
         
         .info-card, .progress-area {
             background-color: var(--cor-fundo-card);
-            padding: 25px;
+            padding: 30px;
             border: 1px solid var(--cor-borda);
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            box-shadow: var(--sombra-card);
+            transition: transform 0.3s;
+        }
+        .info-card:hover, .progress-area:hover {
+            transform: translateY(-3px);
+            border-color: var(--cor-azul-energia);
         }
         
         .rotulo {
-            font-size: 0.85em;
+            font-size: 0.8em;
             color: var(--cor-cinza-claro);
-            margin-bottom: 12px;
+            margin-bottom: 15px;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 1px;
             display: flex;
             align-items: center;
         }
         
         .rotulo i {
-            margin-right: 8px;
-            color: var(--cor-azul);
+            margin-right: 10px;
+            color: var(--cor-azul-energia);
+            text-shadow: var(--sombra-neon);
         }
 
         .valor {
-            font-size: 2.5em;
+            font-size: 2.8em;
             font-weight: 700;
             font-family: var(--fonte-titulo);
+            line-height: 1;
         }
 
         .valor-caixa {
-            color: var(--cor-verde);
+            color: var(--cor-verde-neon);
+            text-shadow: 0 0 5px rgba(57, 255, 20, 0.5);
         }
 
         .valor-divida {
-            color: var(--cor-vermelho);
+            color: var(--cor-vermelho-alerta);
+            text-shadow: 0 0 5px rgba(255, 68, 170, 0.5);
         }
         
         /* Progress Area */
         .progress-area p {
-            font-size: 1em;
-            margin-bottom: 5px;
+            font-size: 0.95em;
+            margin-bottom: 8px;
         }
         .progresso-bar-container {
             width: 100%;
-            height: 8px;
+            height: 12px;
             background-color: #333;
-            border-radius: 4px;
+            border-radius: 6px;
             overflow: hidden;
-            margin-top: 15px;
+            margin-top: 20px;
+            border: 1px solid var(--cor-borda);
         }
         .progresso {
             height: 100%;
-            background-color: var(--cor-verde); 
-            border-radius: 4px;
+            background-color: var(--cor-verde-neon); 
+            border-radius: 6px;
             transition: width 0.5s ease-in-out;
+            box-shadow: 0 0 5px var(--cor-verde-neon);
         }
         
         /* =================================== */
@@ -189,181 +230,197 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
+            border-bottom: 1px dashed var(--cor-borda);
+            padding-bottom: 15px;
         }
         
         .btn-principal {
-            background-color: var(--cor-azul);
-            color: white;
-            padding: 10px 20px;
+            background-color: var(--cor-azul-energia);
+            color: var(--cor-fundo-principal);
+            padding: 12px 25px;
             border: none;
             border-radius: 6px;
             cursor: pointer;
-            font-size: 0.95em;
-            font-weight: 600;
-            transition: background-color 0.3s, transform 0.1s;
+            font-size: 1em;
+            font-weight: 700;
+            transition: background-color var(--transicao-rapida), box-shadow var(--transicao-rapida);
+            text-transform: uppercase;
+            box-shadow: 0 0 10px rgba(0, 191, 255, 0.3);
         }
 
         .btn-principal:hover {
-            background-color: #1a7fc5;
-            transform: translateY(-1px);
-        }
-
-        .transacoes-container {
-            background-color: var(--cor-fundo-card);
-            padding: 20px;
-            border-radius: 8px;
-            margin-top: 20px;
-            border: 1px solid var(--cor-borda);
+            background-color: #0088CC;
+            box-shadow: 0 0 15px var(--cor-azul-energia);
         }
 
         /* Estilos de Tabela Otimizados */
         .tabela-transacoes {
             width: 100%;
             border-collapse: collapse; 
+            font-size: 0.9em;
         }
 
         .tabela-transacoes th, .tabela-transacoes td {
             padding: 15px 10px;
             text-align: left;
-            border-bottom: 1px solid #2e2e2e;
+            border-bottom: 1px solid var(--cor-borda);
         }
         
         .tabela-transacoes th {
-            font-weight: 600;
-            font-size: 0.8em;
+            font-weight: 700;
+            font-size: 0.75em;
             color: var(--cor-cinza-claro);
             text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         .tabela-transacoes tbody tr:hover {
-            background-color: #242424;
+            background-color: #24242F;
         }
 
         .btn-acao-tabela {
             padding: 8px 12px;
-            border: none;
+            border: 1px solid transparent;
             border-radius: 4px;
             cursor: pointer;
-            font-size: 0.85em;
-            font-weight: 600;
-            transition: opacity 0.2s;
+            font-size: 0.8em;
+            font-weight: 700;
+            transition: background-color var(--transicao-rapida), border-color var(--transicao-rapida);
         }
         
         .btn-acao-tabela.quitar {
-            background-color: var(--cor-verde);
-            color: white;
+            background-color: var(--cor-verde-neon);
+            color: var(--cor-fundo-principal);
+        }
+        .btn-acao-tabela.quitar:hover {
+            background-color: #17e600;
         }
 
         .btn-acao-tabela.deletar {
-            background-color: var(--cor-vermelho);
-            color: white;
+            background-color: transparent;
+            color: var(--cor-vermelho-alerta);
+            border-color: var(--cor-vermelho-alerta);
+        }
+        .btn-acao-tabela.deletar:hover {
+            background-color: rgba(255, 68, 170, 0.1);
         }
 
         .saldo-divida {
             font-weight: bold;
-            color: var(--cor-vermelho);
+            color: var(--cor-vermelho-alerta);
         }
         
         /* SEÇÃO OCULTÁVEL (Geral) */
         .toggle-section {
             border: 1px solid var(--cor-borda);
-            border-radius: 8px;
+            border-radius: 10px;
             margin-top: 30px;
+            box-shadow: var(--sombra-card);
         }
         
         .section-toggle {
-            background-color: #383838; 
-            padding: 18px 20px;
+            background-color: #2D2D38; 
+            padding: 20px 25px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             cursor: pointer;
-            border-radius: 8px;
-            transition: background-color 0.3s;
+            border-radius: 10px;
+            transition: background-color var(--transicao-rapida);
         }
         .section-toggle:hover {
-            background-color: #444;
+            background-color: #383845;
         }
         .section-toggle h2 {
             margin: 0;
-            color: var(--cor-vermelho);
-            font-size: 1.3em;
+            font-size: 1.2em;
+        }
+        .section-toggle.dividas h2 {
+            color: var(--cor-vermelho-alerta);
         }
         .section-toggle.receitas h2 {
-            color: var(--cor-verde);
+            color: var(--cor-verde-neon);
         }
         .section-toggle i {
             transition: transform 0.3s;
+            color: var(--cor-cinza-claro);
         }
         .section-toggle.aberto i {
             transform: rotate(180deg);
+            color: var(--cor-azul-energia);
         }
 
         /* Conteúdo Ocultável */
         .lista-container-ocultavel {
             padding: 0 20px 20px 20px;
             background-color: var(--cor-fundo-card);
-            border-bottom-left-radius: 8px;
-            border-bottom-right-radius: 8px;
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
         }
         
         /* 5. Contas Fixas e Plano IA */
         .contas-fixas-container, .plano-quitacao {
              background-color: var(--cor-fundo-card);
-             padding: 25px;
-             border-radius: 8px;
+             padding: 30px;
+             border-radius: 10px;
              margin-top: 30px;
              border: 1px solid var(--cor-borda);
-             position: relative; /* Para a notificação */
+             box-shadow: var(--sombra-card);
+             position: relative; 
         }
         /* Notificação de Meta Batida (Contas Fixas) */
         .contas-fixas-container.meta-batida::before {
-             content: '✅ Meta de Contas Fixas do Mês Batida!';
+             content: '✅ PROTOCOL ESTABLISHED: Contas Fixas do Mês 100% Cobertas!';
              position: absolute;
              top: 0;
              left: 0;
              right: 0;
-             background-color: var(--cor-verde);
-             color: white;
-             padding: 5px 15px;
-             border-top-left-radius: 8px;
-             border-top-right-radius: 8px;
+             background-color: var(--cor-verde-neon);
+             color: var(--cor-fundo-principal);
+             padding: 8px 15px;
+             border-top-left-radius: 9px;
+             border-top-right-radius: 9px;
              font-size: 0.9em;
-             font-weight: bold;
+             font-weight: 700;
              text-align: center;
+             letter-spacing: 1px;
+             box-shadow: 0 0 10px rgba(57, 255, 20, 0.7);
         }
         .contas-fixas-container.meta-batida {
-             padding-top: 40px; /* Ajusta o padding para a notificação */
+             padding-top: 45px; 
         }
 
 
         .contas-fixas-container h3, .plano-quitacao h3 {
-             color: var(--cor-roxo);
-             font-weight: 500;
+             color: var(--cor-roxo-data);
+             font-weight: 700;
              margin-bottom: 20px;
-             border-bottom: 1px solid var(--cor-borda);
+             border-bottom: 2px solid var(--cor-borda);
              padding-bottom: 10px;
+             font-family: var(--fonte-titulo);
+             text-transform: uppercase;
         }
         .contas-fixas-container ul {
             list-style: none;
             padding-left: 0;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
         }
         .contas-fixas-container li {
-            background-color: #262626;
-            padding: 12px;
-            border-radius: 4px;
+            background-color: #2D2D38;
+            padding: 15px;
+            border-radius: 6px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            border-left: 3px solid var(--cor-roxo-data);
         }
         
         .diaria-fixa-destaque {
-            background-color: var(--cor-roxo);
-            color: white !important;
+            background-color: var(--cor-roxo-data);
+            color: var(--cor-fundo-principal) !important;
             font-weight: bold;
             padding: 5px 10px;
             border-radius: 4px;
@@ -372,61 +429,77 @@
         /* Estilos de inputs */
         input[type="number"], input[type="text"], input[type="date"] {
             width: 100%;
-            padding: 10px;
+            padding: 12px;
             margin-bottom: 15px;
             border: 1px solid var(--cor-borda);
-            background-color: #262626;
+            background-color: #2D2D38;
             color: var(--cor-texto-principal);
             border-radius: 4px;
             font-size: 1em;
+            transition: border-color var(--transicao-rapida);
+        }
+        input:focus {
+            border-color: var(--cor-azul-energia);
+            outline: none;
+            box-shadow: 0 0 5px rgba(0, 191, 255, 0.5);
         }
         
         /* Plano IA Layout */
         #plano-ia-controls {
              display: flex; 
              align-items: center; 
-             gap: 15px; 
-             margin-bottom: 25px;
+             gap: 20px; 
+             margin-bottom: 30px;
              flex-wrap: wrap; 
+             border: 1px dashed var(--cor-cinza-claro);
+             padding: 15px;
+             border-radius: 6px;
         }
         #meses-plano {
-             width: 150px; 
+             width: 120px; 
              margin-bottom: 0;
         }
         #btn-gerar-plano {
-            background-color: var(--cor-amarelo) !important;
-            color: #121212 !important;
+            background-color: var(--cor-amarelo-alerta) !important;
+            color: var(--cor-fundo-principal) !important;
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
         }
         #btn-gerar-plano:hover {
-            background-color: #e6a100 !important;
+            background-color: #E6C200 !important;
         }
         
         #resultado-plano-ia strong {
-             color: var(--cor-roxo);
+             color: var(--cor-roxo-data);
         }
         
         /* Dicas de Quitação */
         #dicas-quitacao {
-             background-color: #262626;
-             padding: 15px;
-             border-radius: 6px;
-             margin-top: 15px;
-             border: 1px dashed var(--cor-amarelo);
+             background-color: #12121A;
+             padding: 20px;
+             border-radius: 8px;
+             margin-top: 25px;
+             border: 1px solid var(--cor-vermelho-alerta);
+             box-shadow: 0 0 10px rgba(255, 68, 170, 0.3);
         }
         #dicas-quitacao h4 {
-             color: var(--cor-amarelo);
-             margin-bottom: 10px;
-             font-weight: 500;
-             border-bottom: 1px solid #383838;
-             padding-bottom: 5px;
+             color: var(--cor-vermelho-alerta);
+             margin-bottom: 15px;
+             font-weight: 700;
+             border-bottom: 1px dashed #3E3E4F;
+             padding-bottom: 10px;
+             font-family: var(--fonte-titulo);
+             text-transform: uppercase;
         }
         #dicas-quitacao ul {
-             list-style: decimal inside;
+             list-style: none;
              padding-left: 0;
         }
         #dicas-quitacao li {
-             margin-bottom: 5px;
+             margin-bottom: 10px;
              font-size: 0.95em;
+             padding: 5px 0;
+             border-left: 3px solid var(--cor-amarelo-alerta);
+             padding-left: 10px;
         }
 
 
@@ -437,65 +510,96 @@
         .modal {
             display: none; 
             position: fixed;
-            z-index: 100; 
+            z-index: 1000; /* Alto z-index */
             left: 0;
             top: 0;
             width: 100%;
             height: 100%;
             overflow: auto;
-            background-color: rgba(0,0,0,0.8); 
-            backdrop-filter: blur(5px);
+            background-color: rgba(0,0,0,0.9); 
+            backdrop-filter: blur(8px);
         }
 
         .modal-content {
-            background-color: var(--cor-fundo-card);
+            background-color: #12121A;
             margin: 8% auto; 
-            padding: 30px;
+            padding: 40px;
             width: 90%;
-            max-width: 450px;
-            border-radius: 10px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+            max-width: 500px;
+            border-radius: 12px;
+            box-shadow: 0 0 30px rgba(0, 191, 255, 0.5);
             position: relative;
-            border: 1px solid var(--cor-borda);
+            border: 2px solid var(--cor-azul-energia);
         }
         
+        .modal-content h3 {
+             font-family: var(--fonte-titulo);
+             margin-bottom: 25px;
+             border-bottom: 1px dashed var(--cor-borda);
+             padding-bottom: 10px;
+        }
+
         .fechar-modal {
             color: var(--cor-cinza-claro);
             position: absolute;
-            top: 10px;
-            right: 15px;
-            font-size: 30px;
+            top: 15px;
+            right: 20px;
+            font-size: 35px;
             font-weight: bold;
             cursor: pointer;
-            transition: color 0.2s;
+            transition: color var(--transicao-rapida);
         }
 
         .fechar-modal:hover {
-            color: var(--cor-texto-principal);
+            color: var(--cor-vermelho-alerta);
+        }
+        
+        .modal-content label {
+             display: block;
+             margin-bottom: 5px;
+             color: var(--cor-azul-energia);
+             font-weight: 700;
+             text-transform: uppercase;
+             font-size: 0.9em;
         }
         
         .btn-ok {
-            background-color: var(--cor-verde);
-            color: white;
-            padding: 10px 20px;
+            background-color: var(--cor-verde-neon);
+            color: var(--cor-fundo-principal);
+            padding: 12px 25px;
             border: none;
-            border-radius: 4px;
+            border-radius: 6px;
             cursor: pointer;
-            font-weight: 600;
+            font-weight: 700;
             float: right;
-            margin-top: 15px;
+            margin-top: 20px;
+            box-shadow: 0 0 10px rgba(57, 255, 20, 0.5);
+            transition: all var(--transicao-rapida);
+        }
+        .btn-ok:hover {
+            background-color: #17e600;
         }
         
+        /* Estilos específicos do modal de quitação */
+        .modal-content #nome-credor, .modal-content #saldo-quitacao {
+             color: var(--cor-azul-energia);
+             font-weight: 700;
+             font-size: 1.1em;
+        }
+
         /* =================================== */
-        /* 7. RESPONSIVIDADE                   */
+        /* 7. RESPONSIVIDADE (OTIMIZAÇÃO 100%) */
         /* =================================== */
         @media (max-width: 768px) {
             .dashboard-header {
                 grid-template-columns: 1fr; 
-                gap: 15px;
+                gap: 20px;
             }
             .valor {
-                font-size: 2em; 
+                font-size: 2.2em; 
+            }
+            .meta-diaria-total span {
+                 font-size: 2.5em;
             }
             .container {
                 margin: 20px auto;
@@ -509,9 +613,17 @@
             .btn-principal {
                 width: 100%; 
             }
+            /* Ocultar colunas menos importantes em telas pequenas */
+            .tabela-transacoes th:nth-child(2), 
+            .tabela-transacoes td:nth-child(2),
             .tabela-transacoes th:nth-child(3), 
             .tabela-transacoes td:nth-child(3) {
                 display: none; 
+            }
+            /* Ação na tabela de dívidas é mantida */
+            .tabela-transacoes th:nth-child(4), 
+            .tabela-transacoes td:nth-child(4) {
+                 display: table-cell;
             }
             .contas-fixas-container ul {
                 grid-template-columns: 1fr;
@@ -523,19 +635,24 @@
             #meses-plano {
                 width: 100%;
             }
+            .modal-content {
+                 margin: 5% auto;
+            }
         }
     </style>
 </head>
 <body>
+    
+    <h1><i class="fas fa-satellite-dish"></i> Debt-Zero Protocol</h1>
 
     <div class="motivacao-box container" id="motivacao-diaria">
-        <i class="fas fa-lightbulb"></i>
-        "A disciplina de hoje garante a liberdade de amanhã."
+        <i class="fas fa-terminal"></i>
+        "EXECUTE COMMAND: DISCIPLINA. STATUS: LIBERDADE."
     </div>
     
     <div id="meta-diaria-card" class="meta-diaria-total container">
-        <p>Sua Meta Diária de Economia e Pagamento</p>
-        <span id="meta-diaria-total-el">Calculando...</span>
+        <p>Target Diário de Aporte (FIXAS + DÍVIDA)</p>
+        <span id="meta-diaria-total-el">R$ 0,00</span>
         <span id="meta-diaria-incentivo" class="destaque-conclusao" style="display: none;"></span>
     </div>
     
@@ -543,14 +660,14 @@
     <header class="dashboard-header container">
         
         <div class="info-card">
-            <p class="rotulo"><i class="fas fa-sack-dollar"></i> Saldo Acumulado (Entradas)</p>
+            <p class="rotulo"><i class="fas fa-coins"></i> Saldo Acumulado (Inputs)</p>
             <span id="total-lancado" class="valor valor-caixa">R$ 0,00</span>
         </div>
         
         <div class="progress-area" id="meta-area">
-            <p class="rotulo"><i class="fas fa-bullseye"></i> Progresso Total de Dívidas</p>
-            <p style="margin-bottom: 5px;">Total a Quitar (Dívidas): <span id="total-dividas-pendentes" class="meta-valor-fixo">R$ 0,00</span></p>
-            <p>Faltam para Quitar com Receitas: <span id="valor-faltante" style="font-weight: bold; color: var(--cor-vermelho);">R$ 0,00</span></p>
+            <p class="rotulo"><i class="fas fa-bullseye"></i> Quitação Total - Status</p>
+            <p style="margin-bottom: 5px; color: var(--cor-cinza-claro);">Total Dívidas Pendentes: <span id="total-dividas-pendentes" style="font-weight: bold; color: var(--cor-vermelho-alerta);">R$ 0,00</span></p>
+            <p>Aporte Restante para Dívidas: <span id="valor-faltante" style="font-weight: bold; color: var(--cor-vermelho-alerta);">R$ 0,00</span></p>
             
             <div class="progresso-bar-container">
                 <div id="progresso-bar" class="progresso" style="width: 0%;"></div>
@@ -558,7 +675,7 @@
         </div>
         
         <div class="info-card">
-            <p class="rotulo"><i class="fas fa-balance-scale-right"></i> Saldo Pendente (A Pagar)</p>
+            <p class="rotulo"><i class="fas fa-balance-scale-right"></i> Saldo Pendente (Output)</p>
             <span id="saldo-pendente-total" class="valor valor-divida">R$ 0,00</span>
         </div>
     </header>
@@ -566,14 +683,14 @@
     <main class="container">
         
         <div class="section-header">
-            <h2><i class="fas fa-money-check-dollar"></i> Controles de Caixa</h2>
-            <button id="abrir-cadastro-receita" class="btn-principal"> <i class="fas fa-plus"></i> Lançar Receita</button>
+            <h2><i class="fas fa-upload"></i> INJEÇÃO DE CAPITAL (RECEITAS)</h2>
+            <button id="abrir-cadastro-receita" class="btn-principal"> <i class="fas fa-plus"></i> Injetar Valor</button>
         </div>
 
         
         <div id="historico-receitas-container" class="toggle-section">
             <div class="section-toggle receitas" id="toggle-receitas">
-                <h2><i class="fas fa-history"></i> Histórico de Receitas Lançadas</h2>
+                <h2><i class="fas fa-history"></i> Log de Receitas</h2>
                 <i class="fas fa-chevron-down"></i>
             </div>
             
@@ -594,15 +711,15 @@
         </div>
         
         <div id="contas-fixas-card" class="contas-fixas-container">
-             <h3><i class="fas fa-calendar-check"></i> Contas Fixas Mensais</h3>
+             <h3><i class="fas fa-calendar-check"></i> CONTAS FIXAS (ORÇAMENTO BASE)</h3>
              <ul id="lista-contas-fixas">
                  </ul>
         </div>
 
         
         <div id="dividas-container" class="toggle-section">
-            <div class="section-toggle" id="toggle-dividas">
-                <h2><i class="fas fa-exclamation-triangle"></i> Dívidas a Quitar</h2>
+            <div class="section-toggle dividas" id="toggle-dividas">
+                <h2><i class="fas fa-exclamation-triangle"></i> DÍVIDAS A QUITAR (DEBT PROTOCOL)</h2>
                 <i class="fas fa-chevron-down"></i>
             </div>
             
@@ -623,22 +740,17 @@
         </div>
         
         <div class="plano-quitacao">
-            <h3><i class="fas fa-robot"></i> Gerador de Plano de Quitação Estratégico</h3>
+            <h3><i class="fas fa-robot"></i> PLANO DE QUITAÇÃO ESTRATÉGICO (AI)</h3>
             
             <div id="plano-ia-controls">
-                <label for="meses-plano" style="margin: 0; display: inline; color: var(--cor-texto-principal); font-weight: 600;">
-                    Quitar em (meses):
-                </label>
+                <label for="meses-plano">Meses para Quitar Dívidas:</label>
                 <input type="number" id="meses-plano" value="5" min="1" max="60">
                 <button id="btn-gerar-plano" class="btn-principal">
-                    Gerar Plano
+                    <i class="fas fa-brain"></i> Recalcular Plano
                 </button>
             </div>
             
             <div id="resultado-plano-ia">
-                <p style="margin-bottom: 10px; color: var(--cor-azul);">
-                    Plano gerado automaticamente na abertura. Clique em "Gerar Plano" para simular um prazo diferente.
-                </p>
                 </div>
             
             <div id="dicas-quitacao">
@@ -652,12 +764,12 @@
         <div class="modal-content">
             <span class="fechar-modal" id="fechar-modal-receita">&times;</span>
             
-            <h3 id="titulo-dados-receita" style="color: var(--cor-verde);"><i class="fas fa-money-bill-transfer"></i> Lançar Valor Recebido</h3>
+            <h3 id="titulo-dados-receita" style="color: var(--cor-verde-neon);"><i class="fas fa-arrow-up"></i> Lançamento de Capital</h3>
             
-            <label for="valor-input-receita">VALOR (R$)</label>
+            <label for="valor-input-receita">INPUT VALOR (R$)</label>
             <input type="number" id="valor-input-receita" placeholder="0.00" min="0.01" step="0.01">
             
-            <button class="btn-ok" id="btn-cadastrar-receita" style="background-color: var(--cor-verde);">Confirmar <i class="fas fa-check"></i></button>
+            <button class="btn-ok" id="btn-cadastrar-receita">Confirmar Lançamento <i class="fas fa-check"></i></button>
         </div>
     </div>
     
@@ -665,19 +777,19 @@
         <div class="modal-content">
             <span class="fechar-modal" id="fechar-modal-quitacao">&times;</span>
             
-            <h3 id="titulo-quitacao" style="color: var(--cor-vermelho);"><i class="fas fa-file-invoice-dollar"></i> Registrar Pagamento</h3>
+            <h3 id="titulo-quitacao" style="color: var(--cor-vermelho-alerta);"><i class="fas fa-file-invoice-dollar"></i> REGISTRAR PAGAMENTO</h3>
             
-            <p style="margin-top: 15px;">
-                **Credor:** <span id="nome-credor" style="font-weight: bold; color: var(--cor-azul);"></span>
+            <p style="margin-top: 15px; margin-bottom: 10px;">
+                **TARGET:** <span id="nome-credor"></span>
             </p>
-            <p>
-                **Saldo Atual:** <span id="saldo-quitacao" style="font-weight: bold; color: var(--cor-vermelho);"></span>
+            <p style="margin-bottom: 20px;">
+                **SALDO PENDENTE:** <span id="saldo-quitacao" class="saldo-divida"></span>
             </p>
 
             <label for="valor-pagamento">VALOR DO PAGAMENTO (R$)</label>
             <input type="number" id="valor-pagamento" placeholder="0.00" min="0.01" step="0.01">
             
-            <button class="btn-ok" id="btn-quitar-divida" style="background-color: var(--cor-verde);">Registrar Pagamento</button>
+            <button class="btn-ok" id="btn-quitar-divida">Finalizar Transação</button>
         </div>
     </div>
     
@@ -699,20 +811,17 @@
         const DIAS_UTEIS_MES = 22; 
         const META_DIARIA_FIXAS = SOMA_CONTAS_FIXAS / DIAS_UTEIS_MES; 
 
-        // NOTA: SOMA_DIVIDAS_INICIAIS é usada apenas como referência para a lista inicial
-        const SOMA_DIVIDAS_INICIAIS = 22681.64; 
-        
         // DÍVIDAS INICIAIS (para inicializar localStorage se estiver vazio)
         const DEBT_LIST_INITIAL = [
-            { id: 1, credor: "Bruno Carro", valorInicial: 400.00, valorAtual: 400.00 },
-            { id: 2, credor: "Itau visa", valorInicial: 200.00, valorAtual: 200.00 },
-            { id: 3, credor: "Banco Inter", valorInicial: 120.00, valorAtual: 120.00 },
-            { id: 4, credor: "Banco Pan", valorInicial: 265.00, valorAtual: 265.00 },
-            { id: 5, credor: "Conect car", valorInicial: 60.00, valorAtual: 60.00 },
-            { id: 6, credor: "Vivo", valorInicial: 95.00, valorAtual: 95.00 },
-            { id: 7, credor: "Mercado pago", valorInicial: 522.00, valorAtual: 522.00 },
-            { id: 8, credor: "Karen", valorInicial: 300.00, valorAtual: 300.00 },
-            { id: 9, credor: "Claro", valorInicial: 300.00, valorAtual: 300.00 },
+            { id: 1, credor: "Itau visa", valorInicial: 200.00, valorAtual: 200.00 },
+            { id: 2, credor: "Banco Inter", valorInicial: 120.00, valorAtual: 120.00 },
+            { id: 3, credor: "Conect car", valorInicial: 60.00, valorAtual: 60.00 },
+            { id: 4, credor: "Vivo", valorInicial: 95.00, valorAtual: 95.00 },
+            { id: 5, credor: "Banco Pan", valorInicial: 265.00, valorAtual: 265.00 },
+            { id: 6, credor: "Karen", valorInicial: 300.00, valorAtual: 300.00 },
+            { id: 7, credor: "Claro", valorInicial: 300.00, valorAtual: 300.00 },
+            { id: 8, credor: "Bruno Carro", valorInicial: 400.00, valorAtual: 400.00 },
+            { id: 9, credor: "Mercado pago", valorInicial: 522.00, valorAtual: 522.00 },
             { id: 10, credor: "Koin", valorInicial: 700.00, valorAtual: 700.00 },
             { id: 11, credor: "Will bank", valorInicial: 700.00, valorAtual: 700.00 },
             { id: 12, credor: "Picpay", valorInicial: 859.64, valorAtual: 859.64 },
@@ -734,8 +843,8 @@
         const metaDiariaTotalEl = document.getElementById('meta-diaria-total-el');
         const metaDiariaIncentivoEl = document.getElementById('meta-diaria-incentivo');
         const saldoPendenteTotalEl = document.getElementById('saldo-pendente-total');
-        const totalDividasPendentesEl = document.getElementById('total-dividas-pendentes'); // NOVO ELEMENTO
-        const valorFaltanteEl = document.getElementById('valor-faltante'); // NOVO ELEMENTO
+        const totalDividasPendentesEl = document.getElementById('total-dividas-pendentes'); 
+        const valorFaltanteEl = document.getElementById('valor-faltante'); 
 
         // Elementos DOM para Contas Fixas
         const contasFixasCard = document.getElementById('contas-fixas-card');
@@ -786,7 +895,7 @@
         };
 
         const formatarData = (dataString) => {
-            if (!dataString) return 'Sem Data';
+            if (!dataString) return 'N/A';
             const [year, month, day] = dataString.split('-');
             return `${day}/${month}/${year}`;
         }
@@ -800,7 +909,7 @@
             transacoes.forEach(t => totalReceitas += parseFloat(t.valor));
 
             let totalDividasPendentes = 0;
-            dividas.filter(d => d.valorAtual > 0).forEach(d => totalDividasPendentes += parseFloat(d.valorAtual));
+            dividas.filter(d => d.valorAtual > 0.01).forEach(d => totalDividasPendentes += parseFloat(d.valorAtual));
             
             // Saldo Pendente Total: Valor de Dívidas - Receitas Acumuladas
             const saldoPendenteTotal = Math.max(0, totalDividasPendentes - totalReceitas);
@@ -810,9 +919,9 @@
         
         // Calcula se a Meta Diária foi atingida HOJE
         const getMetaDiariaAtingidaHoje = (transacoes) => {
-            // 1. Calcula a Meta Diária Total
-            const metaQuitacao = gerarPlanoQuitacaoIA(true); 
-            const metaTotalDiaria = META_DIARIA_FIXAS + metaQuitacao;
+            // 1. Calcula a Meta Diária Total (Fixas + Quitação)
+            const metaQuitacaoDiaria = gerarPlanoQuitacaoIA(true); 
+            const metaTotalDiaria = META_DIARIA_FIXAS + metaQuitacaoDiaria;
             
             // 2. Soma as receitas do dia
             const hoje = getHojeString();
@@ -822,14 +931,14 @@
             
             return {
                 metaTotal: metaTotalDiaria,
-                atingido: receitasHoje >= metaTotalDiaria,
+                atingido: receitasHoje >= metaTotalDiaria - 0.01, // 1 centavo de tolerância
                 recebidoHoje: receitasHoje
             };
         }
         
-        // NOVO: Verifica se a meta de Contas Fixas foi atingida
+        // Verifica se a meta de Contas Fixas foi atingida
         const getMetaContasFixasAtingida = (totalReceitas) => {
-             return totalReceitas >= SOMA_CONTAS_FIXAS;
+             return totalReceitas >= SOMA_CONTAS_FIXAS - 0.01;
         }
 
 
@@ -845,14 +954,14 @@
             // Card 3: Saldo Pendente Total
             saldoPendenteTotalEl.textContent = formatarMoeda(saldoPendenteTotal);
             
-            // Card 2: Progresso da Meta Total (CORREÇÃO DE LÓGICA)
+            // Card 2: Progresso da Meta Total
             totalDividasPendentesEl.textContent = formatarMoeda(totalDividasPendentes);
             const valorFaltante = totalDividasPendentes - totalReceitas;
             valorFaltanteEl.textContent = formatarMoeda(Math.max(0, valorFaltante));
 
             // Barra de Progresso (Progresso das Receitas em Relação às Dívidas Pendentes)
             const progressoBar = document.getElementById('progresso-bar');
-            const progressoPercentual = totalDividasPendentes > 0 ? (totalReceitas / totalDividasPendentes) * 100 : 0;
+            const progressoPercentual = totalDividasPendentes > 0.01 ? (totalReceitas / totalDividasPendentes) * 100 : (totalReceitas > 0 ? 100 : 0);
             progressoBar.style.width = `${Math.min(100, progressoPercentual)}%`;
             
             // Notificação de Meta de Contas Fixas
@@ -866,17 +975,19 @@
         // Renderiza o card da Meta Diária
         const renderizarMetaDiaria = (transacoes) => {
             const { metaTotal, atingido } = getMetaDiariaAtingidaHoje(transacoes);
+            const { recebidoHoje } = getMetaDiariaAtingidaHoje(transacoes);
 
             metaDiariaTotalEl.textContent = formatarMoeda(metaTotal);
 
             if (atingido) {
                 metaDiariaCard.classList.add('meta-diaria-concluida');
-                metaDiariaIncentivoEl.innerHTML = `<i class="fas fa-check-circle"></i> Parabéns! Meta Diária Concluída!`;
+                metaDiariaIncentivoEl.innerHTML = `<i class="fas fa-check-circle"></i> Meta de ${formatarMoeda(metaTotal)} Concluída! (${formatarMoeda(recebidoHoje)})`;
                 metaDiariaIncentivoEl.style.display = 'block';
             } else {
                 metaDiariaCard.classList.remove('meta-diaria-concluida');
-                metaDiariaIncentivoEl.style.display = 'none';
-                metaDiariaIncentivoEl.innerHTML = '';
+                const falta = Math.max(0, metaTotal - recebidoHoje);
+                metaDiariaIncentivoEl.innerHTML = `<i class="fas fa-arrow-up"></i> Faltam ${formatarMoeda(falta)} para atingir o Target de Hoje.`;
+                metaDiariaIncentivoEl.style.display = 'block';
             }
         }
         
@@ -885,7 +996,7 @@
             
             let html = `
                 <li>Meta Diária Fixas (22 dias úteis): <span class="diaria-fixa-destaque">${formatarMoeda(META_DIARIA_FIXAS)}</span></li>
-                <li>Total Contas Fixas Mês: <span>${formatarMoeda(SOMA_CONTAS_FIXAS)}</span></li>
+                <li>Total Contas Fixas Mês: <span style="color: var(--cor-verde-neon);">${formatarMoeda(SOMA_CONTAS_FIXAS)}</span></li>
             `;
             
             DADOS_CONTAS_FIXAS.forEach(conta => {
@@ -905,7 +1016,7 @@
             // Tabela de Receitas (Entradas)
             const transacoesOrdenadas = transacoes.sort((a, b) => new Date(b.data) - new Date(a.data));
             if (transacoesOrdenadas.length === 0) {
-                 listaEntradasBody.innerHTML = '<tr><td colspan="4" style="text-align: center; color: var(--cor-cinza-claro);">Nenhuma receita lançada ainda.</td></tr>';
+                 listaEntradasBody.innerHTML = '<tr><td colspan="4" style="text-align: center; color: var(--cor-cinza-claro);">Nenhuma receita lançada no log.</td></tr>';
             } else {
                 transacoesOrdenadas.forEach((t, index) => {
                     const row = listaEntradasBody.insertRow();
@@ -913,26 +1024,26 @@
                         <td>${t.descricao || 'Lançamento Rápido'}</td>
                         <td class="valor-caixa">${formatarMoeda(t.valor)}</td>
                         <td>${formatarData(t.data)}</td>
-                        <td><button class="btn-acao-tabela deletar" data-index="${index}"><i class="fas fa-trash"></i></button></td>
+                        <td><button class="btn-acao-tabela deletar" data-index="${index}"><i class="fas fa-trash"></i> DELETE</button></td>
                     `;
                 });
             }
             
             // Tabela de Dívidas (Quitação)
-            const dividasAtivas = dividas.filter(d => d.valorAtual > 0).sort((a, b) => a.valorAtual - b.valorAtual);
+            const dividasAtivas = dividas.filter(d => d.valorAtual > 0.01).sort((a, b) => a.valorAtual - b.valorAtual);
             
             if (dividasAtivas.length === 0) {
-                 listaDividasBody.innerHTML = '<tr><td colspan="4" style="text-align: center; color: var(--cor-verde); font-weight: bold;">🎉 TODAS AS DÍVIDAS FORAM QUITADAS!</td></tr>';
+                 listaDividasBody.innerHTML = '<tr><td colspan="4" style="text-align: center; color: var(--cor-verde-neon); font-weight: bold;">🎉 PROTOCOL COMPLETE: Todas as dívidas foram quitadas!</td></tr>';
             } else {
                 dividasAtivas.forEach((d) => {
                     const row = listaDividasBody.insertRow();
                     row.innerHTML = `
                         <td>${d.credor}</td>
-                        <td>${formatarMoeda(d.valorInicial)}</td>
+                        <td style="color: var(--cor-cinza-claro);">${formatarMoeda(d.valorInicial)}</td>
                         <td class="saldo-divida">${formatarMoeda(d.valorAtual)}</td>
                         <td>
                             <button class="btn-acao-tabela quitar" data-id="${d.id}">
-                                <i class="fas fa-hand-holding-usd"></i> Quitar
+                                <i class="fas fa-hand-holding-usd"></i> PAY
                             </button>
                         </td>
                     `;
@@ -950,9 +1061,9 @@
             const dividas = carregarDividas();
             const { totalDividasPendentes } = getTotais(carregarTransacoes(), dividas);
             
-            if (totalDividasPendentes <= 0) {
+            if (totalDividasPendentes <= 0.01) {
                 if (!isInit) {
-                     document.getElementById('resultado-plano-ia').innerHTML = '<p style="color: var(--cor-verde); font-weight: bold;">Todas as dívidas foram quitadas! Não é necessário plano.</p>';
+                     document.getElementById('resultado-plano-ia').innerHTML = '<p style="color: var(--cor-verde-neon); font-weight: bold; margin-top: 15px;">Protocolo de dívida concluído. Foco em acumulação de capital!</p>';
                 }
                 return 0;
             }
@@ -963,10 +1074,10 @@
 
             if (!isInit) {
                  let html = `
-                    <p style="margin-bottom: 5px;">Seu plano de **${meses} meses** requer:</p>
-                    <p>Meta Mensal: **${formatarMoeda(valorMensalNecessario)}**</p>
-                    <p>Meta Semanal: **${formatarMoeda(valorSemanalNecessario)}**</p>
-                    <p>Meta Diária (Aporte): **${formatarMoeda(valorDiarioNecessario)}**</p>
+                    <p style="margin-bottom: 15px; color: var(--cor-cinza-claro);">Para quitar **${formatarMoeda(totalDividasPendentes)}** em **${meses} meses**:</p>
+                    <p>Meta Mensal (Aporte): <strong style="color: var(--cor-azul-energia);">${formatarMoeda(valorMensalNecessario)}</strong></p>
+                    <p>Meta Semanal (Aporte): <strong style="color: var(--cor-azul-energia);">${formatarMoeda(valorSemanalNecessario)}</strong></p>
+                    <p>Meta Diária (Aporte): <strong style="color: var(--cor-azul-energia);">${formatarMoeda(valorDiarioNecessario)}</strong></p>
                  `;
                  document.getElementById('resultado-plano-ia').innerHTML = html;
             }
@@ -974,32 +1085,32 @@
             return valorDiarioNecessario; 
         };
         
-        // NOVO: Geração de Dicas de Quitação (Bola de Neve)
+        // Geração de Dicas de Quitação (Bola de Neve)
         const renderizarDicasQuitacao = (dividas) => {
-             const dividasAtivas = dividas.filter(d => d.valorAtual > 0).sort((a, b) => a.valorAtual - b.valorAtual);
+             const dividasAtivas = dividas.filter(d => d.valorAtual > 0.01).sort((a, b) => a.valorAtual - b.valorAtual);
              const dicasEl = document.getElementById('dicas-quitacao');
              
              if (dividasAtivas.length === 0) {
-                 dicasEl.innerHTML = '<h4>Estratégia de Quitação</h4><p style="color: var(--cor-verde);">Nenhuma dívida para priorizar. Mantenha o foco em economizar!</p>';
+                 dicasEl.innerHTML = '<h4>ESTRATÉGIA DE CAPITAL</h4><p style="color: var(--cor-verde-neon);">Nenhuma dívida. Mantenha o foco em acumular e investir!</p>';
                  return;
              }
              
              let html = `
-                 <h4>Estratégia de Quitação (Bola de Neve - Foco em Motivação)</h4>
+                 <h4>DEBT PROTOCOL: PRIORIDADE (BOLA DE NEVE)</h4>
                  <p style="font-size: 0.9em; margin-bottom: 10px; color: var(--cor-cinza-claro);">
-                    Para ganhar impulso e motivação, a sugestão é focar nas dívidas de menor valor primeiro.
+                    Foco nas menores para eliminar o mais rápido possível e ganhar momentum.
                  </p>
                  <ul>
              `;
              
              dividasAtivas.slice(0, 3).forEach((d, index) => {
-                 html += `<li>**Prioridade ${index + 1}:** ${d.credor} (Saldo: ${formatarMoeda(d.valorAtual)})</li>`;
+                 html += `<li>**PRIO ${index + 1}:** ${d.credor} (Saldo: ${formatarMoeda(d.valorAtual)})</li>`;
              });
              
              html += `
                  </ul>
-                 <p style="font-size: 0.85em; margin-top: 10px;">
-                    *Seus próximos passos devem ser concentrar o máximo de receitas nessas dívidas menores.*
+                 <p style="font-size: 0.85em; margin-top: 15px; color: var(--cor-amarelo-alerta);">
+                    *Ação: Direcione qualquer aporte extra para a dívida **PRIO 1**.*
                  </p>
              `;
              dicasEl.innerHTML = html;
@@ -1010,7 +1121,7 @@
             const valor = parseFloat(valorInputReceita.value);
 
             if (isNaN(valor) || valor <= 0) {
-                alert("Por favor, insira um valor positivo.");
+                alert("ERRO: Valor de aporte inválido. Insira um valor positivo.");
                 return;
             }
 
@@ -1034,8 +1145,8 @@
             const dividas = carregarDividas();
             const divida = dividas.find(d => d.id === id); 
             
-            if (!divida || divida.valorAtual <= 0) {
-                alert("Dívida já quitada ou não encontrada.");
+            if (!divida || divida.valorAtual <= 0.01) {
+                alert("STATUS: Dívida já quitada.");
                 return;
             }
             
@@ -1048,27 +1159,36 @@
             modalQuitacao.style.display = 'block';
         }
         
-        // 4.3. Registrar Pagamento
+        // 4.3. Registrar Pagamento (LÓGICA DE ATUALIZAÇÃO REFORÇADA)
         const registrarPagamento = () => {
             const valorPagamento = parseFloat(valorPagamentoInput.value);
             const dividas = carregarDividas();
             let divida = dividas.find(d => d.id === idDebtQuitting);
             
             if (isNaN(valorPagamento) || valorPagamento <= 0) {
-                alert("Insira um valor de pagamento válido e positivo.");
+                alert("ERRO: Insira um valor de pagamento válido e positivo.");
                 return;
             }
             
-            if (valorPagamento > divida.valorAtual) {
-                 if (!confirm(`O valor de ${formatarMoeda(valorPagamento)} é maior que o saldo atual de ${formatarMoeda(divida.valorAtual)}. Deseja aplicar o pagamento total e quitar o saldo?`)) {
-                    return;
-                }
+            if (!divida) {
+                alert("ERRO: Dívida não encontrada no registro.");
+                return;
             }
             
-            divida.valorAtual = Math.max(0, divida.valorAtual - valorPagamento);
+            // Lógica para garantir que o saldo não fique negativo
+            if (valorPagamento > divida.valorAtual + 0.01) {
+                 if (!confirm(`O valor de ${formatarMoeda(valorPagamento)} é maior que o saldo pendente de ${formatarMoeda(divida.valorAtual)}. Deseja aplicar o pagamento total (${formatarMoeda(divida.valorAtual)}) e concluir a dívida?`)) {
+                    return;
+                }
+                 divida.valorAtual = 0; // Quita totalmente
+            } else {
+                divida.valorAtual = divida.valorAtual - valorPagamento;
+            }
             
-            if (divida.valorAtual <= 0) {
-                alert(`🎉 Dívida ${divida.credor} quitada com sucesso!`);
+            // Arredonda para evitar problemas de ponto flutuante, garantindo que seja zero
+            if (divida.valorAtual < 0.01) {
+                divida.valorAtual = 0;
+                alert(`🎉 SUCESSO! Dívida com ${divida.credor} quitada!`);
             }
             
             salvarDividas(dividas);
@@ -1078,7 +1198,7 @@
         
         // 4.4. Deletar Receita
         const deletarReceita = (index) => {
-             if (!confirm("Tem certeza que deseja deletar esta receita?")) {
+             if (!confirm("ALERTA: Confirme a exclusão do registro de receita. Esta ação é irreversível.")) {
                 return;
             }
             
@@ -1122,7 +1242,7 @@
             renderizarTabelas(transacoes, dividas);
             
             // Inicia o plano e renderiza a Meta Diária Total com status de conclusão
-            gerarPlanoQuitacaoIA(false); // Mantém o false para renderizar o plano detalhado no init
+            gerarPlanoQuitacaoIA(false); 
             renderizarMetaDiaria(transacoes);
             
             // Renderiza as dicas de quitação
