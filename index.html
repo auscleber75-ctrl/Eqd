@@ -1,909 +1,1246 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Master Planner Financeiro</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>PROJECT TITAN | CORE FINANCIAL [V4.9 - Dinâmico]</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     
     <style>
+        /* =================================== */
+        /* 1. VARIÁVEIS CSS E BASE (FUTURE NOIR)*/
+        /* =================================== */
         :root {
-            --cor-fundo: #0c131a; /* Preto muito escuro / Azul marinho */
-            --cor-principal: #FFD700; /* Amarelo ouro (Inteligência / IA) */
-            --cor-secundaria: #1f3a57; /* Azul escuro (Caixas) */
-            --cor-texto: #e0e0e0; /* Branco suave */
-            --cor-texto-secundario: #808080; /* Cinza claro */
-            --cor-fixa: #32CD32; /* Verde Lima (Contas Fixas) */
-            --cor-divida: #FF6347; /* Vermelho Tomate (Dívidas) */
-            --cor-receita: #1E90FF; /* Azul Real (Receitas) */
-            --cor-borda: #FFD700; /* Borda principal */
-            --cor-shadow: rgba(255, 215, 0, 0.3); /* Sombra do Amarelo */
+            /* Fundo Escuro Classudo */
+            --cor-fundo-principal: #0E1117; 
+            --cor-fundo-card: rgba(20, 25, 33, 0.9); 
+            --cor-borda: #2C3540; 
+            --cor-texto-principal: #F0F6FC; 
+            --cor-texto-secundario: #8B949E; 
+            
+            /* Cores de Destaque Futuristas */
+            --cor-sucesso: #10B981; 
+            --cor-divida: #EF4444; 
+            --cor-primario: #00BCD4; 
+            --cor-meta-diaria: #9B59B6; 
+            --cor-alerta: #F59E0B; 
+            --cor-fixa: #1DE9B6; 
+            --cor-fundo-ia: #151A23; 
+            --cor-destaque-ia: #FFD700; 
+
+            /* Tipografia */
+            --fonte-titulo: 'Inter', sans-serif;
+            --fonte-corpo: 'Inter', sans-serif;
+            --fonte-dados: 'Space Mono', monospace; 
+            
+            /* Efeitos */
+            --sombra-card: 0 4px 20px rgba(0, 0, 0, 0.5), inset 0 0 0 1px var(--cor-borda);
+            --sombra-card-hover: 0 6px 30px rgba(0, 0, 0, 0.7), inset 0 0 0 2px var(--cor-primario);
+            --transicao-rapida: 0.3s ease-in-out;
+            --espacamento-mobile: 15px;
         }
-        
+
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Poppins', sans-serif;
+            font-family: var(--fonte-corpo);
         }
 
         body {
-            background-color: var(--cor-fundo);
-            color: var(--cor-texto);
+            background-color: var(--cor-fundo-principal);
+            color: var(--cor-texto-principal);
             line-height: 1.6;
-            padding-bottom: 70px; /* Espaço para o menu inferior */
-        }
-
-        /* Estrutura de Login */
-        #login-screen {
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            padding: 20px;
-            text-align: center;
+            background-image: radial-gradient(circle at 50% 50%, rgba(0, 188, 212, 0.05), transparent 80%);
         }
-        
-        #login-screen h1 {
-            color: var(--cor-principal);
-            font-weight: 700;
-            margin-bottom: 30px;
-        }
-        
-        .login-box {
-            background-color: var(--cor-secundaria);
-            padding: 30px;
-            border-radius: 12px;
+
+        .container {
+            max-width: 1300px; 
+            margin: 40px auto;
+            padding: 0 25px;
             width: 100%;
-            max-width: 400px;
-            box-shadow: 0 0 15px var(--cor-shadow);
-        }
-
-        .login-box input {
-            width: 100%;
-            padding: 12px;
-            margin-bottom: 15px;
-            border: 2px solid var(--cor-principal);
-            border-radius: 8px;
-            background-color: #121c27;
-            color: var(--cor-texto);
-            font-size: 16px;
-        }
-
-        .btn-principal {
-            width: 100%;
-            padding: 12px;
-            border: none;
-            border-radius: 8px;
-            background-color: var(--cor-principal);
-            color: var(--cor-fundo);
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background-color 0.3s, transform 0.1s;
-        }
-
-        .btn-principal:hover {
-            background-color: #ffc400;
         }
         
-        .btn-principal:active {
-            transform: scale(0.98);
-        }
+        /* =================================== */
+        /* 2. HEADER E BEM-VINDO */
+        /* =================================== */
 
-        .toggle-form {
-            color: var(--cor-principal);
-            cursor: pointer;
-            margin-top: 15px;
-            font-size: 14px;
-        }
-
-        /* Dashboard */
-        #dashboard-container {
-            display: none;
-            padding: 10px;
-        }
-        
-        /* Header/Saudação */
-        .dashboard-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        .dynamic-banner {
+            width: 100%;
+            background-color: #000000;
+            color: var(--cor-fixa); 
             padding: 10px 0;
-            margin-bottom: 15px;
+            text-align: right;
+            border-bottom: 2px solid var(--cor-fixa);
+            box-shadow: 0 5px 20px rgba(29, 233, 182, 0.3);
+            overflow: hidden; 
+            white-space: nowrap; 
+        }
+        
+        .banner-text {
+            font-family: var(--fonte-dados);
+            font-size: 1.1em;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            padding-right: 30px;
+            display: inline-block;
+            white-space: nowrap; 
+            animation: moveBanner 10s linear infinite; 
+        }
+        
+        @keyframes moveBanner {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
         }
 
-        .greeting {
-            font-size: 20px;
-            font-weight: 600;
-            color: var(--cor-texto);
+        .header-content {
+             display: flex;
+             justify-content: space-between;
+             align-items: center;
+             padding: 0 25px;
+             max-width: 1300px; 
+             margin: 30px auto 0;
+        }
+
+        h1 {
+            font-family: var(--fonte-titulo);
+            color: var(--cor-texto-principal);
+            font-weight: 800;
+            font-size: 3em; 
+            letter-spacing: 2px;
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
         }
         
-        .profile-pic {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 2px solid var(--cor-principal);
+        /* Mensagem de Boas-vindas */
+        #welcome-message {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 0 25px;
+            color: var(--cor-primario);
+            font-weight: 700;
+            font-size: 1.5em;
+            margin-top: 10px;
+            margin-bottom: 20px;
+        }
+
+        /* Botões de Ação Geral (Cadastro) */
+        .btn-principal {
+            background-color: var(--cor-primario);
+            color: var(--cor-fundo-principal);
+            border: none;
+            padding: 10px 15px;
+            border-radius: 6px;
             cursor: pointer;
+            font-weight: 700;
+            transition: all var(--transicao-rapida);
+            white-space: nowrap;
+        }
+        .btn-principal:hover {
+            background-color: #00A3B5;
+            box-shadow: 0 0 8px rgba(0, 188, 212, 0.7);
         }
         
-        /* Sidebar (Menu Lateral) */
-        .sidebar {
-            height: 100%;
-            width: 0;
-            position: fixed;
-            z-index: 100;
-            top: 0;
-            left: 0;
-            background-color: #111;
-            overflow-x: hidden;
-            transition: 0.5s;
-            padding-top: 60px;
+        /* Botão de Menu Hamburger */
+        #menu-toggle {
+            font-size: 1.8em;
+            cursor: pointer;
+            color: var(--cor-primario);
+            transition: color var(--transicao-rapida);
         }
+        #menu-toggle:hover {
+            color: #00A3B5;
+        }
+
+        /* Botão de Rastreio de Metas (DATA) */
+        #data-atual-info {
+             text-align: center;
+             margin-top: 15px;
+             margin-bottom: 25px;
+        }
+        #btn-data-atual {
+             background-color: var(--cor-meta-diaria);
+             color: var(--cor-texto-principal);
+             border: none;
+             padding: 12px 25px;
+             border-radius: 6px;
+             cursor: pointer;
+             font-weight: 700;
+             font-family: var(--fonte-dados);
+             font-size: 1.1em; 
+             transition: all var(--transicao-rapida);
+             box-shadow: 0 2px 10px rgba(155, 89, 182, 0.5);
+        }
+        #btn-data-atual:hover {
+             background-color: #A96EC2;
+             box-shadow: 0 0 15px rgba(155, 89, 182, 0.8);
+        }
+
+        
+        /* =================================== */
+        /* 3. SIDEBAR (MENU HAMBURGER) */
+        /* =================================== */
+
+        .sidebar {
+            height: 100%; 
+            width: 0; 
+            position: fixed; 
+            z-index: 1010; 
+            top: 0;
+            right: 0;
+            background-color: var(--cor-fundo-card);
+            overflow-x: hidden; 
+            transition: 0.5s; 
+            padding-top: 60px;
+            border-left: 3px solid var(--cor-primario);
+            box-shadow: -10px 0 30px rgba(0, 0, 0, 0.8);
+        }
+
+        .sidebar-header {
+             padding: 15px 25px;
+             text-align: center;
+             border-bottom: 1px solid var(--cor-borda);
+             margin-bottom: 20px;
+        }
+        .sidebar-header h3 {
+             color: var(--cor-fixa);
+             margin-top: 20px;
+        }
+        
+        /* Foto de Perfil */
+        .profile-pic-area {
+             position: relative;
+             width: 100px;
+             margin: 0 auto;
+             height: 100px;
+        }
+        
+        .profile-pic-container {
+             width: 100px;
+             height: 100px;
+             border-radius: 50%;
+             overflow: hidden;
+             border: 3px solid var(--cor-primario);
+             cursor: pointer;
+             background-color: #1A212E;
+             display: flex;
+             justify-content: center;
+             align-items: center;
+             transition: transform var(--transicao-rapida);
+        }
+        .profile-pic-container:hover {
+             transform: scale(1.05);
+        }
+        .profile-pic-container img {
+             width: 100%;
+             height: 100%;
+             object-fit: cover;
+        }
+        .profile-pic-container i {
+             font-size: 2.5em;
+             color: var(--cor-texto-secundario);
+        }
+        
+        /* Ícone de Adição (Referência TikTok) */
+        .add-photo-icon {
+             position: absolute;
+             bottom: 0;
+             right: 0;
+             width: 30px;
+             height: 30px;
+             background-color: var(--cor-primario);
+             color: var(--cor-fundo-principal);
+             border-radius: 50%;
+             display: flex;
+             justify-content: center;
+             align-items: center;
+             font-size: 1.2em;
+             font-weight: bold;
+             border: 2px solid var(--cor-fundo-card);
+             pointer-events: none; /* A ação é no container */
+        }
+
 
         .sidebar a, .sidebar button {
-            padding: 10px 15px 10px 32px;
+            padding: 15px 25px;
             text-decoration: none;
-            font-size: 18px;
-            color: #818181;
+            font-size: 1.1em;
+            color: var(--cor-texto-principal);
             display: block;
-            transition: 0.3s;
-            background: none;
-            border: none;
+            transition: var(--transicao-rapida);
             text-align: left;
+            border: none;
+            background: none;
             width: 100%;
             cursor: pointer;
-            font-weight: 600;
-        }
-        
-        .sidebar a i, .sidebar button i {
-            margin-right: 10px;
         }
 
         .sidebar a:hover, .sidebar button:hover {
-            color: var(--cor-principal);
-            background-color: #2a2a2a;
+            color: var(--cor-primario);
+            background-color: #1A212E;
+            border-left: 5px solid var(--cor-primario);
         }
 
         .sidebar .closebtn {
             position: absolute;
-            top: 0;
+            top: 10px;
             right: 25px;
             font-size: 36px;
             margin-left: 50px;
+            color: var(--cor-divida);
+        }
+        .sidebar .closebtn:hover {
+            color: var(--cor-alerta);
         }
         
-        .sidebar-header {
-            padding: 10px 15px 10px 32px;
-            margin-bottom: 20px;
-            border-bottom: 1px solid #333;
+        /* Novo Botão de Excluir Conta */
+        #btn-excluir-conta {
+             color: var(--cor-divida);
+             border-top: 1px solid var(--cor-borda);
+             margin-top: 10px;
+        }
+        #btn-excluir-conta:hover {
+             color: #FF7777;
+             background-color: rgba(239, 68, 68, 0.1);
+             border-left: 5px solid var(--cor-divida);
         }
         
-        .sidebar-header h3 {
-            color: var(--cor-principal);
+        /* Novo Botão de Resetar Dados */
+        #btn-reset-data {
+             color: var(--cor-divida);
+             border-top: 1px solid var(--cor-borda);
+             margin-top: 10px;
         }
-
+        #btn-reset-data:hover {
+             color: #FF7777;
+             background-color: rgba(239, 68, 68, 0.1);
+             border-left: 5px solid var(--cor-divida);
+        }
+        
+        /* Botão de Logout Simples */
         #btn-logout-only {
-            background-color: var(--cor-divida);
-            color: white;
-            margin-top: 20px;
-            padding: 15px 32px;
-            border-radius: 0;
+             color: var(--cor-alerta);
+             border-top: 1px solid var(--cor-borda);
+             margin-top: 10px;
         }
-
         #btn-logout-only:hover {
-            background-color: #e04830;
-            color: white;
+             color: #FFEB80;
+             background-color: rgba(245, 158, 11, 0.1);
+             border-left: 5px solid var(--cor-alerta);
         }
 
-        /* Caixas de Conteúdo */
-        .content-box {
-            background-color: var(--cor-secundaria);
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 15px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-            border: 1px solid var(--cor-borda);
-        }
 
-        .content-box h2 {
-            font-size: 18px;
-            margin-bottom: 10px;
-            color: var(--cor-principal);
-            border-bottom: 2px solid var(--cor-principal);
-            padding-bottom: 5px;
-        }
-
-        /* MÓDULO IA: PLAnO DE QUITAÇÃO ESTRATÉGICO */
-        #plano-quitacao-master {
-            background-color: #0c131a; /* Fundo mais escuro */
-            border: 4px solid var(--cor-principal);
-            padding: 20px 15px;
-            border-radius: 12px;
-            margin-bottom: 20px;
-            text-align: center;
-        }
         
-        #plano-quitacao-master h2 {
-            color: var(--cor-principal);
-            font-size: 20px;
-            font-weight: 700;
-            border-bottom: none;
-            margin-bottom: 5px;
-        }
+        /* =================================== */
+        /* 4. TELAS DE ACESSO (Login e Cadastro) */
+        /* =================================== */
         
-        #plano-quitacao-master p {
-            color: var(--cor-texto-secundario);
-            margin-bottom: 5px;
+        .login-box, .cadastro-box {
+             background-color: var(--cor-fundo-card);
+             padding: 40px;
+             border-radius: 10px;
+             box-shadow: var(--sombra-card);
+             text-align: center;
+             max-width: 350px;
+             width: 90%;
+        }
+        #login-screen, #cadastro-screen {
+             display: flex;
+             justify-content: center;
+             align-items: center;
+             height: 100vh;
+             width: 100%;
+             position: fixed;
+             top: 0;
+             left: 0;
+             background-color: var(--cor-fundo-principal);
+             z-index: 2000;
+        }
+        .login-box h2, .cadastro-box h2 {
+             color: var(--cor-primario);
+             margin-bottom: 10px;
+             font-size: 1.8em;
+        }
+        .login-box label, .cadastro-box label {
+             display: block;
+             text-align: left;
+             margin-top: 15px;
+             margin-bottom: 5px;
+             color: var(--cor-texto-principal);
+             font-weight: 600;
+        }
+        .login-box input, .cadastro-box input {
+             width: 100%;
+             padding: 10px;
+             border-radius: 5px;
+             border: 1px solid var(--cor-borda);
+             background-color: #1A212E;
+             color: var(--cor-fixa);
+             font-family: var(--fonte-dados);
+        }
+        .login-box button {
+             margin-top: 25px;
+        }
+        .cadastro-actions {
+             margin-top: 25px;
+             display: flex;
+             justify-content: space-between;
+             gap: 10px;
+        }
+        .cadastro-actions button {
+             width: 48%;
+             margin-top: 0;
+        }
+        .link-cadastro {
+             color: var(--cor-fixa);
+             cursor: pointer;
+             margin-top: 20px;
+             display: block;
+             font-weight: 600;
+             transition: color var(--transicao-rapida);
+        }
+        .link-cadastro:hover {
+             color: var(--cor-sucesso);
+        }
+        .password-hint {
+             font-size: 0.75em;
+             color: var(--cor-alerta);
+             margin-top: 5px;
+             text-align: left;
         }
 
-        #plano-quitacao-master input {
-            width: 100%;
-            max-width: 100px;
-            text-align: center;
-            padding: 10px;
-            margin: 10px auto;
-            border: 2px solid var(--cor-principal);
-            border-radius: 8px;
-            background-color: var(--cor-fundo);
-            color: var(--cor-texto);
-            font-size: 18px;
-        }
 
-        #btn-recalcular {
-            background-color: var(--cor-principal);
-            color: var(--cor-fundo);
-            padding: 10px 20px;
-            border-radius: 8px;
-            font-weight: 600;
-            margin-top: 5px;
-            margin-bottom: 15px;
-        }
-        
-        .plano-ia-results {
-            background-color: #1f3a57;
-            border-radius: 8px;
-            padding: 15px;
-            text-align: left;
-        }
+        /* =================================== */
+        /* 5. MODAL DE PERFIL */
+        /* =================================== */
 
-        .plano-ia-results div {
-            padding: 8px 0;
-            border-bottom: 1px dashed #3a5d84;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .plano-ia-results div:last-child {
-            border-bottom: none;
-        }
-        
-        .plano-ia-results span.label {
-            font-weight: 400;
-            color: var(--cor-texto);
-        }
-        
-        .plano-ia-results span.value {
-            font-weight: 700;
-            color: var(--cor-principal);
-        }
-
-        .estrategia-box {
-            background-color: #2a1012;
-            border: 2px solid var(--cor-divida);
-            padding: 15px;
-            border-radius: 8px;
-            margin-top: 20px;
-            text-align: left;
-        }
-        
-        .estrategia-box h3 {
-            color: var(--cor-divida);
-            font-size: 16px;
-            margin-bottom: 10px;
-        }
-        
-        /* Contas Fixas e Dívidas */
-        #contas-fixas-toggle h2 {
-            color: var(--cor-fixa);
-            border-bottom-color: var(--cor-fixa);
-        }
-        
-        #dividas-container h2 {
-            color: var(--cor-divida);
-            border-bottom-color: var(--cor-divida);
-        }
-        
-        .account-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 0;
-            border-bottom: 1px solid #333;
-        }
-        
-        .account-item:last-child {
-            border-bottom: none;
-        }
-
-        .account-details {
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .account-details .name {
-            font-weight: 600;
-            color: var(--cor-texto);
-        }
-        
-        .account-details .value {
-            font-size: 14px;
-            color: var(--cor-texto-secundario);
-        }
-        
-        .btn-action {
-            padding: 5px 10px;
-            border: none;
-            border-radius: 5px;
-            font-size: 14px;
-            cursor: pointer;
-            transition: opacity 0.3s;
-        }
-
-        .btn-action:hover {
-            opacity: 0.8;
-        }
-        
-        .btn-pay {
-            background-color: var(--cor-fixa);
-            color: var(--cor-fundo);
-        }
-
-        .btn-delete {
-            background-color: var(--cor-divida);
-            color: var(--cor-texto);
-            margin-left: 5px;
-        }
-
-        .paid-badge {
-            background-color: var(--cor-fixa);
-            color: var(--cor-fundo);
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 12px;
-            font-weight: 600;
-        }
-        
-        /* Adicionar Transação */
-        #add-transaction-section {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-        
-        #add-transaction-section input, 
-        #add-transaction-section select {
-            padding: 10px;
-            border-radius: 6px;
-            border: 1px solid #444;
-            background-color: #1a2736;
-            color: var(--cor-texto);
-        }
-
-        #add-transaction-section button {
-            background-color: var(--cor-receita);
-            color: white;
-            padding: 10px;
-            border: none;
-            border-radius: 6px;
-            font-weight: 600;
-            cursor: pointer;
-        }
-
-        /* Histórico de Receitas */
-        .log-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 8px 0;
-            border-bottom: 1px solid #333;
-        }
-
-        .log-item:last-child {
-            border-bottom: none;
-        }
-
-        .log-item .date {
-            font-size: 12px;
-            color: var(--cor-texto-secundario);
-            width: 80px;
-        }
-
-        .log-item .description {
-            flex-grow: 1;
-            font-weight: 500;
-        }
-
-        .log-item .amount {
-            font-weight: 700;
-            color: var(--cor-receita);
-        }
-
-        /* Tabelas de Totais */
-        .total-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 10px;
-            font-size: 14px;
-        }
-
-        .total-table th, .total-table td {
-            padding: 8px;
-            text-align: left;
-            border-bottom: 1px solid #333;
-        }
-
-        .total-table th {
-            background-color: #1a2736;
-            color: var(--cor-principal);
-            font-weight: 600;
-        }
-
-        .total-table td.positive {
-            color: var(--cor-fixa);
-            font-weight: 700;
-        }
-
-        .total-table td.negative {
-            color: var(--cor-divida);
-            font-weight: 700;
-        }
-        
-        .total-table td.main-total {
-             font-size: 16px;
-             color: var(--cor-principal);
-             font-weight: 700;
-        }
-
-        /* Meta Diária */
-        #meta-diaria-box {
-            text-align: center;
-        }
-
-        #meta-diaria-box p {
-            font-size: 16px;
-            margin-bottom: 5px;
-        }
-
-        .progress-bar {
-            background-color: #333;
-            border-radius: 10px;
-            overflow: hidden;
-            height: 20px;
-            margin-top: 10px;
-        }
-
-        .progress {
-            height: 100%;
-            background-color: var(--cor-fixa);
-            transition: width 0.5s ease-in-out;
-            display: flex;
-            align-items: center;
-            justify-content: flex-end;
-            padding-right: 5px;
-            font-size: 12px;
-            color: var(--cor-fundo);
-            font-weight: 600;
-        }
-        
-        /* Rodapé Fixo - Menu Inferior */
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            background-color: #111;
-            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.4);
-            display: flex;
-            justify-content: space-around;
-            padding: 8px 0;
-            z-index: 50;
-        }
-
-        .nav-item {
-            text-align: center;
-            color: var(--cor-texto-secundario);
-            text-decoration: none;
-            font-size: 12px;
-            padding: 5px;
-            border-radius: 5px;
-            transition: color 0.3s;
-            cursor: pointer;
-        }
-
-        .nav-item i {
-            font-size: 20px;
-            display: block;
-            margin-bottom: 2px;
-        }
-
-        .nav-item.active, .nav-item:hover {
-            color: var(--cor-principal);
-        }
-        
-        /* Modal (Pop-up) */
         .modal {
-            display: none; 
-            position: fixed; 
-            z-index: 101; 
-            left: 0;
-            top: 0;
-            width: 100%; 
-            height: 100%; 
-            overflow: auto; 
-            background-color: rgba(0,0,0,0.8); 
-            padding-top: 60px;
+             display: none; 
+             position: fixed; 
+             z-index: 1000; 
+             left: 0; 
+             top: 0; 
+             width: 100%; 
+             height: 100%; 
+             overflow: auto; 
+             background-color: rgba(0,0,0,0.7);
+        }
+        .modal-content-perfil {
+             background-color: var(--cor-fundo-card);
+             margin: 5% auto;
+             padding: 30px;
+             border-radius: 10px;
+             border: 1px solid var(--cor-fixa);
+             width: 90%;
+             max-width: 500px;
+             box-shadow: 0 0 20px rgba(29, 233, 182, 0.4);
+        }
+        .modal-content-perfil h3 {
+             color: var(--cor-fixa);
+             margin-bottom: 20px;
+             font-size: 1.8em;
+             border-bottom: 2px solid var(--cor-borda);
+             padding-bottom: 10px;
+        }
+        .perfil-pic-preview {
+             width: 80px;
+             height: 80px;
+             border-radius: 50%;
+             overflow: hidden;
+             border: 3px solid var(--cor-primario);
+             margin: 0 auto 15px;
+             cursor: pointer;
+             display: flex;
+             justify-content: center;
+             align-items: center;
+             background-color: #1A212E;
+        }
+        .perfil-pic-preview img {
+             width: 100%;
+             height: 100%;
+             object-fit: cover;
+        }
+        .perfil-pic-preview i {
+             font-size: 2em;
+             color: var(--cor-texto-secundario);
+        }
+        .input-group-perfil {
+             margin-bottom: 15px;
+        }
+        .input-group-perfil label {
+             display: block;
+             color: var(--cor-texto-secundario);
+             font-size: 0.9em;
+             margin-bottom: 5px;
+        }
+        .input-group-perfil input {
+             width: 100%;
+             padding: 10px;
+             border-radius: 5px;
+             border: 1px solid var(--cor-borda);
+             background-color: #1A212E;
+             color: var(--cor-fixa);
+             font-family: var(--fonte-dados);
+        }
+        .perfil-actions button {
+             margin-top: 20px;
+             width: 100%;
+             padding: 12px;
+        }
+        .error-message {
+             color: var(--cor-divida);
+             font-size: 0.85em;
+             margin-top: 10px;
+             text-align: left;
+             font-weight: 600;
         }
 
-        .modal-content-perfil,
-        .modal-content-quitacao {
-            background-color: var(--cor-secundaria);
-            margin: 5% auto; 
-            padding: 20px;
-            border: 1px solid var(--cor-principal);
-            width: 90%; 
-            max-width: 400px;
-            border-radius: 12px;
-            position: relative;
-        }
-
-        .modal-content-quitacao {
-            border: 1px solid var(--cor-divida);
-        }
         
-        .modal-content-perfil h3,
-        .modal-content-quitacao h3 {
-            color: var(--cor-principal);
-            margin-bottom: 15px;
-        }
+        /* [DASHBOARD E CARDS] */
+        .meta-diaria-total{text-align:center;padding:25px;border-radius:10px;margin-bottom:25px;background-color:var(--cor-fundo-card);box-shadow:var(--sombra-card);transition:all var(--transicao-rapida)}.meta-diaria-total>div{display:flex;flex-direction:column;align-items:center}#meta-diaria-total-el{font-size:2.5em;font-weight:800;color:var(--cor-meta-diaria);font-family:var(--fonte-dados);margin-top:5px;line-height:1.2}.destaque-conclusao{font-size:1em;font-weight:700;margin-top:15px;font-family:var(--fonte-titulo)}.meta-batida{border:3px solid var(--cor-sucesso) !important;box-shadow:0 0 15px rgba(16, 185, 129, 0.7),0 0 30px rgba(16, 185, 129, 0.5);background-color:rgba(16, 185, 129, 0.1) !important}.progresso-bar-container{height:12px;background-color:#1A212E;border-radius:6px;overflow:hidden;margin-top:10px;border:1px solid var(--cor-borda)}.progresso{height:100%;background:linear-gradient(90deg, #444444 0%, var(--cor-sucesso) 100%);border-radius:6px;transition:width 0.6s ease-out}.dashboard-header{display:grid;grid-template-columns:repeat(3, 1fr);gap:20px;margin-bottom:40px}.info-card{background-color:var(--cor-fundo-card);padding:20px;border-radius:10px;box-shadow:var(--sombra-card);border-left:5px solid var(--cor-primario);transition:all var(--transicao-rapida)}.info-card:hover{box-shadow:var(--sombra-card-hover)}.info-card .rotulo{color:var(--cor-texto-secundario);font-size:0.9em;margin-bottom:5px;font-weight:600}.info-card .valor{font-family:var(--fonte-dados);font-size:1.8em;font-weight:700;display:block}.valor-caixa{color:var(--cor-sucesso)}.valor-divida{color:var(--cor-divida)}.progress-area{grid-column:span 3;background-color:var(--cor-fundo-card);padding:20px;border-radius:10px;box-shadow:var(--sombra-card);border-left:5px solid var(--cor-sucesso)}.section-header{display:flex;justify-content:space-between;align-items:center;margin-top:40px;margin-bottom:20px}.section-header h2{font-size:1.5em;color:var(--cor-fixa)}.toggle-section{margin-top:25px;border-radius:8px;overflow:hidden}.section-toggle{display:flex;justify-content:space-between;align-items:center;padding:15px;cursor:pointer;border-radius:8px;transition:background-color var(--transicao-rapida);background-color:var(--cor-fundo-card);box-shadow:var(--sombra-card)}.section-toggle:hover{background-color:#1A212E}.section-toggle h2{font-size:1.1em;margin:0;color:var(--cor-texto-principal);font-weight:600}.section-toggle i{transition:transform 0.3s ease}.section-toggle.aberto i{transform:rotate(180deg)}.toggle-section.receitas .section-toggle{border-left:5px solid var(--cor-sucesso)}.toggle-section.fixas .section-toggle{border-left:5px solid var(--cor-fixa)}.toggle-section.dividas .section-toggle{border-left:5px solid var(--cor-divida)}.lista-container-ocultavel{padding-top:15px;padding-bottom:15px;background-color:var(--cor-fundo-card)}.alerta-nota{background-color:#1A212E;padding:12px;border-radius:6px;border-left:5px solid var(--cor-alerta);color:var(--cor-alerta);font-size:0.9em;margin:15px 15px 15px 15px}.motivacao-box{background-color:var(--cor-fundo-ia);padding:15px;border-radius:8px;text-align:center;font-style:italic;color:var(--cor-texto-secundario);margin-bottom:25px;border:1px solid var(--cor-borda)}.tabela-wrapper{overflow-x:auto;width:100%;padding:0 15px}.tabela-transacoes-log, .tabela-fixas-log, .tabela-dividas-log{min-width:400px;width:100%;border-collapse:collapse;font-family:var(--fonte-dados);border:1px solid var(--cor-borda);border-radius:8px;overflow:hidden}.tabela-transacoes-log th, .tabela-transacoes-log td, .tabela-fixas-log th, .tabela-fixas-log td, .tabela-dividas-log th, .tabela-dividas-log td{padding:12px 8px;text-align:left;border-bottom:1px solid var(--cor-borda);background-color:#1A212E}.tabela-transacoes-log th, .tabela-fixas-log th, .tabela-dividas-log th{background-color:#1A212E;color:var(--cor-primario);text-transform:uppercase;font-weight:700;font-size:0.9em;white-space:nowrap;background-color:#13171F}.log-receita-descricao{color:var(--cor-sucesso);font-weight:600}.log-receita-valor{color:var(--cor-sucesso) !important;font-weight:700}.btn-acao-tabela{background:none;border:none;cursor:pointer;padding:5px;font-size:1.1em;transition:color var(--transicao-rapida)}.btn-acao-tabela.deletar-log{color:var(--cor-divida)}.btn-acao-tabela.deletar-log:hover{color:var(--cor-alerta)}.btn-acao-tabela.pagar-fixa{background-color:var(--cor-fixa);color:var(--cor-fundo-principal);padding:6px 10px;border:none;border-radius:4px;cursor:pointer;font-size:0.8em;font-weight:700;transition:all var(--transicao-rapida);white-space:nowrap}.btn-acao-tabela.pagar-fixa:hover{background-color:#00FFC6;box-shadow:0 0 5px var(--cor-fixa)}.conta-paga{display:none}.btn-acao-tabela.quitar-divida{background-color:var(--cor-divida);color:var(--cor-fundo-principal);padding:6px 10px;border:none;border-radius:4px;cursor:pointer;font-size:0.8em;font-weight:700;transition:all var(--transicao-rapida);white-space:nowrap}.btn-acao-tabela.quitar-divida.inativo{background-color:var(--cor-borda);cursor:not-allowed;opacity:0.4}.btn-acao-tabela.quitar-divida:hover:not(.inativo){background-color:#FF7777}.plano-quitacao{background-color:var(--cor-fundo-ia);padding:30px;border-radius:10px;border:2px solid var(--cor-destaque-ia);box-shadow:0 0 20px rgba(255, 215, 0, 0.4);margin-top:50px;transition:all var(--transicao-rapida)}.plano-quitacao:hover{box-shadow:0 0 30px rgba(255, 215, 0, 0.6)}.plano-quitacao h3{color:var(--cor-destaque-ia);margin-bottom:25px;font-size:1.6em;display:flex;align-items:center;gap:10px}.ia-input-group{display:flex;gap:20px;align-items:flex-end;margin-bottom:25px}.ia-input-group label{color:var(--cor-texto-principal);font-weight:600;display:block;margin-bottom:8px}.ia-input-group input{padding:10px;border-radius:4px;border:1px solid var(--cor-destaque-ia);background:#1A212E;color:var(--cor-fixa);font-family:var(--fonte-dados);width:100px;text-align:center}.ia-input-group button{padding:10px 20px;background-color:var(--cor-destaque-ia);color:var(--cor-fundo-principal);font-weight:700;border-radius:4px;border:none;cursor:pointer;transition:all var(--transicao-rapida)}.ia-input-group button:hover{background-color:#FFEB80;box-shadow:0 0 10px var(--cor-destaque-ia)}#resultado-plano-ia{background-color:#0E1117;padding:20px;border-radius:8px;border-left:4px solid var(--cor-destaque-ia);margin-bottom:25px;font-family:var(--fonte-dados)}#resultado-plano-ia p{margin:8px 0;color:var(--cor-texto-principal)}#resultado-plano-ia strong{color:var(--cor-fixa)}.estrategia-quitacao{padding:20px;border-top:1px dashed var(--cor-borda);margin-top:20px;}#dicas-quitacao{background-color:rgba(239, 68, 68, 0.1); border: 2px solid var(--cor-divida); border-radius: 8px; padding: 20px; margin-top: 20px;}.estrategia-quitacao h4{color:var(--cor-divida); margin-bottom: 15px; font-size: 1.2em; border-bottom: 1px solid var(--cor-borda); padding-bottom: 5px;}.estrategia-quitacao p{margin: 10px 0; color: var(--cor-texto-principal); font-size: 0.9em;}.prioridade-item{font-family: var(--fonte-dados); margin-bottom: 8px; padding: 8px; background-color: rgba(239, 68, 68, 0.2); border-radius: 4px; border-left: 5px solid var(--cor-divida);}.prioridade-item strong{color: var(--cor-divida);}.prioridade-acao{margin-top: 15px; font-weight: 700; color: var(--cor-alerta); border-top: 1px dashed var(--cor-borda); padding-top: 10px;}.modal-relatorio-content{background-color:var(--cor-fundo-card);margin:5% auto;padding:30px;border-radius:10px;border:1px solid var(--cor-meta-diaria);width:90%;max-width:800px;box-shadow:0 0 20px rgba(155, 89, 182, 0.4)}.modal-relatorio-content h3{color:var(--cor-meta-diaria);margin-bottom:20px;font-size:1.6em}.tabela-relatorio{width:100%;border-collapse:collapse;margin-top:15px;font-family:var(--fonte-dados)}.tabela-relatorio th, .tabela-relatorio td{padding:10px;text-align:left;border-bottom:1px solid var(--cor-borda);font-size:0.9em}.tabela-relatorio th{background-color:#1A212E;color:var(--cor-meta-diaria);text-transform:uppercase}.meta-batida-status{color:var(--cor-sucesso);font-weight:700}.meta-nao-batida-status{color:var(--cor-divida);font-weight:700}
 
-        .close {
-            color: var(--cor-texto);
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-            line-height: 1;
-            position: absolute;
-            top: 10px;
-            right: 15px;
+        /* V4.9 NOVO: Estilo para Botões de Ação Dinâmicos */
+        .btn-acao-tabela.deletar-divida {
+             color: var(--cor-divida);
+             font-size: 1.1em;
+             margin-right: 10px;
         }
-
-        .close:hover,
-        .close:focus {
-            color: var(--cor-divida);
-            text-decoration: none;
+        .btn-acao-tabela.deletar-divida:hover {
+             color: var(--cor-alerta);
+        }
+        .btn-acao-tabela.pagamento-divida {
+            background-color: var(--cor-divida);
+            color: var(--cor-fundo-principal);
+            padding: 6px 10px;
+            border: none;
+            border-radius: 4px;
             cursor: pointer;
+            font-size: 0.8em;
+            font-weight: 700;
+            transition: all var(--transicao-rapida);
+            white-space: nowrap;
+        }
+        .btn-acao-tabela.pagamento-divida:hover {
+            background-color: #FF7777;
+        }
+        .divida-actions {
+             display: flex;
+             align-items: center;
+             justify-content: center;
         }
         
-        /* Detalhes do Perfil no Modal */
-        #perfil-details input {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 10px;
-            border-radius: 6px;
-            border: 1px solid #444;
-            background-color: #1a2736;
-            color: var(--cor-texto);
-        }
-        
-        .perfil-actions {
-            margin-top: 20px;
-        }
-
-        /* Alerta de Contas Fixas Quitadas */
-        #feedback-fixas-quitadas {
-            background-color: rgba(50, 205, 50, 0.2);
-            border: 2px solid var(--cor-fixa);
-            padding: 15px;
-            border-radius: 8px;
-            text-align: center;
-            margin-bottom: 15px;
-            font-weight: 600;
-            color: var(--cor-fixa);
-        }
-
-        /* Responsividade para telas maiores */
-        @media (min-width: 768px) {
-            #dashboard-container {
-                max-width: 800px;
-                margin: 0 auto;
-                padding: 20px;
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 var(--espacamento-mobile);
             }
-
-            .bottom-nav {
-                display: none;
-            }
-            
             .dashboard-header {
-                padding: 10px 0 20px 0;
+                 grid-template-columns: 1fr;
             }
-            
-            .content-box {
-                padding: 20px;
+            .progress-area {
+                 grid-column: span 1;
             }
-            
-            #plano-quitacao-master {
-                max-width: 400px;
-                margin-left: auto;
-                margin-right: auto;
+            .header-content {
+                 flex-direction: row; 
+                 align-items: center;
+                 margin-top: 20px;
+            }
+            h1 {
+                 font-size: 2em;
+                 text-align: left;
+            }
+            .modal-content, .modal-relatorio-content, .modal-content-perfil {
+                 width: 95% !important; 
+                 max-width: 95% !important;
+                 padding: 15px !important;
+            }
+            .tabela-relatorio th, .tabela-relatorio td {
+                 font-size: 0.75em;
+            }
+            .tabela-wrapper {
+                 padding: 0 5px;
+            }
+            .tabela-transacoes-log, .tabela-fixas-log, .tabela-dividas-log {
+                 font-size: 0.8em;
+                 min-width: 100%;
+            }
+            .tabela-transacoes-log th:nth-child(1), .tabela-transacoes-log td:nth-child(1) { width: 50%; }
+            .tabela-transacoes-log th:nth-child(2), .tabela-transacoes-log td:nth-child(2) { width: 30%; }
+            .tabela-transacoes-log th:nth-child(3), .tabela-transacoes-log td:nth-child(3) { width: 20%; text-align: center; } 
+            .tabela-fixas-log th:nth-child(1), .tabela-fixas-log td:nth-child(1), .tabela-dividas-log th:nth-child(1), .tabela-dividas-log td:nth-child(1) { width: 45%; }
+            .tabela-fixas-log th:nth-child(2), .tabela-fixas-log td:nth-child(2), .tabela-dividas-log th:nth-child(2), .tabela-dividas-log td:nth-child(2) { width: 35%; }
+            .tabela-fixas-log th:nth-child(3), .tabela-fixas-log td:nth-child(3), .tabela-dividas-log th:nth-child(3), .tabela-dividas-log td:nth-child(3) { width: 20%; text-align: center; } 
+            .plano-quitacao {
+                 padding: 20px;
+            }
+            .ia-input-group {
+                 flex-direction: column;
+                 align-items: flex-start;
+                 gap: 15px;
+            }
+            .ia-input-group > div {
+                 width: 100%;
+            }
+            .ia-input-group input {
+                 width: 100%;
+            }
+            .ia-input-group button {
+                 width: 100% !important;
+            }
+            .sidebar {
+                 width: 250px;
+            }
+            .cadastro-actions {
+                 flex-direction: column;
+            }
+            .cadastro-actions button {
+                 width: 100%;
+                 margin-bottom: 10px;
             }
         }
+
     </style>
 </head>
 <body>
+    
+    <div id="mySidebar" class="sidebar">
+        <a href="javascript:void(0)" class="closebtn" id="close-sidebar">&times;</a>
+        
+        <div class="sidebar-header">
+            <div class="profile-pic-area">
+                <div class="profile-pic-container" id="profile-pic-container">
+                     <img id="profile-image" alt="Foto de Perfil" style="display: none;">
+                     <i id="profile-icon" class="fas fa-user-circle"></i>
+                </div>
+                <div class="add-photo-icon">+</div>
+            </div>
+            <h3 id="sidebar-username">Nome do Usuário</h3>
+        </div>
+        
+        <a href="javascript:void(0)" id="menu-perfil"><i class="fas fa-id-badge"></i> Perfil</a>
+        <button id="btn-excluir-conta"><i class="fas fa-user-slash"></i> EXCLUIR CONTA</button>
+        <a href="https://wa.me/5521967074896" target="_blank" id="menu-suporte"><i class="fab fa-whatsapp"></i> Suporte</a>
+        <button id="btn-logout-only"><i class="fas fa-sign-out-alt"></i> SAIR (MANTER DADOS)</button>
+        <button id="btn-reset-data"><i class="fas fa-trash-restore"></i> RESETAR TUDO (APAGAR LOG)</button>
+    </div>
+    
+    <input type="file" id="photo-input" accept="image/*" style="display: none;">
 
-    <div id="login-screen">
-        <div class="login-box">
-            <h1>Master Planner</h1>
-            <form id="login-form">
-                <input type="email" id="login-email" placeholder="Email" required>
-                <input type="password" id="login-password" placeholder="Senha" required>
-                <button type="submit" class="btn-principal" id="btn-login"><i class="fas fa-sign-in-alt"></i> Entrar</button>
-            </form>
-            <form id="register-form" style="display: none;">
-                <input type="text" id="register-name" placeholder="Seu Nome" required>
-                <input type="email" id="register-email" placeholder="Email" required>
-                <input type="password" id="register-password" placeholder="Senha (mín. 6 caracteres)" required>
-                <button type="submit" class="btn-principal" id="btn-register"><i class="fas fa-user-plus"></i> Cadastrar</button>
-            </form>
-            <p class="toggle-form" id="toggle-form-btn">Ainda não tem conta? Clique para Cadastrar.</p>
+    <div id="cadastro-screen" style="display: none;">
+        <div class="cadastro-box" style="border: 2px solid var(--cor-fixa); box-shadow: 0 0 15px rgba(29, 233, 182, 0.7);">
+            <h2><i class="fas fa-user-plus"></i> NOVO REGISTRO TITAN</h2>
+            <p style="color: var(--cor-texto-secundario); margin-bottom: 15px;">Crie sua conta de acesso.</p>
+            
+            <label for="reg-first-name-input">PRIMEIRO NOME</label>
+            <input type="text" id="reg-first-name-input" placeholder="Seu Nome" required>
+            
+            <label for="reg-last-name-input">SOBRENOME</label>
+            <input type="text" id="reg-last-name-input" placeholder="Seu Sobrenome" required>
+            
+            <label for="reg-email-input">E-MAIL</label>
+            <input type="email" id="reg-email-input" placeholder="seu@email.com" required>
+            
+            <label for="reg-phone-input">TELEFONE</label>
+            <input type="tel" id="reg-phone-input" placeholder="(99) 99999-9999" required>
+            
+            <label for="reg-password-input">CHAVE DE SEGURANÇA (SENHA)</label>
+            <input type="password" id="reg-password-input" placeholder="8+ chars, aA, #" required>
+            <p class="password-hint">Mínimo 8 caracteres, 1 maiúscula, 1 minúscula e 1 especial (#, @, $, etc.).</p>
+            <p id="reg-feedback" class="error-message" style="display: none;"></p>
+
+            <div class="cadastro-actions">
+                <button id="btn-cadastrar" class="btn-principal" style="background-color: var(--cor-sucesso);"><i class="fas fa-user-check"></i> CONFIRMAR CADASTRO</button>
+                <button id="btn-voltar-login" class="btn-principal" style="background-color: var(--cor-borda);"><i class="fas fa-undo"></i> VOLTAR</button>
+            </div>
         </div>
     </div>
 
-    <div id="dashboard-container">
+
+    <div id="login-screen" style="display: none;">
+        <div class="login-box" style="border: 2px solid var(--cor-primario); box-shadow: var(--sombra-card-hover);">
+            <h2><i class="fas fa-fingerprint"></i> PROJECT TITAN</h2>
+            <p style="color: var(--cor-texto-secundario); margin-bottom: 25px;">Acesso restrito ao Painel de Gestão Estratégica.</p>
+            
+            <label for="login-email-input">E-MAIL OU PRIMEIRO NOME</label>
+            <input type="text" id="login-email-input" placeholder="Seu Email ou Nome" required autocomplete="off">
+            
+            <label for="login-password-input">CHAVE DE SEGURANÇA</label>
+            <input type="password" id="login-password-input" placeholder="Senha" required autocomplete="off">
+            
+            <button id="btn-login" class="btn-principal"><i class="fas fa-sign-in-alt"></i> AUTORIZAR ACESSO</button>
+            <p id="login-feedback" class="error-message" style="margin-top: 15px;"></p>
+            
+            <a href="#" id="link-abrir-cadastro" class="link-cadastro"><i class="fas fa-file-invoice"></i> CADASTRE-SE AQUI</a>
+        </div>
+    </div>
     
-        <div id="mySidebar" class="sidebar">
-            <a href="javascript:void(0)" class="closebtn" id="close-sidebar">&times;</a>
-            <div class="sidebar-header">
-                <h3>Menu Principal</h3>
+    <div id="main-content" style="display: none;">
+        
+        <div class="dynamic-banner">
+            <div class="banner-text" id="banner-text">
+                💰 Foco & Disciplina. ZERO DÍVIDA. Capital é PODER. 💸
             </div>
-            <a href="javascript:void(0)" id="menu-perfil"><i class="fas fa-id-badge"></i> Perfil</a>
-            <a href="https://wa.me/5521967074896" target="_blank" id="menu-suporte"><i class="fab fa-whatsapp"></i> Suporte</a>
-            <button id="btn-logout-only"><i class="fas fa-sign-out-alt"></i> SAIR (MANTER DADOS)</button>
-            </div>
-
-        <div class="dashboard-header">
-            <span class="greeting" id="greeting-message" onclick="openNav()">
-                <i class="fas fa-bars"></i> Olá, Usuário!
-            </span>
-            <img id="dashboard-profile-pic" class="profile-pic" src="default.png" alt="Perfil" onclick="abrirModalPerfil()">
-        </div>
-
-        <div id="feedback-fixas-quitadas" style="display: none;">
-            <i class="fas fa-check-circle"></i> Parabéns! Todas as Contas Fixas deste mês estão quitadas. Foco nas Dívidas!
-        </div>
-
-        <div id="plano-quitacao-master" style="display: none;">
-            <h2><i class="fas fa-brain"></i> MÓDULO IA: PLANO DE QUITAÇÃO ESTRATÉGICO</h2>
-            <p>TARGET: Meses para Quitar Dívidas Únicas</p>
-            <input type="number" id="target-meses" value="5" min="1" max="120">
-            
-            <button class="btn-principal" id="btn-recalcular"><i class="fas fa-redo"></i> RECALCULAR PLANO</button>
-
-            <div class="plano-ia-results">
-                 <p style="text-align: left; margin-bottom: 10px;">Para quitar **R$ <span id="ia-total-dividas">0,00</span>** em **<span id="ia-meses-target">5</span> meses**:</p>
-                 <div>
-                     <span class="label"><i class="far fa-calendar-alt"></i> Aporte Mensal Necessário:</span>
-                     <span class="value" id="ia-aporte-mensal">R$ 0,00</span>
-                 </div>
-                 <div>
-                     <span class="label"><i class="fas fa-calendar-week"></i> Aporte Semanal (5 dias úteis):</span>
-                     <span class="value" id="ia-aporte-semanal">R$ 0,00</span>
-                 </div>
-                 <div>
-                     <span class="label"><i class="fas fa-sun"></i> Aporte Diário (por dia útil):</span>
-                     <span class="value" id="ia-aporte-diario">R$ 0,00</span>
-                 </div>
-            </div>
-            
-            <div id="dicas-quitacao" class="estrategia-box">
-                </div>
         </div>
         
-        <div id="contas-fixas-toggle" class="content-box">
-            <h2 onclick="toggleSection('contas-fixas-list')"><i class="fas fa-file-invoice"></i> Contas Fixas (Mês)</h2>
-            <div id="contas-fixas-list" style="display: block;">
-                </div>
-        </div>
-
-        <div id="dividas-container" class="content-box" style="display: none;">
-            <h2 onclick="toggleSection('dividas-list')"><i class="fas fa-hand-holding-usd"></i> Dívidas Únicas (Total R$ <span id="total-dividas">0,00</span>)</h2>
-            <div id="dividas-list" style="display: block;">
-                <button class="btn-principal" style="background-color: var(--cor-divida); margin-top: 15px;" onclick="abrirModalQuitacao()"><i class="fas fa-plus"></i> Adicionar Dívida</button>
-            </div>
-        </div>
-
-        <div id="transacoes-container" class="content-box">
-            <h2><i class="fas fa-money-bill-wave"></i> Adicionar Receita / Gasto</h2>
-            <div id="add-transaction-section">
-                <input type="text" id="transaction-description" placeholder="Descrição (Ex: Salário, PIX)" required>
-                <input type="number" id="transaction-amount" placeholder="Valor (R$)" step="0.01" required>
-                <select id="transaction-type">
-                    <option value="Receita">Receita</option>
-                    <option value="Gasto">Gasto Extra</option>
-                </select>
-                <button id="btn-add-receita"><i class="fas fa-plus-circle"></i> Registrar Transação</button>
-            </div>
-        </div>
-
-        <div id="relatorio-diario" class="content-box">
-            <h2><i class="fas fa-calendar-day"></i> Relatório Diário / Metas</h2>
-            <div id="meta-diaria-box">
-                </div>
-        </div>
-
-        <div id="totais-container" class="content-box">
-            <h2><i class="fas fa-balance-scale"></i> Balanço Financeiro</h2>
-            <table class="total-table">
-                <thead>
-                    <tr>
-                        <th>Item</th>
-                        <th>Valor (R$)</th>
-                    </tr>
-                </thead>
-                <tbody id="totais-table-body">
-                    </tbody>
-            </table>
+        <div class="header-content">
+            <h1><i class="fas fa-terminal"></i> PROJECT TITAN</h1>
+            <i class="fas fa-bars" id="menu-toggle" title="Menu de Opções"></i>
         </div>
         
-        <div id="historico-container" class="content-box">
-            <h2><i class="fas fa-history"></i> Histórico de Transações</h2>
-            <div id="log-transacoes">
+        <div class="container" id="welcome-message">
+            </div>
+
+        
+        <div class="container" id="data-atual-info">
+            <button id="btn-data-atual" title="Clique para ver o Relatório de Metas">
+                <i class="fas fa-calendar-day"></i> <span id="data-atual"></span>
+            </button>
+        </div>
+
+        <div class="motivacao-box container" id="motivacao-diaria">
+            <i class="fas fa-infinity"></i>
+            "DISCIPLINA É O COMANDO. A LIBERDADE FINANCEIRA É O STATUS. Mantenha o Foco."
+        </div>
+        
+        <div id="meta-diaria-card" class="meta-diaria-total container" style="border: 1px solid var(--cor-meta-diaria);">
+            <div>
+                <p style="color: var(--cor-texto-secundario); font-weight: 600;"><i class="fas fa-bullseye"></i> TARGET DIÁRIO DE APORTE (FIXAS + QUITAÇÃO)</p>
+                <span id="meta-diaria-total-el">R$ 0,00</span>
+            </div>
+            <span id="meta-diaria-incentivo" class="destaque-conclusao" style="display: none;"></span>
+        </div>
+        
+
+        <header class="dashboard-header container">
+            
+            <div class="info-card">
+                <p class="rotulo"><i class="fas fa-satellite-dish"></i> CAPITAL ACUMULADO (ENTRADAS)</p>
+                <span id="total-lancado" class="valor valor-caixa">R$ 0,00</span>
+            </div>
+            
+            <div class="progress-area" id="meta-area">
+                <p class="rotulo"><i class="fas fa-route"></i> STATUS DE QUITAÇÃO ÚNICA</p>
+                <p style="margin-bottom: 5px; color: var(--cor-texto-secundario);">Dívidas Pendentes: <span id="total-dividas-pendentes" style="font-weight: 700; color: var(--cor-divida); font-family: var(--fonte-dados);">R$ 0,00</span></p>
+                <p>Progresso de Quitação com Capital: <span id="progresso-capital-txt" style="font-weight: 700; color: var(--cor-sucesso); font-family: var(--fonte-dados);">0.00%</span></p>
+                
+                <div class="progresso-bar-container">
+                    <div id="progresso-bar" class="progresso" style="width: 0%;"></div>
                 </div>
+            </div>
+            
+            <div class="info-card">
+                <p class="rotulo"><i class="fas fa-skull-crossbones"></i> SALDO TOTAL A QUITAR</p>
+                <span id="saldo-pendente-total" class="valor valor-divida">R$ 0,00</span>
+            </div>
+        </header>
+        
+        <main class="container">
+            
+            <div class="section-header">
+                <h2><i class="fas fa-bolt"></i> MÓDULO DE AÇÕES</h2>
+                <div style="display: flex; gap: 10px;">
+                    <button id="abrir-cadastro-receita" class="btn-principal" style="background-color: var(--cor-sucesso);"> <i class="fas fa-plus"></i> INJETAR CAPITAL</button>
+                    <button id="abrir-cadastro-divida" class="btn-principal" style="background-color: var(--cor-divida);"><i class="fas fa-plus"></i> NOVA DÍVIDA</button>
+                </div>
+            </div>
+            <div id="historico-receitas-container" class="toggle-section">
+                <div class="section-toggle receitas" id="toggle-receitas">
+                    <h2><i class="fas fa-clipboard-list"></i> LOG: REGISTROS DE LANÇAMENTO (CAPITAL)</h2>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                
+                <div id="lista-receitas-container" class="lista-container-ocultavel" style="display: none;">
+                    <div class="tabela-wrapper">
+                        <table class="tabela-transacoes-log">
+                            <thead>
+                                <tr>
+                                    <th>DESCRIÇÃO</th>
+                                    <th>VALOR (R$)</th>
+                                    <th>AÇÃO</th>
+                                </tr>
+                            </thead>
+                            <tbody id="lista-entradas">
+                                </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="feedback-fixas-quitadas" class="motivacao-box" style="display: none; margin-top: 40px; border: 2px solid var(--cor-sucesso);">
+                 <i class="fas fa-medal" style="color: var(--cor-sucesso);"></i> PROTOCOLO DE CONTAS FIXAS CONCLUÍDO! <i class="fas fa-medal" style="color: var(--cor-sucesso);"></i>
+                 <p style="color: var(--cor-texto-principal); font-weight: 600; font-style: normal; margin-top: 5px;">Contas Fixas liquidadas para este ciclo. Foco total em reduzir o Saldo Pendente.</p>
+            </div>
+
+            
+            <div id="contas-fixas-toggle" class="toggle-section">
+                <div class="section-toggle fixas" id="toggle-fixas">
+                    <h2><i class="fas fa-calculator"></i> CONTAS FIXAS (META: R$ <span id="soma-fixas" class="valor-divida" style="font-family: var(--fonte-dados); font-size: 1em;">0,00</span>)</h2>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                
+                <div id="lista-fixas-container" class="lista-container-ocultavel" style="display: none;">
+                     <p class="alerta-nota">
+                        <i class="fas fa-exclamation-triangle"></i> NOTA: Ao clicar em 'PAGAR', o valor será deduzido imediatamente do Capital Acumulado.
+                     </p>
+                     <div class="tabela-wrapper">
+                         <table class="tabela-fixas-log">
+                             <thead>
+                                 <tr>
+                                     <th>CONTA</th>
+                                     <th>VALOR (R$)</th>
+                                     <th>AÇÃO</th>
+                                 </tr>
+                             </thead>
+                             <tbody id="lista-contas-fixas-tabela">
+                                 </tbody>
+                         </table>
+                    </div>
+                </div>
+            </div>
+
+
+            
+            <div id="dividas-container" class="toggle-section" style="display: none;"> 
+                
+                <div class="section-header" style="margin-top: 0; margin-bottom: 20px;">
+                    <h2 style="font-size: 1.5em; color: var(--cor-divida);"><i class="fas fa-radiation"></i> DÍVIDAS ÚNICAS (PROTOCOLO DE REDUÇÃO)</h2>
+                </div>
+                
+                <div class="section-toggle dividas" id="toggle-dividas">
+                    <h2><i class="fas fa-clipboard-list"></i> LOG: DÍVIDAS A QUITAR</h2>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                
+                <div id="lista-dividas-quitar-container" class="lista-container-ocultavel" style="display: none;">
+                    <p class="alerta-nota">
+                        <i class="fas fa-exclamation-triangle"></i> NOTA: O botão "QUITAÇÃO TOTAL" só é ativado quando o Capital Acumulado é $\ge$ Saldo da Dívida. Use **PAGAR** para fazer aportes parciais.
+                     </p>
+                     <div class="tabela-wrapper">
+                         <table class="tabela-dividas-log">
+                             <thead>
+                                 <tr>
+                                     <th>CREDOR</th>
+                                     <th>SALDO ATUAL (R$)</th>
+                                     <th>AÇÕES</th>
+                                 </tr>
+                             </thead>
+                             <tbody id="lista-dividas-quitar-tabela">
+                                 </tbody>
+                         </table>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="plano-quitacao-master" class="plano-quitacao" style="margin-top: 50px; display: none;"> 
+                <h3><i class="fas fa-brain"></i> MÓDULO IA: PLANO DE QUITAÇÃO ESTRATÉGICO</h3>
+                
+                <div id="plano-ia-controls" class="ia-input-group">
+                    <div>
+                         <label for="meses-plano">TARGET: Meses para Quitar Dívidas ÚNICAS</label>
+                         <input type="number" id="meses-plano" value="5" min="1" max="60">
+                    </div>
+                    <button id="btn-gerar-plano" class="btn-principal" style="margin-top: 0;">
+                        <i class="fas fa-redo-alt"></i> RECALCULAR PLANO
+                    </button>
+                </div>
+                
+                <div id="resultado-plano-ia">
+                    <p style="color: var(--cor-texto-secundario);">Aguardando cálculo...</p>
+                    </div>
+                
+                <div id="dicas-quitacao" class="estrategia-quitacao">
+                     </div>
+            </div>
+            
+        </main>
+    </div>
+
+    <div id="modal-relatorio" class="modal">
+        <div class="modal-relatorio-content">
+            <span class="fechar-modal" id="fechar-modal-relatorio" style="color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer;">&times;</span>
+            <h3><i class="fas fa-chart-line"></i> RELATÓRIO DE PROGRESSO DIÁRIO</h3>
+            <p style="color: var(--cor-texto-secundario); font-size: 0.9em;">Histórico de metas diárias de aporte (Fixas + Quitação) versus o capital efetivamente lançado por dia.</p>
+            
+            <div class="tabela-wrapper" style="padding: 0;">
+                <table class="tabela-relatorio">
+                    <thead>
+                        <tr>
+                            <th>DATA</th>
+                            <th>META TOTAL (R$)</th>
+                            <th>APORTADO (R$)</th>
+                            <th>STATUS</th>
+                        </tr>
+                    </thead>
+                    <tbody id="corpo-tabela-relatorio">
+                        </tbody>
+                </table>
+            </div>
+            
+        </div>
+    </div>
+
+
+    <div id="modal-receita" class="modal">
+        <div class="modal-content" style="background-color: var(--cor-fundo-card); margin: 15% auto; padding: 30px; border-radius: 10px; border: 1px solid var(--cor-primario); width: 80%; max-width: 400px; box-shadow: var(--sombra-card-hover);">
+            <span class="fechar-modal" id="fechar-modal-receita" style="color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer;">&times;</span>
+            <h3 id="titulo-dados-receita" style="color: var(--cor-sucesso);"><i class="fas fa-arrow-up"></i> LANÇAMENTO DE CAPITAL</h3>
+            <label for="valor-input-receita" style="display: block; margin-top: 20px; color: var(--cor-texto-principal); font-weight: 600;">VALOR DO APORTE (R$)</label>
+            <input type="number" id="valor-input-receita" placeholder="0.00" min="0.01" step="0.01" style="width: 100%; padding: 10px; margin-top: 8px; border-radius: 5px; border: 1px solid var(--cor-borda); background-color: #1A212E; color: var(--cor-fixa); font-family: var(--fonte-dados);">
+            <button class="btn-principal btn-ok" id="btn-cadastrar-receita" style="background-color: var(--cor-sucesso); margin-top: 25px;">CONFIRMAR LANÇAMENTO <i class="fas fa-check"></i></button>
+        </div>
+    </div>
+    
+    <div id="modal-divida" class="modal">
+        <div class="modal-content" style="background-color: var(--cor-fundo-card); margin: 15% auto; padding: 30px; border-radius: 10px; border: 1px solid var(--cor-divida); width: 80%; max-width: 400px; box-shadow: 0 0 20px rgba(239, 68, 68, 0.5);">
+            <span class="fechar-modal" id="fechar-modal-divida" style="color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer;">&times;</span>
+            <h3 id="titulo-cadastro-divida" style="color: var(--cor-divida);"><i class="fas fa-hand-holding-usd"></i> CADASTRO DE DÍVIDA ÚNICA</h3>
+            
+            <label for="credor-input-divida" style="display: block; margin-top: 20px; color: var(--cor-texto-principal); font-weight: 600;">CREDOR/ORIGEM</label>
+            <input type="text" id="credor-input-divida" placeholder="Ex: Banco X" style="width: 100%; padding: 10px; margin-top: 8px; border-radius: 5px; border: 1px solid var(--cor-borda); background-color: #1A212E; color: var(--cor-fixa); font-family: var(--fonte-dados);">
+
+            <label for="valor-input-divida" style="display: block; margin-top: 20px; color: var(--cor-texto-principal); font-weight: 600;">VALOR TOTAL (R$)</label>
+            <input type="number" id="valor-input-divida" placeholder="0.00" min="0.01" step="0.01" style="width: 100%; padding: 10px; margin-top: 8px; border-radius: 5px; border: 1px solid var(--cor-borda); background-color: #1A212E; color: var(--cor-fixa); font-family: var(--fonte-dados);">
+            
+            <button class="btn-principal btn-ok" id="btn-cadastrar-divida" style="background-color: var(--cor-divida); margin-top: 25px;">REGISTRAR DÍVIDA <i class="fas fa-save"></i></button>
         </div>
     </div>
     
     <div id="modal-quitacao" class="modal">
-        <div class="modal-content-quitacao">
-            <span class="close" id="fechar-modal-quitacao">&times;</span>
-            <h3 id="modal-quitacao-title">Cadastrar Nova Dívida</h3>
-            <input type="hidden" id="divida-id-edit">
+        <div class="modal-content" style="background-color: var(--cor-fundo-card); margin: 15% auto; padding: 30px; border-radius: 10px; border: 1px solid var(--cor-divida); width: 80%; max-width: 400px; box-shadow: 0 0 20px rgba(239, 68, 68, 0.5);">
+            <span class="fechar-modal" id="fechar-modal-quitacao" style="color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer;">&times;</span>
+            <h3 id="titulo-quitacao" style="color: var(--cor-divida);"><i class="fas fa-receipt"></i> REGISTRAR PAGAMENTO</h3>
+            <p style="margin-top: 15px; margin-bottom: 10px; font-family: var(--fonte-titulo); font-weight: 600; color: var(--cor-texto-secundario);">
+                TARGET CREDOR: <span id="nome-credor" style="font-family: var(--fonte-dados); color: var(--cor-texto-principal);"></span>
+            </p>
+            <p style="margin-bottom: 20px; font-family: var(--fonte-titulo); font-weight: 600; color: var(--cor-texto-secundario);">
+                SALDO PENDENTE: <span id="saldo-quitacao" class="saldo-divida" style="font-family: var(--fonte-dados);"></span>
+            </p>
+            <label for="valor-pagamento" style="display: block; margin-top: 20px; color: var(--cor-texto-principal); font-weight: 600;">VALOR DO PAGAMENTO (R$)</label>
+            <input type="number" id="valor-pagamento" placeholder="0.00" min="0.01" step="0.01" style="width: 100%; padding: 10px; margin-top: 8px; border-radius: 5px; border: 1px solid var(--cor-borda); background-color: #1A212E; color: var(--cor-fixa); font-family: var(--fonte-dados);">
             
-            <input type="text" id="divida-nome" placeholder="Nome da Dívida (Ex: Cartão X)" required style="margin-bottom: 10px;">
-            <input type="number" id="divida-valor-inicial" placeholder="Valor Total Inicial (R$)" step="0.01" required style="margin-bottom: 10px;">
-            <input type="number" id="divida-valor-atual" placeholder="Valor Atual (R$)" step="0.01" required style="margin-bottom: 10px;">
-            <select id="divida-tipo-estrategia" style="margin-bottom: 15px;">
-                <option value="Bola de Neve">Bola de Neve (Menor p/ Maior)</option>
-                <option value="Avalanche">Avalanche (Maior Juro p/ Menor)</option>
-            </select>
+            <div style="display: flex; gap: 10px; margin-top: 25px;">
+                 <button class="btn-principal btn-ok" id="btn-quitar-total" style="flex: 1; background-color: var(--cor-divida);">QUITAÇÃO TOTAL</button>
+                 <button class="btn-principal btn-ok" id="btn-quitar-parcial" style="flex: 1; background-color: var(--cor-alerta);">PAGAMENTO PARCIAL</button>
+            </div>
             
-            <button class="btn-principal" id="btn-salvar-divida" style="background-color: var(--cor-divida);">
-                <i class="fas fa-check"></i> Salvar Dívida
-            </button>
         </div>
     </div>
-
+    
     <div id="modal-perfil" class="modal">
         <div class="modal-content-perfil">
-            <span class="close" id="fechar-modal-perfil">&times;</span>
-            <h3><i class="fas fa-user-circle"></i> Meu Perfil</h3>
+            <span class="fechar-modal" id="fechar-modal-perfil" style="color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer;">&times;</span>
+            <h3><i class="fas fa-user-circle"></i> MEU PERFIL</h3>
             
-            <div id="perfil-details">
-                <input type="text" id="perfil-name" placeholder="Nome">
-                <input type="text" id="perfil-email" placeholder="Email (Não Editável)" disabled>
-                <input type="file" id="perfil-foto" accept="image/*">
+            <div class="perfil-pic-preview" id="perfil-pic-preview">
+                 <img id="perfil-image-modal" alt="Foto de Perfil" style="display: none;">
+                 <i id="perfil-icon-modal" class="fas fa-camera"></i>
             </div>
+            <p style="text-align: center; color: var(--cor-texto-secundario); font-size: 0.85em; margin-bottom: 20px;">Clique na foto acima para alterar</p>
+            
+            <div class="input-group-perfil">
+                 <label for="perfil-first-name">Primeiro Nome</label>
+                 <input type="text" id="perfil-first-name" required>
+            </div>
+            <div class="input-group-perfil">
+                 <label for="perfil-last-name">Sobrenome</label>
+                 <input type="text" id="perfil-last-name" required>
+            </div>
+            <div class="input-group-perfil">
+                 <label for="perfil-email">E-mail</label>
+                 <input type="email" id="perfil-email" required>
+            </div>
+            <div class="input-group-perfil">
+                 <label for="perfil-phone">Telefone</label>
+                 <input type="tel" id="perfil-phone" required>
+            </div>
+            
+            <p id="perfil-feedback" class="error-message" style="display: none;"></p>
             
             <div class="perfil-actions">
                  <button id="btn-salvar-perfil" class="btn-principal" style="background-color: var(--cor-fixa);">
                      <i class="fas fa-save"></i> SALVAR ALTERAÇÕES
                  </button>
-                 <button id="btn-excluir-conta-perfil" class="btn-principal" style="background-color: var(--cor-divida); margin-top: 10px;">
-                     <i class="fas fa-user-slash"></i> EXCLUIR CONTA
-                 </button>
             </div>
         </div>
     </div>
 
-    <nav class="bottom-nav">
-        <a href="#relatorio-diario" class="nav-item active" data-section="relatorio-diario">
-            <i class="fas fa-chart-line"></i>
-            <span>Relatório</span>
-        </a>
-        <a href="#contas-fixas-toggle" class="nav-item" data-section="contas-fixas-toggle">
-            <i class="fas fa-file-invoice"></i>
-            <span>Fixas</span>
-        </a>
-        <a href="#transacoes-container" class="nav-item" data-section="transacoes-container">
-            <i class="fas fa-plus"></i>
-            <span>Adicionar</span>
-        </a>
-        <a href="#dividas-container" class="nav-item" data-section="dividas-container">
-            <i class="fas fa-hand-holding-usd"></i>
-            <span>Dívidas</span>
-        </a>
-        <a href="#historico-container" class="nav-item" data-section="historico-container">
-            <i class="fas fa-history"></i>
-            <span>Histórico</span>
-        </a>
-    </nav>
-
-
+    
     <script>
         // ===========================================
-        // VARIÁVEIS GLOBAIS E CONSTANTES INICIAIS
+        // JAVASCRIPT: LÓGICA DE NEGÓCIO E CONEXÃO V4.9 (ATUALIZADO)
         // ===========================================
-        const TODAY = new Date();
-        const CURRENT_MONTH = TODAY.getMonth() + 1; // 1-12
-        const CURRENT_YEAR = TODAY.getFullYear();
-        let sessionTimer = null; // Para controle de sessão
 
+        const DIAS_UTEIS_MES = 22; 
+        const SESSION_TIMEOUT_MS = 600000; // 10 minutos
+        let sessionTimer;
+        const DEFAULT_PASSWORD = '123'; 
+        
+        // Dados Iniciais
         const CONTAS_FIXAS_INITIAL = [
-            { id: 1, nome: "Aluguel / Prestação", valor: 1500.00, pago: false, recorrencia: 'mensal', diaVencimento: 5, tipo: 'necessidade' },
-            { id: 2, nome: "Energia Elétrica", valor: 250.00, pago: false, recorrencia: 'mensal', diaVencimento: 10, tipo: 'necessidade' },
-            { id: 3, nome: "Plano de Saúde", valor: 450.00, pago: false, recorrencia: 'mensal', diaVencimento: 15, tipo: 'necessidade' },
-            { id: 4, nome: "Internet / Celular", valor: 120.00, pago: false, recorrencia: 'mensal', diaVencimento: 20, tipo: 'necessidade' },
-            { id: 5, nome: "Academia", valor: 90.00, pago: false, recorrencia: 'mensal', diaVencimento: 25, tipo: 'desejo' }
-        ];
+            { id: 100, nome: "Carro", valor: 1800.00, pago: false },
+            { id: 101, nome: "Aluguel", valor: 850.00, pago: false },
+            { id: 102, nome: "Academia", valor: 300.00, pago: false },
+            { id: 103, nome: "Luz", valor: 250.00, pago: false },
+            { id: 104, nome: "Internet Movel", valor: 120.00, pago: false },
+            { id: 105, nome: "Wifi", valor: 100.00, pago: false }
+        ].sort((a, b) => b.valor - a.valor);
+        
+        let idDebtQuitting = null; 
 
+        // Usuário Padrão/Logado (Objeto simplificado)
+        const DEFAULT_USER = {
+             firstName: "Cleber",
+             lastName: "Teste",
+             email: "cleber@titan.com",
+             phone: "(21) 98765-4321",
+             password: DEFAULT_PASSWORD 
+        }
+        let loggedUser = null;
+        
         // ===========================================
         // FUNÇÕES UTILITÁRIAS DE DADOS E SESSÃO
         // ===========================================
-
-        const getLocalStorage = (key, defaultValue = null) => {
-            try {
-                const data = localStorage.getItem(key);
-                return data ? JSON.parse(data) : defaultValue;
-            } catch (error) {
-                console.error(`Erro ao carregar ${key}:`, error);
-                return defaultValue;
-            }
-        };
-
-        const setLocalStorage = (key, value) => {
-            try {
-                localStorage.setItem(key, JSON.stringify(value));
-            } catch (error) {
-                console.error(`Erro ao salvar ${key}:`, error);
-            }
-        };
-
-        const formatCurrency = (amount) => {
-            return new Intl.NumberFormat('pt-BR', {
-                style: 'currency',
-                currency: 'BRL'
-            }).format(amount);
-        };
         
-        const formatDecimal = (amount, decimals = 2) => {
-             return amount.toFixed(decimals).replace('.', ',');
+        const formatarMoeda = (valor) => {
+            return parseFloat(valor).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
         };
 
-        const getGreeting = (name) => {
-            const hour = TODAY.getHours();
-            let greeting = "Olá";
-            if (hour < 12) {
-                greeting = "Bom dia";
-            } else if (hour < 18) {
-                greeting = "Boa tarde";
-            } else {
-                greeting = "Boa noite";
-            }
-            return `${greeting}, ${name.split(' ')[0]}!`;
-        };
+        const getHojeString = () => new Date().toISOString().slice(0, 10);
         
-        const logoutOnly = () => {
-             if (confirm('Você confirma que deseja sair da sua conta? Todos os dados serão mantidos no dispositivo. Você precisará logar novamente para acessá-los.')) {
-                 localStorage.removeItem('isLoggedIn');
-                 window.location.reload();
+        // --- Funções de Carregamento/Salvamento ---
+        const carregarContasFixas = () => {
+            const fixas = localStorage.getItem('contasFixas');
+            if (!fixas) return CONTAS_FIXAS_INITIAL;
+            const loadedFixas = JSON.parse(fixas);
+            // Garante que a lista inicial é a base, aplicando o status 'pago' do localStorage
+            const currentFixas = CONTAS_FIXAS_INITIAL.map(initialFixa => {
+                const loadedFixa = loadedFixas.find(f => f.id === initialFixa.id);
+                return { ...initialFixa, pago: loadedFixa ? loadedFixa.pago : false };
+            }).sort((a, b) => b.valor - a.valor);
+            return currentFixas;
+        };
+        const salvarContasFixas = (fixas) => localStorage.setItem('contasFixas', JSON.stringify(fixas));
+        const carregarTransacoes = () => {
+            const transacoes = localStorage.getItem('transacoes');
+            return transacoes ? JSON.parse(transacoes) : [];
+        };
+        const salvarTransacoes = (transacoes) => localStorage.setItem('transacoes', JSON.stringify(transacoes));
+        const carregarDividas = () => {
+            const dividas = localStorage.getItem('dividas');
+            if (!dividas) {
+                salvarDividas([]); // Inicializa vazia se não existir
+                return [];
+            }
+            const loadedDebts = JSON.parse(dividas).map(d => ({ 
+                ...d, 
+                id: parseInt(d.id), 
+                valorInicial: parseFloat(d.valorInicial),
+                valorAtual: parseFloat(d.valorAtual) 
+            })).filter(d => d.valorAtual > 0.01); // Filtra dívidas quitadas
+            loadedDebts.sort((a, b) => a.valorAtual - b.valorAtual); // Prioriza menor saldo (Bola de Neve)
+            return loadedDebts;
+        }
+        const salvarDividas = (dividas) => {
+             // Salva todas as dívidas, incluindo as quitadas (valorAtual <= 0.01)
+             localStorage.setItem('dividas', JSON.stringify(dividas));
+        }
+
+        const carregarUsuario = () => {
+             const storedUser = localStorage.getItem('userProfile');
+             if (storedUser) {
+                 loggedUser = JSON.parse(storedUser);
+             } else {
+                 loggedUser = DEFAULT_USER;
+                 localStorage.setItem('userProfile', JSON.stringify(DEFAULT_USER));
              }
+             return loggedUser;
+        }
+        const salvarUsuario = (user) => {
+             localStorage.setItem('userProfile', JSON.stringify(user));
+             loggedUser = user;
+        }
+
+
+        // --- Funções de Sessão e Personalização ---
+        
+        const getGreeting = (name) => {
+            const hour = new Date().getHours();
+            let saudacao;
+            if (hour >= 5 && hour < 12) {
+                saudacao = "Bom dia";
+            } else if (hour >= 12 && hour < 18) {
+                saudacao = "Boa tarde";
+            } else {
+                saudacao = "Boa noite";
+            }
+            return `${saudacao}, ${name}!`;
+        };
+        
+        // NOVO: Função para SAIR mantendo os dados
+        const logoutOnly = () => {
+             if (confirm('Deseja realmente sair? Seus dados de transações e dívidas serão mantidos para o próximo acesso.')) {
+                 localStorage.removeItem('loggedIn');
+                 if (sessionTimer) clearTimeout(sessionTimer);
+                 window.location.reload(); 
+             }
+        };
+        
+        const resetSession = () => {
+             localStorage.removeItem('loggedIn');
+             document.getElementById('login-screen').style.display = 'flex';
+             document.getElementById('main-content').style.display = 'none';
+             document.getElementById('mySidebar').style.width = '0'; 
+             if (sessionTimer) clearTimeout(sessionTimer);
+             alert('Sessão expirada. Faça login novamente.');
+        };
+        
+        const startSessionTimer = () => {
+             if (sessionTimer) clearTimeout(sessionTimer);
+             sessionTimer = setTimeout(resetSession, SESSION_TIMEOUT_MS);
+        };
+        
+        // NOVO: Função para RESETAR TODOS OS DADOS (excluindo perfil)
+        const resetAllData = () => {
+             if (confirm('ATENÇÃO: Isso irá limpar todo o LOG de transações, Contas Fixas, Dívidas e te desconectar. Você confirma?')) {
+                 if (sessionTimer) clearTimeout(sessionTimer);
+                 
+                 // Mantém apenas o perfil
+                 const profile = localStorage.getItem('userProfile');
+                 const profilePic = localStorage.getItem('profilePic');
+    
+                 localStorage.clear(); 
+                 
+                 if (profile) localStorage.setItem('userProfile', profile);
+                 if (profilePic) localStorage.setItem('profilePic', profilePic);
+                 
+                 // Garante que as contas fixas iniciais sejam salvas para o próximo ciclo
+                 salvarContasFixas(CONTAS_FIXAS_INITIAL);
+                 salvarDividas([]); // Garante que as dívidas estão vazias
+                 
+                 window.location.reload(); 
+             }
+        };
+
+        // ===========================================
+        // FUNÇÕES DE PERFIL E SIDEBAR
+        // ===========================================
+
+        const openSidebar = () => {
+             document.getElementById("mySidebar").style.width = "300px";
+        }
+
+        const closeSidebar = () => {
+             document.getElementById("mySidebar").style.width = "0";
         }
         
-        // NOVO: Função para EXCLUIR CONTA (acessada pelo modal de perfil)
+        const renderSidebarProfile = () => {
+            const user = carregarUsuario(); // Sempre recarrega para ter os dados mais recentes
+            const firstName = user.firstName || "Usuário";
+            const profilePicData = localStorage.getItem('profilePic');
+            
+            document.getElementById('sidebar-username').textContent = firstName;
+            
+            const imgEl = document.getElementById('profile-image');
+            const iconEl = document.getElementById('profile-icon');
+            
+            if (profilePicData) {
+                imgEl.src = profilePicData;
+                imgEl.style.display = 'block';
+                iconEl.style.display = 'none';
+            } else {
+                imgEl.src = '';
+                imgEl.style.display = 'none';
+                iconEl.style.display = 'block';
+            }
+        }
+        
+        const handleProfilePicChange = (event) => {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    localStorage.setItem('profilePic', e.target.result);
+                    renderSidebarProfile();
+                    // Atualiza o modal de perfil se estiver aberto
+                    const imgModalEl = document.getElementById('perfil-image-modal');
+                    const iconModalEl = document.getElementById('perfil-icon-modal');
+                    imgModalEl.src = e.target.result;
+                    imgModalEl.style.display = 'block';
+                    iconModalEl.style.display = 'none';
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        const abrirModalPerfil = () => {
+             closeSidebar();
+             const user = carregarUsuario();
+             const profilePicData = localStorage.getItem('profilePic');
+
+             // Preenche os campos
+             document.getElementById('perfil-first-name').value = user.firstName || '';
+             document.getElementById('perfil-last-name').value = user.lastName || '';
+             document.getElementById('perfil-email').value = user.email || '';
+             document.getElementById('perfil-phone').value = user.phone || '';
+             document.getElementById('perfil-feedback').style.display = 'none';
+             
+             // Preenche a foto de perfil no modal
+             const imgModalEl = document.getElementById('perfil-image-modal');
+             const iconModalEl = document.getElementById('perfil-icon-modal');
+             if (profilePicData) {
+                 imgModalEl.src = profilePicData;
+                 imgModalEl.style.display = 'block';
+                 iconModalEl.style.display = 'none';
+             } else {
+                 imgModalEl.src = '';
+                 imgModalEl.style.display = 'none';
+                 iconModalEl.style.display = 'block';
+             }
+
+             document.getElementById('modal-perfil').style.display = 'block';
+        }
+
+        const salvarDadosPerfil = () => {
+             const firstName = document.getElementById('perfil-first-name').value.trim();
+             const lastName = document.getElementById('perfil-last-name').value.trim();
+             const email = document.getElementById('perfil-email').value.trim();
+             const phone = document.getElementById('perfil-phone').value.trim();
+             const feedback = document.getElementById('perfil-feedback');
+             
+             if (!firstName || !email) {
+                 feedback.textContent = 'Nome e Email são obrigatórios.';
+                 feedback.style.display = 'block';
+                 return;
+             }
+             
+             const currentUser = carregarUsuario();
+             const updatedUser = {
+                 ...currentUser,
+                 firstName: firstName,
+                 lastName: lastName,
+                 email: email,
+                 phone: phone
+             };
+             
+             salvarUsuario(updatedUser);
+             feedback.textContent = 'Dados atualizados com sucesso!';
+             feedback.style.color = 'var(--cor-sucesso)';
+             feedback.style.display = 'block';
+             
+             // Atualiza o painel principal
+             document.getElementById('welcome-message').textContent = getGreeting(firstName);
+             renderSidebarProfile();
+
+             // Fecha o modal após um breve feedback
+             setTimeout(() => {
+                 document.getElementById('modal-perfil').style.display = 'none';
+             }, 1000);
+        }
+        
         const excluirConta = () => {
              if (confirm('CONFIRMAÇÃO FINAL: Esta ação irá APAGAR TODOS os seus dados de perfil, transações, dívidas e fixas. Você terá que se cadastrar novamente. TEM CERTEZA?')) {
                  localStorage.clear();
@@ -911,390 +1248,194 @@
              }
         }
 
-        // ===========================================
-        // FUNÇÕES DE PERFIL E LOGIN
-        // ===========================================
-
-        const loginUser = (email, password) => {
-            const profile = getLocalStorage('userProfile');
-            if (profile && profile.email === email && profile.password === password) {
-                setLocalStorage('isLoggedIn', true);
-                initDashboard();
-                return true;
-            }
-            alert('Email ou senha incorretos. Tente novamente ou cadastre-se.');
-            return false;
-        };
-
-        const registerUser = (name, email, password) => {
-            if (getLocalStorage('userProfile')) {
-                alert('Já existe um usuário cadastrado. Por favor, faça login.');
-                return false;
-            }
-            if (password.length < 6) {
-                alert('A senha deve ter no mínimo 6 caracteres.');
-                return false;
-            }
-            
-            const newUser = {
-                name: name,
-                email: email,
-                password: password,
-                createdAt: new Date().toISOString()
-            };
-            setLocalStorage('userProfile', newUser);
-            setLocalStorage('isLoggedIn', true);
-            
-            // Inicializa as contas e dívidas
-            salvarContasFixas(CONTAS_FIXAS_INITIAL);
-            salvarDividas([]); 
-            setLocalStorage('transacoes', []); 
-
-            initDashboard();
-            return true;
-        };
-        
-        const abrirModalPerfil = () => {
-            const profile = getLocalStorage('userProfile');
-            const pic = localStorage.getItem('profilePic');
-            if (profile) {
-                document.getElementById('perfil-name').value = profile.name;
-                document.getElementById('perfil-email').value = profile.email;
-            }
-            
-            document.getElementById('modal-perfil').style.display = 'block';
-        }
-        
-        const salvarPerfil = () => {
-            const name = document.getElementById('perfil-name').value;
-            const fileInput = document.getElementById('perfil-foto');
-            const profile = getLocalStorage('userProfile');
-
-            if (!name) {
-                alert('O nome não pode ser vazio.');
-                return;
-            }
-
-            if (profile) {
-                profile.name = name;
-                setLocalStorage('userProfile', profile);
-            }
-            
-            if (fileInput.files.length > 0) {
-                const file = fileInput.files[0];
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    localStorage.setItem('profilePic', e.target.result);
-                    // Atualiza a imagem imediatamente
-                    document.getElementById('dashboard-profile-pic').src = e.target.result;
-                };
-                reader.readAsDataURL(file);
-            }
-
-            document.getElementById('modal-perfil').style.display = 'none';
-            document.getElementById('greeting-message').innerHTML = `<i class="fas fa-bars"></i> ${getGreeting(name)}`;
-            alert('Perfil atualizado com sucesso!');
-        }
 
         // ===========================================
-        // FUNÇÕES DE CONTAS FIXAS
+        // FUNÇÕES DE CADASTRO/LOGIN
         // ===========================================
         
-        const salvarContasFixas = (fixas) => setLocalStorage('contasFixas', fixas);
-        const getContasFixas = () => getLocalStorage('contasFixas', CONTAS_FIXAS_INITIAL);
-
-        const isHojePassouDiaQuinze = () => TODAY.getDate() > 15;
-
-        const checkAndResetContasFixas = (fixas) => {
-            const lastResetMonth = getLocalStorage('lastResetMonth');
-            const lastResetYear = getLocalStorage('lastResetYear');
-            
-            if (CURRENT_YEAR > lastResetYear || (CURRENT_YEAR === lastResetYear && CURRENT_MONTH > lastResetMonth)) {
-                // Novo mês, ou primeiro reset
-                fixas.forEach(f => f.pago = false);
-                setLocalStorage('lastResetMonth', CURRENT_MONTH);
-                setLocalStorage('lastResetYear', CURRENT_YEAR);
-                salvarContasFixas(fixas);
-                return fixas;
-            }
-            return fixas;
-        };
-
-        const pagarContaFixa = (id) => {
-            let fixas = getContasFixas();
-            const contaIndex = fixas.findIndex(c => c.id === id);
-            
-            if (contaIndex !== -1 && !fixas[contaIndex].pago) {
-                fixas[contaIndex].pago = true;
-                salvarContasFixas(fixas);
-                
-                // Adiciona uma transação de Gasto
-                adicionarTransacao(
-                    fixas[contaIndex].nome, 
-                    fixas[contaIndex].valor, 
-                    'Gasto'
-                );
-                
-                atualizarDashboard();
-            }
-        };
-        
-        // ===========================================
-        // FUNÇÕES DE DÍVIDAS ÚNICAS
-        // ===========================================
-
-        const salvarDividas = (dividas) => setLocalStorage('dividas', dividas);
-        const getDividas = () => getLocalStorage('dividas', []);
-
-        const adicionarDivida = (nome, valorInicial, valorAtual, estrategia) => {
-            let dividas = getDividas();
-            const newId = dividas.length > 0 ? Math.max(...dividas.map(d => d.id)) + 1 : 1;
-            
-            const novaDivida = {
-                id: newId,
-                nome,
-                valorInicial,
-                valorAtual,
-                estrategia,
-                dataCadastro: new Date().toISOString(),
-                quitada: valorAtual <= 0.01
-            };
-            
-            dividas.push(novaDivida);
-            salvarDividas(dividas);
-            atualizarDashboard();
+        const validarSenha = (senha) => {
+             // Mínimo 8 caracteres
+             if (senha.length < 8) return "A senha deve ter no mínimo 8 caracteres.";
+             // Pelo menos 1 letra maiúscula
+             if (!/[A-Z]/.test(senha)) return "A senha deve conter pelo menos 1 letra maiúscula.";
+             // Pelo menos 1 letra minúscula
+             if (!/[a-z]/.test(senha)) return "A senha deve conter pelo menos 1 letra minúscula.";
+             // Pelo menos 1 caractere especial (Não alfanumérico)
+             if (!/[^a-zA-Z0-9]/.test(senha)) return "A senha deve conter pelo menos 1 caractere especial.";
+             return true; 
         }
 
-        const deletarDivida = (id) => {
-            let dividas = getDividas();
-            dividas = dividas.filter(d => d.id !== id);
-            salvarDividas(dividas);
-            atualizarDashboard();
+        const abrirTelaCadastro = () => {
+             document.getElementById('login-screen').style.display = 'none';
+             document.getElementById('cadastro-screen').style.display = 'flex';
+             document.getElementById('reg-feedback').style.display = 'none';
         }
         
-        const realizarPagamentoDivida = (id, valor) => {
-            let dividas = getDividas();
-            const dividaIndex = dividas.findIndex(d => d.id === id);
-            
-            if (dividaIndex !== -1) {
-                let d = dividas[dividaIndex];
-                d.valorAtual -= valor;
-                
-                if (d.valorAtual < 0.01) {
-                    d.valorAtual = 0;
-                    d.quitada = true;
-                }
-                
-                // Adiciona uma transação de Gasto (Aporte)
-                adicionarTransacao(
-                    `Aporte Dívida: ${d.nome}`, 
-                    valor, 
-                    'Gasto'
-                );
-
-                salvarDividas(dividas);
-                atualizarDashboard();
-            }
-        }
-        
-        const abrirModalQuitacao = (dividaId = null) => {
-            const modal = document.getElementById('modal-quitacao');
-            const title = document.getElementById('modal-quitacao-title');
-            const btn = document.getElementById('btn-salvar-divida');
-            document.getElementById('divida-id-edit').value = '';
-            
-            if (dividaId) {
-                const divida = getDividas().find(d => d.id === dividaId);
-                if (divida) {
-                    title.textContent = 'Editar Dívida Existente';
-                    btn.textContent = 'Salvar Edição';
-                    document.getElementById('divida-id-edit').value = divida.id;
-                    document.getElementById('divida-nome').value = divida.nome;
-                    document.getElementById('divida-valor-inicial').value = divida.valorInicial;
-                    document.getElementById('divida-valor-atual').value = divida.valorAtual;
-                    document.getElementById('divida-tipo-estrategia').value = divida.estrategia;
-                }
-            } else {
-                title.textContent = 'Cadastrar Nova Dívida';
-                btn.textContent = 'Salvar Dívida';
-                document.getElementById('divida-nome').value = '';
-                document.getElementById('divida-valor-inicial').value = '';
-                document.getElementById('divida-valor-atual').value = '';
-                document.getElementById('divida-tipo-estrategia').value = 'Bola de Neve';
-            }
-            
-            modal.style.display = 'block';
-        }
-        
-        // ===========================================
-        // FUNÇÕES DE TRANSAÇÕES E LOG
-        // ===========================================
-
-        const adicionarTransacao = (descricao, valor, tipo) => {
-            let transacoes = getLocalStorage('transacoes', []);
-            const newId = transacoes.length > 0 ? Math.max(...transacoes.map(t => t.id)) + 1 : 1;
-            
-            const novaTransacao = {
-                id: newId,
-                data: new Date().toISOString().split('T')[0], // YYYY-MM-DD
-                descricao,
-                valor: parseFloat(valor),
-                tipo
-            };
-            
-            transacoes.unshift(novaTransacao); // Adiciona no início para o histórico
-            setLocalStorage('transacoes', transacoes);
-            
-            // Alerta e limpa o formulário
-            if (document.getElementById('transaction-description')) {
-                document.getElementById('transaction-description').value = '';
-                document.getElementById('transaction-amount').value = '';
-                alert(`${tipo} de ${formatCurrency(novaTransacao.valor)} registrada com sucesso!`);
-            }
+        const fecharTelaCadastro = () => {
+             document.getElementById('cadastro-screen').style.display = 'none';
+             document.getElementById('login-screen').style.display = 'flex';
+             document.getElementById('login-feedback').textContent = '';
         }
 
-        const deletarTransacao = (id) => {
-            let transacoes = getLocalStorage('transacoes', []);
-            transacoes = transacoes.filter(t => t.id !== id);
-            setLocalStorage('transacoes', transacoes);
-            atualizarDashboard();
-        }
-        
-        // ===========================================
-        // FUNÇÕES DE CÁLCULO
-        // ===========================================
+        const cadastrarNovoUsuario = () => {
+            const firstName = document.getElementById('reg-first-name-input').value.trim();
+            const lastName = document.getElementById('reg-last-name-input').value.trim();
+            const email = document.getElementById('reg-email-input').value.trim();
+            const phone = document.getElementById('reg-phone-input').value.trim();
+            const password = document.getElementById('reg-password-input').value;
+            const feedback = document.getElementById('reg-feedback');
 
-        const getSomaFixas = (fixas) => fixas.reduce((sum, f) => sum + f.valor, 0);
-        
-        const getMetaDiariaFixas = (fixas) => {
-            const somaFixas = getSomaFixas(fixas);
-            const diasNoMes = new Date(CURRENT_YEAR, CURRENT_MONTH, 0).getDate();
-            // Calcula apenas para 20 dias úteis
-            return somaFixas / 20; 
-        };
+            feedback.style.color = 'var(--cor-divida)';
 
-        const getReceitasPorDia = () => {
-             const transacoes = getLocalStorage('transacoes', []);
-             const receitas = transacoes.filter(t => t.tipo === 'Receita');
-             
-             const hoje = TODAY.toISOString().split('T')[0];
-             const receitasDoDia = receitas.filter(t => t.data === hoje);
-             
-             return receitasDoDia.reduce((sum, t) => sum + t.valor, 0);
-        }
-
-        const getGastosDoMes = () => {
-             const transacoes = getLocalStorage('transacoes', []);
-             const gastos = transacoes.filter(t => t.tipo === 'Gasto');
-             
-             const mesAno = `${CURRENT_YEAR}-${String(CURRENT_MONTH).padStart(2, '0')}`;
-             
-             return gastos.filter(t => t.data.startsWith(mesAno)).reduce((sum, t) => sum + t.valor, 0);
-        }
-        
-        const getTotais = (fixas, transacoes) => {
-            const somaFixasPagas = fixas.filter(f => f.pago).reduce((sum, f) => sum + f.valor, 0);
-            const somaReceitas = transacoes.filter(t => t.tipo === 'Receita').reduce((sum, t) => sum + t.valor, 0);
-            const somaGastosExtra = transacoes.filter(t => t.tipo === 'Gasto').reduce((sum, t) => sum + t.valor, 0);
-            
-            const totalFixas = getSomaFixas(fixas);
-            
-            // Focamos no saldo acumulado do mês, deduzindo tudo que foi gasto/pago
-            const saldoGeral = somaReceitas - somaGastosExtra - somaFixasPagas;
-            
-            // Total a pagar: Contas fixas pendentes + Dívidas
-            const totalPendentesFixas = fixas.filter(f => !f.pago).reduce((sum, f) => sum + f.valor, 0);
-            const totalDividas = getDividas().filter(d => !d.quitada).reduce((sum, d) => sum + d.valorAtual, 0);
-            
-            return {
-                somaReceitas,
-                somaGastosExtra,
-                totalFixas,
-                somaFixasPagas,
-                saldoGeral,
-                totalPendentesFixas,
-                totalDividas,
-            };
-        };
-        
-        const gerarPlanoQuitacaoIA = (isRecalculate, totalDividas) => {
-            const targetMesesInput = document.getElementById('target-meses');
-            let targetMeses = parseInt(targetMesesInput.value, 10);
-            
-            if (isRecalculate) {
-                if (targetMeses < 1) {
-                    alert('O target deve ser de no mínimo 1 mês.');
-                    targetMeses = 5; // Reseta para o padrão
-                    targetMesesInput.value = 5;
-                }
-            } else {
-                 // No carregamento, usa o valor atual do input
-                 targetMeses = parseInt(targetMesesInput.value, 10);
-            }
-            
-            if (totalDividas === 0) {
-                 document.getElementById('plano-quitacao-master').style.display = 'none';
+            if (!firstName || !email || !password) {
+                 feedback.textContent = 'Preencha todos os campos obrigatórios (Nome, Email, Senha).';
+                 feedback.style.display = 'block';
                  return;
             }
 
-            // Cálculo dos Aportes
-            const aporteMensal = totalDividas / targetMeses;
-            
-            // Assumindo ~20 dias úteis por mês
-            const aporteDiario = aporteMensal / 20; 
-            const aporteSemanal = aporteDiario * 5;
-
-            // Atualiza os elementos no DOM
-            document.getElementById('ia-total-dividas').textContent = formatDecimal(totalDividas);
-            document.getElementById('ia-meses-target').textContent = targetMeses;
-            document.getElementById('ia-aporte-mensal').textContent = formatCurrency(aporteMensal);
-            document.getElementById('ia-aporte-semanal').textContent = formatCurrency(aporteSemanal);
-            document.getElementById('ia-aporte-diario').textContent = formatCurrency(aporteDiario);
-        }
-
-        // ===========================================
-        // FUNÇÕES DE RENDERIZAÇÃO E DASHBOARD
-        // ===========================================
-
-        const getMetaDiariaAtingida = (receitasDia, metaDiaria) => {
-             if (metaDiaria <= 0) return 0;
-             let percent = (receitasDia / metaDiaria) * 100;
-             return Math.min(percent, 100); // Limita o progresso a 100%
-        }
-
-        const atualizarDashboard = () => {
-            const fixas = checkAndResetContasFixas(getContasFixas());
-            const dividas = getDividas();
-            const transacoes = getLocalStorage('transacoes', []);
-            const profile = getLocalStorage('userProfile');
-            
-            if (profile) {
-                document.getElementById('greeting-message').innerHTML = `<i class="fas fa-bars"></i> ${getGreeting(profile.name)}`;
-                const pic = localStorage.getItem('profilePic');
-                document.getElementById('dashboard-profile-pic').src = pic || 'default.png';
-                document.getElementById('dashboard-profile-pic').style.display = 'block';
+            const validacao = validarSenha(password);
+            if (validacao !== true) {
+                 feedback.textContent = validacao;
+                 feedback.style.display = 'block';
+                 return;
             }
 
-            // 1. Visibilidade Condicional do Módulo IA e Dívidas Únicas
-            verificarEstadoContasFixas(fixas, dividas);
-
-            // 2. Renderização dos Módulos
-            renderizarContasFixas(fixas);
-            renderizarDívidas(dividas);
-            renderizarLogReceitas(transacoes);
+            // Simulação de armazenamento do novo usuário
+            const newUser = {
+                 firstName: firstName,
+                 lastName: lastName,
+                 email: email,
+                 phone: phone,
+                 password: password 
+            };
+            salvarUsuario(newUser);
             
-            const totais = getTotais(fixas, transacoes);
-            renderizarTabelas(totais);
-            
-            const metaDiariaFixas = getMetaDiariaFixas(fixas);
-            const receitasDoDia = getReceitasPorDia();
-            renderizarMetaDiaria(receitasDoDia, metaDiariaFixas);
+            // Feedback de sucesso e transição
+            feedback.textContent = 'Cadastro realizado com sucesso! Redirecionando para o login...';
+            feedback.style.color = 'var(--cor-sucesso)';
+            feedback.style.display = 'block';
 
-            // 3. Relatório Diário
-            calcularRelatorioDiario(totais);
+            // Limpa os campos após 1 segundo e volta para o login
+            setTimeout(() => {
+                 document.getElementById('reg-first-name-input').value = '';
+                 document.getElementById('reg-last-name-input').value = '';
+                 document.getElementById('reg-email-input').value = '';
+                 document.getElementById('reg-phone-input').value = '';
+                 document.getElementById('reg-password-input').value = '';
+                 fecharTelaCadastro();
+                 
+                 // Limpar campos de login após o cadastro
+                 document.getElementById('login-email-input').value = '';
+                 document.getElementById('login-password-input').value = '';
+            }, 1500);
+        }
+
+        const realizarLogin = () => {
+             const loginInput = document.getElementById('login-email-input').value.trim();
+             const password = document.getElementById('login-password-input').value;
+             const feedback = document.getElementById('login-feedback');
+             
+             const user = carregarUsuario(); // Tenta carregar o usuário cadastrado
+             
+             let isAuthenticated = false;
+             
+             // Lógica de autenticação
+             // 1. Tenta autenticar por Email e Senha
+             if (user.email === loginInput && user.password === password) {
+                 isAuthenticated = true;
+             }
+             // 2. Tenta autenticar por Primeiro Nome e Senha
+             else if (user.firstName.toLowerCase() === loginInput.toLowerCase() && user.password === password) {
+                 isAuthenticated = true;
+             }
+             // 3. Tenta autenticar com a senha padrão (caso não tenha cadastro ou seja a primeira vez)
+             else if (loginInput === user.firstName && password === DEFAULT_PASSWORD && user.password === DEFAULT_PASSWORD) {
+                 isAuthenticated = true;
+             }
+
+             if (isAuthenticated) {
+                 localStorage.setItem('loggedIn', 'true');
+                 document.getElementById('login-screen').style.display = 'none';
+                 document.getElementById('main-content').style.display = 'block';
+                 
+                 document.getElementById('mySidebar').style.width = '0'; 
+
+                 startSessionTimer();
+                 initDashboard();
+             } else {
+                 feedback.textContent = 'ACESSO NEGADO: Email/Nome ou Senha incorretos.';
+                 feedback.style.color = 'var(--cor-divida)';
+             }
+        }
+
+
+        // ===========================================
+        // INICIALIZAÇÃO DO DASHBOARD 
+        // ===========================================
+        
+        const initDashboard = () => {
+            const transacoes = carregarTransacoes();
+            const dividas = carregarDividas();
+            const fixas = checkAndResetContasFixas(); 
+            
+            // Novos: Personalização
+            const firstName = carregarUsuario().firstName || "Usuário";
+            document.getElementById('welcome-message').textContent = getGreeting(firstName);
+            renderSidebarProfile(); 
+
+            atualizarDashboard(transacoes, dividas, fixas);
+            renderizarTabelas(transacoes, dividas, fixas); 
+            verificarEstadoContasFixas(fixas, dividas); // Passando dívidas
         };
         
-        // ALTERADO: Função que verifica o estado das fixas e controla a visibilidade das Dívidas e IA
+        // --- Funções de Contas Fixas ---
+        const isHojePassouDiaQuinze = () => new Date().getDate() > 15;
+        const checkAndResetContasFixas = () => {
+            let fixas = carregarContasFixas();
+            
+            // Se as fixas iniciais não foram carregadas, salva
+            if (fixas.length === 0) {
+                 salvarContasFixas(CONTAS_FIXAS_INITIAL);
+                 fixas = CONTAS_FIXAS_INITIAL;
+            }
+            
+            // Lógica de Reset mensal (após o dia 15)
+            if (isHojePassouDiaQuinze() && localStorage.getItem('fixasResetadas') !== getHojeString()) {
+                fixas = CONTAS_FIXAS_INITIAL.map(fixa => ({...fixa, pago: false}));
+                salvarContasFixas(fixas);
+                localStorage.setItem('fixasResetadas', getHojeString());
+                // Mensagem de alerta de reset (opcional)
+                console.log('Contas Fixas resetadas para o novo ciclo.');
+            }
+            return fixas;
+        }
+        const pagarContaFixa = (id) => {
+            let fixas = carregarContasFixas();
+            const transacoes = carregarTransacoes();
+            const dividas = carregarDividas(); // Carrega dívidas para o cálculo de capital
+            const fixaIndex = fixas.findIndex(f => f.id === id);
+            const fixa = fixas[fixaIndex];
+            
+            if (fixa && !fixa.pago) {
+                const { totalReceitas } = getTotais(transacoes, dividas, fixas); // FIX: Passa 'fixas'
+                if (totalReceitas >= fixa.valor) {
+                    fixa.pago = true;
+                    salvarContasFixas(fixas);
+                    const novaTransacao = {
+                        data: getHojeString(),
+                        valor: (-fixa.valor).toFixed(2), 
+                        descricao: `Pagamento de Conta Fixa: ${fixa.nome}`
+                    };
+                    transacoes.push(novaTransacao);
+                    salvarTransacoes(transacoes);
+                    initDashboard(); 
+                } else {
+                    alert(`Capital insuficiente (${formatarMoeda(totalReceitas)}) para pagar ${fixa.nome} (${formatarMoeda(fixa.valor)})`);
+                }
+            }
+        }
+        
+        // NOVO: Função que verifica o estado das fixas e controla a visibilidade das Dívidas
         const verificarEstadoContasFixas = (fixas, dividas) => {
             const todasPagas = fixas.every(f => f.pago);
             const feedbackEl = document.getElementById('feedback-fixas-quitadas');
@@ -1302,446 +1443,656 @@
             const dividasContainer = document.getElementById('dividas-container');
             const planoQuitacao = document.getElementById('plano-quitacao-master');
             
-            // Total de dívidas ativas
-            const totalDividasPendentes = dividas.filter(d => !d.quitada).reduce((sum, d) => sum + d.valorAtual, 0);
+            // Lógica para DÍVIDAS e PLANO DE QUITAÇÃO (Correção 4: Aparecer se houver dívidas)
+            const totalDividasPendentes = dividas.reduce((sum, d) => sum + d.valorAtual, 0);
 
-            // 1. VISIBILIDADE DO MÓDULO IA: Sempre visível se houver dívidas pendentes (Instrução 1)
-            if (totalDividasPendentes > 0.01) {
+            if (dividas.length > 0 && totalDividasPendentes > 0.01) {
+                 dividasContainer.style.display = 'block'; 
                  planoQuitacao.style.display = 'block'; 
                  gerarPlanoQuitacaoIA(false, totalDividasPendentes);
                  renderizarDicasQuitacao(dividas);
             } else {
+                 dividasContainer.style.display = 'none'; 
                  planoQuitacao.style.display = 'none'; 
                  document.getElementById('dicas-quitacao').innerHTML = '<p style="color: var(--cor-texto-secundario); font-weight: bold; margin-top: 15px;"><i class="fas fa-info-circle"></i> Cadastre sua primeira Dívida Única para ativar o Plano de Quitação Estratégico.</p>';
             }
 
-            // 2. Lógica para CONTAS FIXAS
+
+            // Lógica para CONTAS FIXAS
             if (todasPagas) {
                 feedbackEl.style.display = 'block';
-                fixasToggle.style.display = 'none'; // Contas Fixas OCULTA se todas pagas
+                fixasToggle.style.display = 'none'; 
             } else {
-                feedbackEl.style.display = 'none'; // O feedback de "Parabéns" só aparece se estiver quitado
-                fixasToggle.style.display = 'block'; // Contas Fixas VISÍVEL se pendente
+                feedbackEl.style.display = 'none';
+                fixasToggle.style.display = 'block';
             }
+        }
+        
+        // --- Funções de Transação ---
+        const cadastrarReceita = () => {
+            const valorInput = document.getElementById('valor-input-receita');
+            const valor = parseFloat(valorInput.value);
+            if (isNaN(valor) || valor <= 0) {
+                 alert('Por favor, insira um valor positivo válido.');
+                 return;
+            }
+            const transacoes = carregarTransacoes();
+            const novaTransacao = {
+                data: getHojeString(),
+                valor: valor.toFixed(2), 
+                descricao: 'Saldo Adicionado (Receita)'
+            };
+            transacoes.push(novaTransacao);
+            salvarTransacoes(transacoes);
+            valorInput.value = '';
+            document.getElementById('modal-receita').style.display = 'none';
+            initDashboard();
+        }
+        const deletarTransacao = (index) => {
+            let transacoes = carregarTransacoes();
+            const transacoesEntrada = transacoes.filter(t => parseFloat(t.valor) > 0).map((t, i) => ({...t, displayIndex: i}));
+            const transacoesOrdenadas = transacoesEntrada.sort((a, b) => new Date(b.data) - new Date(a.data));
+            const transacaoToDelete = transacoesOrdenadas.find(t => t.displayIndex === index);
             
-            // 3. VISIBILIDADE DA SEÇÃO DÍVIDAS ÚNICAS (Instrução 2)
-            // Dívidas Únicas visível APENAS SE CONTAS FIXAS estiver oculta (todas pagas) E houver dívidas pendentes
-            const contasFixasOcultas = fixasToggle.style.display === 'none'; 
-            
-            if (contasFixasOcultas && totalDividasPendentes > 0.01) {
-                 dividasContainer.style.display = 'block'; 
+            if (transacaoToDelete) {
+                // Encontra a primeira ocorrência da transação original (sem o displayIndex)
+                const indexToRemove = transacoes.findIndex(t => t.data === transacaoToDelete.data && parseFloat(t.valor).toFixed(2) === parseFloat(transacaoToDelete.valor).toFixed(2));
+                if (indexToRemove !== -1) {
+                    transacoes.splice(indexToRemove, 1);
+                    salvarTransacoes(transacoes);
+                    initDashboard();
+                }
             } else {
-                 dividasContainer.style.display = 'none'; 
+                 alert('Transação não encontrada.');
             }
         }
-
-        const renderizarContasFixas = (fixas) => {
-            const listEl = document.getElementById('contas-fixas-list');
-            listEl.innerHTML = '';
-
-            fixas.sort((a, b) => a.diaVencimento - b.diaVencimento); // Ordena por vencimento
-
-            fixas.forEach(conta => {
-                const item = document.createElement('div');
-                item.className = 'account-item';
-                
-                const statusHtml = conta.pago ? 
-                    '<span class="paid-badge"><i class="fas fa-check"></i> Pago</span>' :
-                    `<button class="btn-action btn-pay" onclick="pagarContaFixa(${conta.id})">Pagar</button>`;
-
-                item.innerHTML = `
-                    <div class="account-details">
-                        <span class="name">${conta.nome}</span>
-                        <span class="value">${formatCurrency(conta.valor)} (Vencimento: Dia ${String(conta.diaVencimento).padStart(2, '0')})</span>
-                    </div>
-                    <div>
-                        ${statusHtml}
-                    </div>
-                `;
-                listEl.appendChild(item);
-            });
-        };
-
-        const renderizarDívidas = (dividas) => {
-            const listEl = document.getElementById('dividas-list');
-            const totalDividasEl = document.getElementById('total-dividas');
-            
-            listEl.innerHTML = '';
-            
-            const dividasAtivas = dividas.filter(d => !d.quitada);
-            const totalPendentes = dividasAtivas.reduce((sum, d) => sum + d.valorAtual, 0);
-
-            totalDividasEl.textContent = formatDecimal(totalPendentes);
-
-            if (dividasAtivas.length === 0) {
-                 listEl.innerHTML = `
-                     <p style="text-align: center; color: var(--cor-texto-secundario); margin-bottom: 15px;">
-                         Você não tem Dívidas Únicas ativas. Parabéns!
-                     </p>
-                     <button class="btn-principal" style="background-color: var(--cor-divida); margin-top: 15px;" onclick="abrirModalQuitacao()">
-                         <i class="fas fa-plus"></i> Adicionar Dívida
-                     </button>
-                 `;
-                 return;
-            }
-            
-            // Prioriza a estratégia (Bola de Neve: Menor valor atual primeiro)
-            dividasAtivas.sort((a, b) => {
-                 if (a.estrategia === 'Bola de Neve' && b.estrategia === 'Bola de Neve') {
-                     return a.valorAtual - b.valorAtual;
-                 }
-                 // Lógica para outras estratégias...
-                 return a.valorAtual - b.valorAtual; // Padrão se não for 'Bola de Neve'
-            });
-
-            dividasAtivas.forEach(d => {
-                const item = document.createElement('div');
-                item.className = 'account-item';
-                
-                // Botão de aporte
-                const btnAporte = `<button class="btn-action btn-pay" onclick="realizarAportePrompt(${d.id}, '${d.nome}')">Aporte</button>`;
-                
-                const btnDelete = `<button class="btn-action btn-delete" onclick="deletarDivida(${d.id})"><i class="fas fa-trash-alt"></i></button>`;
-
-                item.innerHTML = `
-                    <div class="account-details" onclick="abrirModalQuitacao(${d.id})" style="cursor: pointer;">
-                        <span class="name">${d.nome} <i class="fas fa-edit" style="font-size: 0.8em; color: var(--cor-texto-secundario);"></i></span>
-                        <span class="value" style="color: var(--cor-divida); font-weight: 700;">Atual: ${formatCurrency(d.valorAtual)}</span>
-                        <span class="value">Total Inicial: ${formatCurrency(d.valorInicial)}</span>
-                    </div>
-                    <div>
-                        ${btnAporte}
-                        ${btnDelete}
-                    </div>
-                `;
-                listEl.appendChild(item);
-            });
-            
-            // Adiciona o botão de cadastro no final da lista
-             listEl.innerHTML += `
-                 <button class="btn-principal" style="background-color: var(--cor-divida); margin-top: 15px;" onclick="abrirModalQuitacao()">
-                     <i class="fas fa-plus"></i> Adicionar Nova Dívida
-                 </button>
-             `;
-        };
         
-        const renderizarDicasQuitacao = (dividas) => {
-             const dicasEl = document.getElementById('dicas-quitacao');
-             const dividasAtivas = dividas.filter(d => !d.quitada);
-
-             if (dividasAtivas.length === 0) {
-                 dicasEl.innerHTML = '<p style="color: var(--cor-texto-secundario); font-weight: bold;"><i class="fas fa-info-circle"></i> Parabéns, todas as suas Dívidas Únicas estão quitadas!</p>';
-                 return;
-             }
-
-             // Prioriza a dívida de menor valor (Bola de Neve)
-             dividasAtivas.sort((a, b) => a.valorAtual - b.valorAtual);
-             const alvo = dividasAtivas[0];
-             
-             dicasEl.innerHTML = `
-                 <h3><i class="fas fa-star-of-life"></i> ESTRATÉGIA: BOLA DE NEVE (MENOR PARA MAIOR)</h3>
-                 <p style="margin-top: 5px;">Priorize as **menores dívidas** para criar impulso mental e financeiro rápido.</p>
-                 <p style="margin-top: 10px; font-weight: 700;">Seu Alvo Principal: **${alvo.nome}** (R$ ${formatDecimal(alvo.valorAtual)})</p>
-                 <p style="margin-top: 5px; font-size: 14px;">Recomendamos focar todo o seu aporte extra nesta dívida até quitá-la.</p>
-             `;
-        }
-
-        const renderizarLogReceitas = (transacoes) => {
-            const logEl = document.getElementById('log-transacoes');
-            logEl.innerHTML = '';
+        // NOVO: Função para adicionar dívida
+        const adicionarDivida = () => {
+            const credorInput = document.getElementById('credor-input-divida');
+            const valorInput = document.getElementById('valor-input-divida');
+            const credor = credorInput.value.trim();
+            const valor = parseFloat(valorInput.value);
             
-            const transacoesVisiveis = transacoes.slice(0, 15); // Limita aos últimos 15
-
-            if (transacoesVisiveis.length === 0) {
-                 logEl.innerHTML = '<p style="text-align: center; color: var(--cor-texto-secundario);">Nenhuma transação registrada ainda.</p>';
+            if (!credor || isNaN(valor) || valor <= 0) {
+                 alert('Por favor, preencha o Credor e um Valor positivo válido.');
                  return;
             }
-
-            transacoesVisiveis.forEach(t => {
-                const item = document.createElement('div');
-                item.className = 'log-item';
-                
-                const valorFormatado = formatCurrency(t.valor);
-                const valorClass = t.tipo === 'Receita' ? 'positive' : 'negative';
-                const valorPrefix = t.tipo === 'Receita' ? '+' : '-';
-                
-                item.innerHTML = `
-                    <span class="date">${t.data.split('-').reverse().join('/')}</span>
-                    <span class="description">${t.descricao} (${t.tipo === 'Receita' ? 'Receita' : 'Gasto Extra'})</span>
-                    <span class="amount ${valorClass}">${valorPrefix} ${valorFormatado}</span>
-                    <button class="btn-action btn-delete" style="padding: 3px 5px;" onclick="deletarTransacao(${t.id})"><i class="fas fa-times"></i></button>
-                `;
-                logEl.appendChild(item);
-            });
-        };
-
-        const renderizarTabelas = (totais) => {
-            const bodyEl = document.getElementById('totais-table-body');
-            bodyEl.innerHTML = `
-                <tr>
-                    <td>Total de Receitas (Geral)</td>
-                    <td class="positive">${formatCurrency(totais.somaReceitas)}</td>
-                </tr>
-                <tr>
-                    <td>Total de Gastos Extras (Geral)</td>
-                    <td class="negative">${formatCurrency(totais.somaGastosExtra)}</td>
-                </tr>
-                <tr>
-                    <td>Contas Fixas Totais (Mês)</td>
-                    <td>${formatCurrency(totais.totalFixas)}</td>
-                </tr>
-                <tr>
-                    <td>Contas Fixas Pagas (Mês)</td>
-                    <td class="negative">${formatCurrency(totais.somaFixasPagas)}</td>
-                </tr>
-                <tr>
-                    <td>Dívidas Únicas Pendentes</td>
-                    <td class="negative">${formatCurrency(totais.totalDividas)}</td>
-                </tr>
-                <tr>
-                    <td style="font-weight: 700;">SALDO GERAL (Líquido)</td>
-                    <td class="main-total" style="color: ${totais.saldoGeral >= 0 ? 'var(--cor-fixa)' : 'var(--cor-divida)'}">${formatCurrency(totais.saldoGeral)}</td>
-                </tr>
-            `;
-        };
-
-        const renderizarMetaDiaria = (receitasDia, metaDiaria) => {
-            const boxEl = document.getElementById('meta-diaria-box');
-            const percentAtingido = getMetaDiariaAtingida(receitasDia, metaDiaria);
             
-            const statusText = percentAtingido >= 100 ? 
-                 'Meta Diária Atingida! Continue assim!' : 
-                 'Foque em bater sua meta hoje para equilibrar as contas.';
-
-            const progressoBarra = `
-                <div class="progress-bar">
-                    <div class="progress" style="width: ${percentAtingido}%; background-color: ${percentAtingido >= 100 ? 'var(--cor-fixa)' : 'var(--cor-principal)'};">
-                        ${percentAtingido.toFixed(0)}%
-                    </div>
-                </div>
-            `;
+            let dividas = localStorage.getItem('dividas') ? JSON.parse(localStorage.getItem('dividas')) : [];
+            // Gera um ID sequencial para a nova dívida, considerando as já quitadas
+            const novoId = dividas.length > 0 ? Math.max(...dividas.map(d => d.id)) + 1 : 1; 
             
-            boxEl.innerHTML = `
-                <p>Meta Diária para Cobrir Fixas: **${formatCurrency(metaDiaria)}**</p>
-                <p>Receita Acumulada Hoje: **${formatCurrency(receitasDia)}**</p>
-                ${progressoBarra}
-                <p style="margin-top: 10px; font-size: 14px; font-weight: 600; color: var(--cor-texto-secundario);">${statusText}</p>
-            `;
-        };
-        
-        const calcularRelatorioDiario = (totais) => {
-             const gastosMes = getGastosDoMes();
-             const fixasPendentes = totais.totalPendentesFixas;
-             const dividasPendentes = totais.totalDividas;
-             const saldo = totais.saldoGeral;
-             
-             const relatorioEl = document.getElementById('relatorio-diario');
-             
-             let feedback = '';
-             let cor = 'var(--cor-fixa)'; // Verde
-             
-             if (saldo < 0) {
-                  feedback = `Seu saldo geral está negativo em ${formatCurrency(Math.abs(saldo))}. É crucial reduzir os gastos extras.`;
-                  cor = 'var(--cor-divida)'; // Vermelho
-             } else if (fixasPendentes > 0) {
-                  feedback = `Você ainda tem **${formatCurrency(fixasPendentes)}** em contas fixas pendentes. Foco total em quitá-las.`;
-                  cor = 'var(--cor-principal)'; // Amarelo
-             } else if (dividasPendentes > 0) {
-                  feedback = `Parabéns, fixas pagas! Agora, foque em aumentar o aporte nas dívidas, começando por sua meta IA.`;
-                  cor = 'var(--cor-fixa)';
-             } else {
-                  feedback = 'Sua situação financeira está excelente! Mantenha o saldo positivo e planeje seus próximos investimentos.';
-                  cor = 'var(--cor-fixa)';
-             }
-             
-             renderizarRelatorioDiario(feedback, cor);
+            const novaDivida = {
+                id: novoId,
+                credor: credor,
+                valorInicial: valor,
+                valorAtual: valor
+            };
+            
+            dividas.push(novaDivida);
+            salvarDividas(dividas); // Salva todas, incluindo a nova (que será filtrada na próxima leitura se o valorAtual for 0)
+            
+            credorInput.value = '';
+            valorInput.value = '';
+            document.getElementById('modal-divida').style.display = 'none';
+            
+            initDashboard(); 
         }
 
-        const renderizarRelatorioDiario = (feedback, cor) => {
-            const boxEl = document.getElementById('relatorio-diario');
-            let metaDiariaHtml = document.getElementById('meta-diaria-box').outerHTML; // Pega o HTML da meta já renderizada
-            
-            boxEl.innerHTML = `
-                 <h2><i class="fas fa-calendar-day"></i> Relatório Diário / Metas</h2>
-                 ${metaDiariaHtml}
+        // NOVO: Função para deletar dívida
+        const deletarDivida = (id) => {
+             if (confirm('ATENÇÃO: Isso irá apagar esta dívida e todo o seu histórico de pagamentos/aportes a ela. Deseja continuar?')) {
+                 let dividas = localStorage.getItem('dividas') ? JSON.parse(localStorage.getItem('dividas')) : [];
+                 const dividaIndex = dividas.findIndex(d => d.id === id);
                  
-                 <div style="margin-top: 15px; padding: 10px; border: 2px solid ${cor}; border-radius: 8px; font-weight: 600;">
-                     <i class="fas fa-lightbulb"></i> **Status Atual:** ${feedback}
-                 </div>
-            `;
-        }
-        
-        // ===========================================
-        // FUNÇÕES DE UTILIDADE E INTERAÇÃO
-        // ===========================================
-        
-        const toggleSection = (id) => {
-            const section = document.getElementById(id);
-            if (section.style.display === 'none') {
-                section.style.display = 'block';
-            } else {
-                section.style.display = 'none';
-            }
-        };
+                 if (dividaIndex !== -1) {
+                     const nomeCredor = dividas[dividaIndex].credor;
+                     dividas.splice(dividaIndex, 1);
+                     salvarDividas(dividas);
+                     
+                     // Opcional: Remover transações de quitação desta dívida
+                     let transacoes = carregarTransacoes();
+                     transacoes = transacoes.filter(t => t.descricao !== `Quitação de Dívida: ${nomeCredor}`);
+                     salvarTransacoes(transacoes);
 
-        function openNav() {
-            document.getElementById("mySidebar").style.width = "250px";
-        }
-
-        function closeNav() {
-            document.getElementById("mySidebar").style.width = "0";
-        }
-        
-        function realizarAportePrompt(id, nome) {
-             const valorStr = prompt(`Quanto você gostaria de aportar na dívida "${nome}"? (Apenas números, Ex: 150.00)`);
-             if (valorStr) {
-                 const valor = parseFloat(valorStr.replace(',', '.'));
-                 if (!isNaN(valor) && valor > 0) {
-                     realizarPagamentoDivida(id, valor);
+                     initDashboard();
                  } else {
-                     alert('Valor de aporte inválido.');
+                     alert('Dívida não encontrada.');
                  }
              }
         }
 
 
-        // ===========================================
-        // INICIALIZAÇÃO
-        // ===========================================
-
-        const initDashboard = () => {
-            document.getElementById('login-screen').style.display = 'none';
-            document.getElementById('dashboard-container').style.display = 'block';
-            atualizarDashboard();
-        };
-
-        const initLoginScreen = () => {
-            document.getElementById('login-screen').style.display = 'flex';
-            document.getElementById('dashboard-container').style.display = 'none';
-        };
-
-        document.addEventListener('DOMContentLoaded', () => {
-            const isLoggedIn = getLocalStorage('isLoggedIn', false);
-            
-            if (isLoggedIn && getLocalStorage('userProfile')) {
-                initDashboard();
-            } else {
-                initLoginScreen();
-            }
-
-            // --- Eventos de Login/Cadastro ---
-            document.getElementById('toggle-form-btn').addEventListener('click', () => {
-                const loginForm = document.getElementById('login-form');
-                const registerForm = document.getElementById('register-form');
-                const toggleBtn = document.getElementById('toggle-form-btn');
-
-                if (loginForm.style.display === 'none') {
-                    loginForm.style.display = 'block';
-                    registerForm.style.display = 'none';
-                    toggleBtn.textContent = 'Ainda não tem conta? Clique para Cadastrar.';
-                } else {
-                    loginForm.style.display = 'none';
-                    registerForm.style.display = 'block';
-                    toggleBtn.textContent = 'Já tem conta? Clique para Entrar.';
-                }
-            });
-
-            document.getElementById('login-form').addEventListener('submit', (e) => {
-                e.preventDefault();
-                const email = document.getElementById('login-email').value;
-                const password = document.getElementById('login-password').value;
-                loginUser(email, password);
-            });
-
-            document.getElementById('register-form').addEventListener('submit', (e) => {
-                e.preventDefault();
-                const name = document.getElementById('register-name').value;
-                const email = document.getElementById('register-email').value;
-                const password = document.getElementById('register-password').value;
-                registerUser(name, email, password);
-            });
-
-            // --- Eventos do Dashboard ---
-            document.getElementById('close-sidebar').addEventListener('click', closeNav);
-            document.getElementById('btn-logout-only').addEventListener('click', logoutOnly);
-            
-            // REMOVIDO: O listener para #btn-reset-data foi excluído (Instrução 3).
-            
-            document.getElementById('btn-add-receita').addEventListener('click', () => {
-                 const desc = document.getElementById('transaction-description').value;
-                 const amount = document.getElementById('transaction-amount').value;
-                 const type = document.getElementById('transaction-type').value;
-
-                 if (desc && amount && parseFloat(amount) > 0) {
-                     adicionarTransacao(desc, amount, type);
-                     atualizarDashboard();
-                 } else {
-                     alert('Preencha a descrição e o valor corretamente.');
-                 }
-            });
-            
-            // --- Eventos do Módulo IA ---
-            document.getElementById('btn-recalcular').addEventListener('click', () => {
-                const totalDividasPendentes = getDividas().filter(d => !d.quitada).reduce((sum, d) => sum + d.valorAtual, 0);
-                if (totalDividasPendentes > 0.01) {
-                    gerarPlanoQuitacaoIA(true, totalDividasPendentes);
-                } else {
-                     alert('Não há dívidas ativas para recalcular.');
-                }
-            });
-            
-            // --- Eventos Modal Quitação ---
-            document.getElementById('fechar-modal-quitacao').addEventListener('click', () => {
-                document.getElementById('modal-quitacao').style.display = 'none';
-            });
-            
-            document.getElementById('btn-salvar-divida').addEventListener('click', () => {
-                const id = document.getElementById('divida-id-edit').value;
-                const nome = document.getElementById('divida-nome').value;
-                const valorInicial = parseFloat(document.getElementById('divida-valor-inicial').value);
-                const valorAtual = parseFloat(document.getElementById('divida-valor-atual').value);
-                const estrategia = document.getElementById('divida-tipo-estrategia').value;
-                
-                if (!nome || isNaN(valorInicial) || valorInicial <= 0 || isNaN(valorAtual) || valorAtual < 0) {
-                     alert('Preencha todos os campos da dívida corretamente. O Valor Inicial e o Valor Atual devem ser maiores que zero (ou zero para quitada).');
+        // --- Funções de Quitação de Dívida (Ajustadas) ---
+        
+        const realizarPagamentoDivida = (tipo) => {
+             const valorInput = document.getElementById('valor-pagamento');
+             let valorPagamento = parseFloat(valorInput.value);
+             
+             let dividas = localStorage.getItem('dividas') ? JSON.parse(localStorage.getItem('dividas')) : [];
+             let transacoes = carregarTransacoes();
+             let fixas = carregarContasFixas(); // FIX: Carregar fixas
+             
+             const dividaIndex = dividas.findIndex(d => d.id === idDebtQuitting);
+             const divida = dividas[dividaIndex];
+             if (!divida) { alert('Erro: Dívida não encontrada.'); return; }
+             
+             const { totalReceitas } = getTotais(transacoes, dividas, fixas); // FIX: Passa 'fixas'
+             
+             if (tipo === 'total') {
+                 // Quitação total: Valor é o saldo da dívida, limitado ao capital
+                 valorPagamento = Math.min(divida.valorAtual, totalReceitas);
+             } else { // Parcial
+                 if (isNaN(valorPagamento) || valorPagamento <= 0) {
+                     alert('Por favor, insira um valor de pagamento positivo válido.');
                      return;
-                }
+                 }
+                 // Pagamento parcial: Valor é o do input, limitado ao saldo da dívida e ao capital
+                 valorPagamento = Math.min(valorPagamento, divida.valorAtual, totalReceitas);
+             }
+
+
+             if (valorPagamento <= 0.01) {
+                 alert('Capital acumulado ou saldo da dívida insuficiente para o pagamento.');
+                 return;
+             }
+             
+             // Atualiza a dívida
+             divida.valorAtual = Math.max(0, divida.valorAtual - valorPagamento);
+             salvarDividas(dividas);
+             
+             // Registra a transação de saída
+             const novaTransacao = {
+                 data: getHojeString(),
+                 valor: (-valorPagamento).toFixed(2), 
+                 descricao: `Quitação de Dívida: ${divida.credor}`
+             };
+             transacoes.push(novaTransacao);
+             salvarTransacoes(transacoes);
+             
+             valorInput.value = '';
+             document.getElementById('modal-quitacao').style.display = 'none';
+             idDebtQuitting = null;
+             initDashboard();
+        }
+        
+        // --- Lógica de Negócio e Dashboard (Ajuste no getTotais) ---
+        const getSomaFixas = (fixas) => fixas.filter(f => !f.pago).reduce((sum, item) => sum + item.valor, 0);
+        const getMetaDiariaFixas = (somaFixas) => somaFixas / DIAS_UTEIS_MES;
+        const getReceitasPorDia = (transacoes) => {
+             const receitasDiarias = {};
+             transacoes.filter(t => parseFloat(t.valor) > 0).forEach(t => { 
+                 const data = t.data;
+                 receitasDiarias[data] = (receitasDiarias[data] || 0) + parseFloat(t.valor);
+             });
+             return receitasDiarias;
+        }
+        
+        // NOVO: Função central de cálculo de totais (Recebe FIXAS para correção 5)
+        const getTotais = (transacoes, dividas, fixas) => {
+            let totalReceitas = transacoes.reduce((sum, t) => sum + parseFloat(t.valor), 0); 
+            totalReceitas = Math.max(0, totalReceitas);
+
+            // Total de dívidas ativas
+            const dividasAtivas = dividas.filter(d => d.valorAtual > 0.01);
+            
+            // Soma do valor inicial de todas as dívidas ativas e quitadas (base para 100% do progresso)
+            const todasDividas = localStorage.getItem('dividas') ? JSON.parse(localStorage.getItem('dividas')) : [];
+            const totalDividasIniciais = todasDividas.reduce((sum, d) => sum + parseFloat(d.valorInicial), 0); 
+            
+            // Soma do saldo atual pendente (o que falta pagar)
+            const totalDividasPendentes = dividasAtivas.reduce((sum, d) => sum + parseFloat(d.valorAtual), 0);
+            
+            // Valor já pago (para o progresso) = Total Inicial - Total Pendente
+            const totalPagoDividas = totalDividasIniciais - totalDividasPendentes; 
+            
+            const progressoCapital = totalDividasIniciais > 0.01 
+                ? (totalPagoDividas / totalDividasIniciais) * 100 
+                : (totalDividasPendentes === 0 ? 100 : 0);
                 
-                if (id) {
-                     // Lógica de edição
-                     let dividas = getDividas().filter(d => d.id !== parseInt(id, 10)); // Remove a antiga
-                     dividas.push({
-                          id: parseInt(id, 10),
-                          nome,
-                          valorInicial,
-                          valorAtual,
-                          estrategia,
-                          dataCadastro: new Date().toISOString(),
-                          quitada: valorAtual <= 0.01
-                     });
-                     salvarDividas(dividas);
-                     alert('Dívida atualizada com sucesso!');
-                } else {
-                     adicionarDivida(nome, valorInicial, valorAtual, estrategia);
-                     alert('Dívida cadastrada com sucesso!');
-                }
+            // CORREÇÃO 5: Saldo Pendente Total = Dívidas Pendentes + Contas Fixas Pendentes
+            const somaFixasPendentes = fixas.filter(f => !f.pago).reduce((sum, item) => sum + item.valor, 0);
+            const saldoPendenteTotal = totalDividasPendentes + somaFixasPendentes; 
+
+            return { totalReceitas, totalDividasIniciais, totalDividasPendentes, progressoCapital, saldoPendenteTotal, somaFixasPendentes };
+        }
+        
+        const gerarPlanoQuitacaoIA = (isInit = false, totalDividasPendentes) => {
+             const meses = parseInt(document.getElementById('meses-plano').value) || 5;
+             const resultadoEl = document.getElementById('resultado-plano-ia');
+             
+             if (totalDividasPendentes <= 0.01) {
+                 if (!isInit) {
+                      resultadoEl.innerHTML = '<p style="color: var(--cor-sucesso); font-weight: bold; margin-top: 15px;"><i class="fas fa-check-circle"></i> Protocolo de dívida concluído. Foco em acumulação de capital!</p>';
+                 }
+                 return 0;
+             }
+             
+             const valorMensalNecessario = totalDividasPendentes / meses;
+             const valorDiarioNecessario = valorMensalNecessario / DIAS_UTEIS_MES; 
+             
+             if (!isInit) {
+                  const valorSemanalNecessario = valorDiarioNecessario * 5; 
+                  let html = `
+                     <p style="margin-bottom: 15px; color: var(--cor-texto-secundario); font-family: var(--fonte-titulo); font-weight: 600;">Para quitar **${formatarMoeda(totalDividasPendentes)}** em **${meses} meses**:</p>
+                     <p><i class="fas fa-calendar-alt" style="color: var(--cor-destaque-ia);"></i> Aporte Mensal Necessário: <strong>${formatarMoeda(valorMensalNecessario)}</strong></p>
+                     <p><i class="fas fa-calendar-week" style="color: var(--cor-destaque-ia);"></i> Aporte Semanal (5 dias úteis): <strong>${formatarMoeda(valorSemanalNecessario)}</strong></p>
+                     <p><i class="fas fa-sun" style="color: var(--cor-destaque-ia);"></i> Aporte Diário (por dia útil): <strong>${formatarMoeda(valorDiarioNecessario)}</strong></p>
+                  `;
+                  resultadoEl.innerHTML = html;
+             }
+             return valorDiarioNecessario; 
+        };
+        const getMetaDiariaAtingida = (transacoes, dividas, fixas, dataAlvo = getHojeString()) => {
+            const somaFixasPendentes = getSomaFixas(fixas);
+            const metaDiariaFixas = somaFixasPendentes / DIAS_UTEIS_MES;
+            const receitasDiarias = getReceitasPorDia(transacoes);
+            
+            // A meta de quitação diária só é calculada se houver dívidas pendentes
+            const totalDividasPendentes = dividas.reduce((sum, d) => sum + d.valorAtual, 0);
+            const metaQuitacaoDiaria = totalDividasPendentes > 0.01 ? gerarPlanoQuitacaoIA(true, totalDividasPendentes) : 0; 
+
+            const metaTotalDiaria = metaDiariaFixas + metaQuitacaoDiaria;
+            const recebido = receitasDiarias[dataAlvo] || 0;
+            const faltando = Math.max(0, metaTotalDiaria - recebido);
+            return {
+                metaTotal: metaTotalDiaria,
+                atingido: recebido >= metaTotalDiaria - 0.009, 
+                recebido: recebido,
+                faltando: faltando
+            };
+        }
+        const atualizarDashboard = (transacoes, dividas, fixas) => {
+            const { totalReceitas, totalDividasPendentes, progressoCapital, saldoPendenteTotal, somaFixasPendentes } = getTotais(transacoes, dividas, fixas); // FIX: Passa 'fixas'
+            
+            document.getElementById('data-atual').textContent = new Date().toLocaleDateString('pt-BR');
+            document.getElementById('soma-fixas').textContent = formatarMoeda(somaFixasPendentes).replace('R$', '').trim(); 
+            document.getElementById('total-lancado').textContent = formatarMoeda(totalReceitas); 
+            document.getElementById('saldo-pendente-total').textContent = formatarMoeda(saldoPendenteTotal);
+            document.getElementById('total-dividas-pendentes').textContent = formatarMoeda(totalDividasPendentes);
+            
+            const progressoExibido = Math.min(100, progressoCapital).toFixed(2);
+            document.getElementById('progresso-capital-txt').textContent = `${progressoExibido}%`;
+            document.getElementById('progresso-bar').style.width = `${progressoExibido}%`; 
+            
+            renderizarMetaDiaria(transacoes, dividas, fixas);
+        };
+        
+        // --- Funções de Renderização ---
+        const renderizarContasFixas = (fixas) => {
+            const container = document.getElementById('lista-contas-fixas-tabela');
+            if (!container) return; 
+            container.innerHTML = ''; 
+            const fixasPendentes = fixas.filter(f => !f.pago);
+            fixasPendentes.forEach((fixa) => {
+                const btnClass = 'pagar-fixa';
+                const btnText = 'PAGAR';
+                const row = container.insertRow();
+                row.id = `fixa-row-${fixa.id}`;
+                row.innerHTML = `
+                    <td><span style="color: var(--cor-texto-principal);">${fixa.nome}</span></td>
+                    <td><span style="color: var(--cor-fixa); font-weight: 700;">${formatarMoeda(fixa.valor)}</span></td>
+                    <td style="text-align: center;">
+                        <button class="btn-acao-tabela ${btnClass}" data-id="${fixa.id}">
+                            ${btnText}
+                        </button>
+                    </td>
+                `;
+            });
+            if(fixasPendentes.length === 0) {
+                 container.innerHTML = '<tr><td colspan="3" style="text-align: center; color: var(--cor-texto-secundario); opacity: 0.6;">Todas as contas fixas foram liquidadas neste ciclo.</td></tr>';
+            }
+        };
+        const renderizarDívidas = (dividas) => {
+            const container = document.getElementById('lista-dividas-quitar-tabela');
+            // FIX: Passa 'fixas' para calcular totalReceitas corretamente
+            const { totalReceitas } = getTotais(carregarTransacoes(), dividas, carregarContasFixas()); 
+            if (!container) return;
+            container.innerHTML = '';
+            // Dividas já estão carregadas e filtradas para valorAtual > 0.01
+            const dividasPendentes = dividas; 
+            
+            if (dividasPendentes.length === 0) {
+                container.innerHTML = '<tr><td colspan="3" style="text-align: center; color: var(--cor-sucesso); font-weight: bold;">Nenhuma dívida única pendente. Parabéns!</td></tr>';
+                return;
+            }
+            dividasPendentes.forEach((divida) => {
+                const podeQuitarTotal = totalReceitas >= divida.valorAtual - 0.009; 
                 
-                document.getElementById('modal-quitacao').style.display = 'none';
-                atualizarDashboard();
+                const row = container.insertRow();
+                row.innerHTML = `
+                    <td><span style="color: var(--cor-texto-principal); font-weight: 600;">${divida.credor}</span></td>
+                    <td><span style="color: var(--cor-divida); font-weight: 700;">${formatarMoeda(divida.valorAtual)}</span></td>
+                    <td style="text-align: center;">
+                        <div class="divida-actions">
+                             <button class="btn-acao-tabela deletar-divida" data-id="${divida.id}" title="Deletar Dívida"><i class="fas fa-trash"></i></button>
+                             <button class="btn-acao-tabela pagamento-divida" data-id="${divida.id}" data-credor="${divida.credor}" data-valor="${divida.valorAtual}">
+                                 ${podeQuitarTotal ? 'QUITAÇÃO TOTAL' : 'PAGAR'}
+                             </button>
+                        </div>
+                    </td>
+                `;
             });
+        };
+        const renderizarLogReceitas = (transacoes) => {
+            const listaEntradasBody = document.getElementById('lista-entradas');
+            const transacoesEntrada = transacoes.filter(t => parseFloat(t.valor) > 0);
+            const transacoesOrdenadas = transacoesEntrada.map((t, index) => ({...t, displayIndex: index}))
+                                                        .sort((a, b) => new Date(b.data) - new Date(a.data));
+            listaEntradasBody.innerHTML = '';
+            if (transacoesOrdenadas.length === 0) {
+                 listaEntradasBody.innerHTML = '<tr><td colspan="3" style="text-align: center; color: var(--cor-texto-secundario);">Nenhuma receita lançada no log.</td></tr>';
+            } else {
+                transacoesOrdenadas.forEach((t) => {
+                    const row = listaEntradasBody.insertRow();
+                    row.innerHTML = `
+                        <td><span class="log-receita-descricao">SALDO ADICIONADO</span></td>
+                        <td class="log-receita-valor">${formatarMoeda(t.valor)}</td>
+                        <td style="text-align: center;">
+                            <button class="btn-acao-tabela deletar-log" data-index="${t.displayIndex}"><i class="fas fa-trash"></i></button>
+                        </td>
+                    `;
+                });
+            }
+        };
+        const renderizarTabelas = (transacoes, dividas, fixas) => {
+             renderizarLogReceitas(transacoes);
+             renderizarContasFixas(fixas);
+             renderizarDívidas(dividas);
+        }
+        const renderizarMetaDiaria = (transacoes, dividas, fixas) => {
+             const { metaTotal, atingido, recebido, faltando } = getMetaDiariaAtingida(transacoes, dividas, fixas, getHojeString());
+             const metaDiariaTotalEl = document.getElementById('meta-diaria-total-el');
+             const metaDiariaCard = document.getElementById('meta-diaria-card');
+             const metaDiariaIncentivoEl = document.getElementById('meta-diaria-incentivo');
+             metaDiariaTotalEl.textContent = formatarMoeda(metaTotal);
+             if (atingido) {
+                 metaDiariaCard.classList.add('meta-batida');
+                 metaDiariaTotalEl.style.color = 'var(--cor-sucesso)'; 
+                 metaDiariaIncentivoEl.style.display = 'block';
+                 metaDiariaIncentivoEl.innerHTML = `
+                     <i class="fas fa-medal"></i> **META DIÁRIA BATIDA!** <i class="fas fa-medal"></i>
+                     <p style="color: var(--cor-fixa); font-size: 0.9em; margin-top: 5px; font-style: normal;">Capital Extra Acumulado: ${formatarMoeda(recebido - metaTotal)}</p>
+                 `;
+                 metaDiariaIncentivoEl.style.color = 'var(--cor-sucesso)';
+             } else {
+                 metaDiariaCard.classList.remove('meta-batida');
+                 metaDiariaTotalEl.style.color = 'var(--cor-meta-diaria)';
+                 metaDiariaCard.style.border = `1px solid var(--cor-meta-diaria)`; 
+                 metaDiariaIncentivoEl.style.display = 'block';
+                 metaDiariaIncentivoEl.innerHTML = `
+                     <i class="fas fa-exclamation-circle"></i> **FALTAM ${formatarMoeda(faltando)}** PARA BATER A META DIÁRIA.
+                 `;
+                 metaDiariaIncentivoEl.style.color = 'var(--cor-alerta)';
+             }
+        }
+        // NOVO: Renderização da Bola de Neve com mais destaque
+        const renderizarDicasQuitacao = (dividas) => {
+             const div = document.getElementById('dicas-quitacao');
+             const dividasPendentes = dividas.filter(d => d.valorAtual > 0.01);
+             div.className = 'estrategia-quitacao'; // Remove a classe antiga para aplicar o novo estilo
+
+             if (dividasPendentes.length === 0) { 
+                 div.innerHTML = '<p style="color: var(--cor-sucesso); font-weight: bold;"><i class="fas fa-check-double"></i> Sem dívidas para aplicar a estratégia!</p>'; 
+                 return; 
+             }
+             
+             let html = `
+                 <h4><i class="fas fa-snowflake"></i> ESTRATÉGIA: BOLA DE NEVE (MENOR PARA MAIOR)</h4>
+                 <p style="margin-bottom: 20px; color: var(--cor-texto-secundario); font-size: 0.9em;">
+                    Priorize as **menores dívidas** para criar impulso mental e financeiro rápido. Concentre todo o excedente do seu aporte diário na Dívida Prioritária.
+                 </p>
+             `;
+             dividasPendentes.slice(0, 3).forEach((d, index) => {
+                 html += `
+                     <div class="prioridade-item">
+                         <i class="fas fa-angle-right"></i> **PRIORIDADE ${index + 1}:** ${d.credor} 
+                         <span style="float: right; color: var(--cor-divida); font-weight: 700;">${formatarMoeda(d.valorAtual)}</span>
+                     </div>
+                 `;
+             });
+             html += `
+                 <p class="prioridade-acao">
+                     <i class="fas fa-bolt"></i> **AÇÃO:** Direcione **TODO** capital excedente para a dívida **PRIORIDADE 1** (${dividasPendentes[0].credor}).
+                 </p>
+             `;
+             div.innerHTML = html;
+        }
+        const calcularRelatorioDiario = (transacoes, dividas, fixas) => {
+            const receitasDiarias = getReceitasPorDia(transacoes);
+            const todasAsDatas = Array.from(new Set(Object.keys(receitasDiarias)));
             
-            // --- Eventos de Perfil (Atualizado com novo botão de exclusão) ---
-            document.getElementById('menu-perfil').addEventListener('click', abrirModalPerfil);
-            document.getElementById('dashboard-profile-pic').addEventListener('click', abrirModalPerfil);
-            document.getElementById('btn-salvar-perfil').addEventListener('click', salvarPerfil);
+            // Soma fixa de contas fixas
+            const somaFixas = CONTAS_FIXAS_INITIAL.reduce((sum, item) => sum + item.valor, 0);
+            const metaDiariaFixas = somaFixas / DIAS_UTEIS_MES;
             
-            document.getElementById('fechar-modal-perfil').addEventListener('click', () => {
-                document.getElementById('modal-perfil').style.display = 'none';
+            // Calcula a meta de quitação baseada no total inicial de todas as dívidas cadastradas (mesmo as quitadas)
+            const todasDividas = localStorage.getItem('dividas') ? JSON.parse(localStorage.getItem('dividas')) : [];
+            const totalDividasIniciais = todasDividas.reduce((sum, d) => sum + parseFloat(d.valorInicial), 0);
+            
+            const meses = parseInt(document.getElementById('meses-plano').value) || 5;
+            const metaQuitacaoDiaria = (totalDividasIniciais / meses) / DIAS_UTEIS_MES; 
+            const metaTotalDiaria = metaDiariaFixas + metaQuitacaoDiaria;
+            
+            const hoje = getHojeString();
+            if (!todasAsDatas.includes(hoje)) { todasAsDatas.push(hoje); }
+            todasAsDatas.sort((a, b) => new Date(b) - new Date(a));
+            
+            const relatorio = todasAsDatas.map(data => {
+                const recebido = receitasDiarias[data] || 0;
+                const atingido = recebido >= metaTotalDiaria - 0.009;
+                return {
+                    data: data,
+                    meta: metaTotalDiaria,
+                    aportado: recebido,
+                    atingido: atingido
+                };
             });
-            
-            // NOVO: Listener para o botão de Excluir Conta realocado para dentro do Modal de Perfil (Instrução 3)
-            document.getElementById('btn-excluir-conta-perfil').addEventListener('click', excluirConta);
+            return relatorio;
+        }
+        const renderizarRelatorioDiario = (relatorio) => {
+            const corpoTabela = document.getElementById('corpo-tabela-relatorio');
+            corpoTabela.innerHTML = '';
+            if (relatorio.length === 0) {
+                corpoTabela.innerHTML = '<tr><td colspan="4" style="text-align: center; color: var(--cor-texto-secundario);">Nenhum registro de meta diária.</td></tr>';
+                return;
+            }
+            relatorio.forEach(item => {
+                const row = corpoTabela.insertRow();
+                const statusClass = item.atingido ? 'meta-batida-status' : 'meta-nao-batida-status';
+                const statusText = item.atingido ? '<i class="fas fa-check-circle"></i> BATIDA' : '<i class="fas fa-times-circle"></i> FALHOU';
+                if (item.data === getHojeString()) { row.style.backgroundColor = 'rgba(155, 89, 182, 0.1)'; }
+                row.innerHTML = `
+                    <td>${new Date(item.data).toLocaleDateString('pt-BR')}</td>
+                    <td style="color: var(--cor-meta-diaria);">${formatarMoeda(item.meta)}</td>
+                    <td style="color: ${item.aportado > item.meta ? 'var(--cor-fixa)' : 'var(--cor-texto-principal)'}; font-weight: 700;">${formatarMoeda(item.aportado)}</td>
+                    <td><span class="${statusClass}">${statusText}</span></td>
+                `;
+            });
+        }
+        const abrirModalQuitacao = (credor, valor) => {
+             document.getElementById('nome-credor').textContent = credor;
+             document.getElementById('saldo-quitacao').textContent = formatarMoeda(valor);
+             document.getElementById('valor-pagamento').value = valor.toFixed(2);
+             
+             // Define a ação do botão Quitação Total
+             // FIX: Passa 'fixas' para calcular totalReceitas corretamente
+             const { totalReceitas } = getTotais(carregarTransacoes(), carregarDividas(), carregarContasFixas()); 
+             const btnQuitarTotal = document.getElementById('btn-quitar-total');
+             
+             if (totalReceitas >= valor - 0.009) {
+                 btnQuitarTotal.disabled = false;
+                 btnQuitarTotal.style.backgroundColor = 'var(--cor-divida)';
+             } else {
+                 btnQuitarTotal.disabled = true;
+                 btnQuitarTotal.style.backgroundColor = 'var(--cor-borda)';
+             }
+
+             document.getElementById('modal-quitacao').style.display = 'block';
+        }
+
+
+        // ===========================================
+        // EVENT LISTENERS
+        // ===========================================
+        
+        document.addEventListener('DOMContentLoaded', () => {
+             carregarUsuario(); 
+             
+             // Limpar campos de login na inicialização
+             document.getElementById('login-email-input').value = '';
+             document.getElementById('login-password-input').value = '';
+
+             // --- Login e Cadastro ---
+             document.getElementById('btn-login').addEventListener('click', realizarLogin);
+             document.getElementById('link-abrir-cadastro').addEventListener('click', (e) => {
+                 e.preventDefault();
+                 abrirTelaCadastro();
+             });
+             document.getElementById('btn-voltar-login').addEventListener('click', fecharTelaCadastro);
+             document.getElementById('btn-cadastrar').addEventListener('click', cadastrarNovoUsuario);
+             
+             // --- Menu Sidebar ---
+             document.getElementById('menu-toggle').addEventListener('click', openSidebar);
+             document.getElementById('close-sidebar').addEventListener('click', closeSidebar);
+             
+             // NOVO: Botões de Logout/Reset
+             document.getElementById('btn-logout-only').addEventListener('click', logoutOnly);
+             document.getElementById('btn-reset-data').addEventListener('click', resetAllData);
+             document.getElementById('btn-excluir-conta').addEventListener('click', excluirConta);
+             
+             // --- Opção de Perfil / Mudar Foto ---
+             document.getElementById('menu-perfil').addEventListener('click', abrirModalPerfil);
+             document.getElementById('profile-pic-container').addEventListener('click', () => {
+                 document.getElementById('photo-input').click();
+             });
+             document.getElementById('perfil-pic-preview').addEventListener('click', () => {
+                 document.getElementById('photo-input').click();
+             });
+             document.getElementById('photo-input').addEventListener('change', handleProfilePicChange);
+             document.getElementById('btn-salvar-perfil').addEventListener('click', salvarDadosPerfil);
+             document.getElementById('fechar-modal-perfil').addEventListener('click', () => {
+                 document.getElementById('modal-perfil').style.display = 'none';
+             });
+
+             // --- Modals e Botões de Ação (Correção 1: Fechar Modal) ---
+             const modalsToClose = ['modal-receita', 'modal-quitacao', 'modal-divida', 'modal-relatorio', 'modal-perfil'];
+             modalsToClose.forEach(id => {
+                 const modal = document.getElementById(id);
+                 if (modal) {
+                     modal.style.display = 'none'; 
+                     // CORREÇÃO AQUI: Usa o ID completo do span fechar
+                     const closeBtn = document.getElementById(`fechar-${id}`); 
+                     if (closeBtn) closeBtn.addEventListener('click', () => modal.style.display = 'none');
+                 }
+             });
+             
+             // Os listeners dos botões de fechar dos modais já devem funcionar com a correção acima
+             // document.getElementById('fechar-modal-relatorio').addEventListener('click', () => {
+             //     document.getElementById('modal-relatorio').style.display = 'none';
+             // });
+
+             document.getElementById('abrir-cadastro-receita').addEventListener('click', () => document.getElementById('modal-receita').style.display = 'block');
+             document.getElementById('btn-cadastrar-receita').addEventListener('click', cadastrarReceita);
+             
+             // Ações de Quitação
+             document.getElementById('btn-quitar-total').addEventListener('click', () => realizarPagamentoDivida('total'));
+             document.getElementById('btn-quitar-parcial').addEventListener('click', () => realizarPagamentoDivida('parcial'));
+
+             // Cadastro de Dívida
+             document.getElementById('abrir-cadastro-divida').addEventListener('click', () => {
+                 document.getElementById('credor-input-divida').value = '';
+                 document.getElementById('valor-input-divida').value = '';
+                 document.getElementById('modal-divida').style.display = 'block';
+             });
+             document.getElementById('btn-cadastrar-divida').addEventListener('click', adicionarDivida);
+
+             
+             // --- Eventos do Relatório Diário ---
+             document.getElementById('btn-data-atual').addEventListener('click', () => {
+                  const transacoes = carregarTransacoes();
+                  const dividas = carregarDividas();
+                  const fixas = carregarContasFixas();
+                  const relatorio = calcularRelatorioDiario(transacoes, dividas, fixas);
+                  renderizarRelatorioDiario(relatorio);
+                  document.getElementById('modal-relatorio').style.display = 'block';
+             });
+             
+             // --- Toggles (Mantidos) ---
+             document.getElementById('toggle-receitas').addEventListener('click', (e) => {
+                 const container = document.getElementById('lista-receitas-container');
+                 const isOpen = container.style.display === 'block';
+                 container.style.display = isOpen ? 'none' : 'block';
+                 e.currentTarget.classList.toggle('aberto', !isOpen);
+             });
+             document.getElementById('toggle-fixas').addEventListener('click', (e) => {
+                 const container = document.getElementById('lista-fixas-container');
+                 const isOpen = container.style.display === 'block';
+                 container.style.display = isOpen ? 'none' : 'block';
+                 e.currentTarget.classList.toggle('aberto', !isOpen);
+             });
+             document.getElementById('toggle-dividas').addEventListener('click', (e) => {
+                 const container = document.getElementById('lista-dividas-quitar-container');
+                 const isOpen = container.style.display === 'block';
+                 container.style.display = isOpen ? 'none' : 'block';
+                 e.currentTarget.classList.toggle('aberto', !isOpen);
+             });
+             
+             // --- Ações de Tabela ---
+             document.getElementById('lista-entradas').addEventListener('click', (e) => {
+                 if (e.target.closest('.deletar-log')) {
+                     const btn = e.target.closest('.deletar-log');
+                     const index = btn.getAttribute('data-index');
+                     deletarTransacao(parseInt(index));
+                 }
+             });
+             document.getElementById('lista-contas-fixas-tabela').addEventListener('click', (e) => {
+                  const button = e.target.closest('.pagar-fixa');
+                  if (button && !button.disabled) {
+                      const id = parseInt(button.getAttribute('data-id'));
+                      pagarContaFixa(id);
+                  }
+             });
+             document.getElementById('lista-dividas-quitar-tabela').addEventListener('click', (e) => {
+                  const btnPagar = e.target.closest('.pagamento-divida');
+                  const btnDeletar = e.target.closest('.deletar-divida');
+
+                  if (btnPagar) {
+                      idDebtQuitting = parseInt(btnPagar.getAttribute('data-id'));
+                      const credor = btnPagar.getAttribute('data-credor');
+                      const valor = parseFloat(btnPagar.getAttribute('data-valor'));
+                      abrirModalQuitacao(credor, valor);
+                  } else if (btnDeletar) {
+                       const id = parseInt(btnDeletar.getAttribute('data-id'));
+                       deletarDivida(id);
+                  }
+             });
+             
+             // --- Módulo IA (Mantido) ---
+             document.getElementById('btn-gerar-plano').addEventListener('click', () => {
+                  const dividas = carregarDividas();
+                  const totalDividasPendentes = dividas.reduce((sum, d) => sum + d.valorAtual, 0);
+                  gerarPlanoQuitacaoIA(false, totalDividasPendentes);
+                  renderizarDicasQuitacao(dividas);
+                  const fixas = carregarContasFixas();
+                  renderizarMetaDiaria(carregarTransacoes(), dividas, fixas);
+             });
+
+             // --- Inicialização da Tela ---
+             if (localStorage.getItem('loggedIn') === 'true') {
+                 document.getElementById('login-screen').style.display = 'none';
+                 document.getElementById('main-content').style.display = 'block';
+                 document.getElementById('mySidebar').style.width = '0'; // Garante que esteja fechado
+                 startSessionTimer(); 
+                 initDashboard();
+             } else {
+                 document.getElementById('login-screen').style.display = 'flex';
+                 document.getElementById('main-content').style.display = 'none';
+             }
         });
+        
+
     </script>
 </body>
 </html>
