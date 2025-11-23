@@ -69,7 +69,7 @@
         }
 
         /* =================================== */
-        /* 2. CARD META DIÁRIA TOTAL           */
+        /* 2. CARD META DIÁRIA TOTAL (DESTAQUE)*/
         /* =================================== */
         .meta-diaria-total {
             background: linear-gradient(135deg, var(--cor-roxo), #9c27b0);
@@ -79,7 +79,14 @@
             text-align: center;
             margin-bottom: 30px;
             box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+            transition: background 0.5s ease-in-out;
         }
+        
+        /* NOVO: Estilo para Meta Diária Concluída */
+        .meta-diaria-concluida {
+            background: linear-gradient(135deg, var(--cor-verde), #2e7d32);
+        }
+
         .meta-diaria-total p {
             font-size: 1.1em;
             font-weight: 400;
@@ -91,6 +98,18 @@
             display: block;
             margin-top: 5px;
             font-family: var(--fonte-titulo);
+        }
+        
+        /* Estilos do Destaque */
+        .meta-diaria-total .destaque-conclusao {
+            display: block;
+            font-size: 1.3em;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+        .meta-diaria-total .destaque-conclusao i {
+            margin-right: 8px;
+            font-size: 1.2em;
         }
 
 
@@ -463,9 +482,10 @@
         "A disciplina de hoje garante a liberdade de amanhã."
     </div>
     
-    <div class="meta-diaria-total container">
+    <div id="meta-diaria-card" class="meta-diaria-total container">
         <p>Sua Meta Diária de Economia e Pagamento</p>
         <span id="meta-diaria-total-el">Calculando...</span>
+        <span id="meta-diaria-incentivo" class="destaque-conclusao" style="display: none;"></span>
     </div>
     
 
@@ -656,7 +676,9 @@
         let idDebtQuitting = null; 
 
         // Elementos DOM para Meta Diária
+        const metaDiariaCard = document.getElementById('meta-diaria-card');
         const metaDiariaTotalEl = document.getElementById('meta-diaria-total-el');
+        const metaDiariaIncentivoEl = document.getElementById('meta-diaria-incentivo');
         const saldoPendenteTotalEl = document.getElementById('saldo-pendente-total');
 
         // Elementos DOM para Modais
@@ -705,8 +727,13 @@
         };
 
         const formatarData = (dataString) => {
+            if (!dataString) return 'Sem Data'; // Adicionado para receitas simplificadas
             const [year, month, day] = dataString.split('-');
             return `${day}/${month}/${year}`;
+        }
+        
+        const getHojeString = () => {
+            return new Date().toISOString().slice(0, 10);
         }
         
         const getTotais = (transacoes, dividas) => {
@@ -716,22 +743,41 @@
             let totalDividasPendentes = 0;
             dividas.filter(d => d.valorAtual > 0).forEach(d => totalDividasPendentes += parseFloat(d.valorAtual));
             
-            // NOVO CÁLCULO: Saldo Pendente Total (Valor de Dívidas - Receitas Acumuladas)
             const saldoPendenteTotal = Math.max(0, totalDividasPendentes - totalReceitas);
 
             return { totalReceitas, totalDividasPendentes, saldoPendenteTotal };
         }
+        
+        // NOVO: Calcula se a Meta Diária foi atingida HOJE
+        const getMetaDiariaAtingidaHoje = (transacoes) => {
+            // 1. Calcula a Meta Diária Total
+            const metaQuitacao = gerarPlanoQuitacaoIA(true); 
+            const metaTotalDiaria = META_DIARIA_FIXAS + metaQuitacao;
+            
+            // 2. Soma as receitas do dia
+            const hoje = getHojeString();
+            const receitasHoje = transacoes
+                .filter(t => t.data === hoje)
+                .reduce((sum, t) => sum + parseFloat(t.valor), 0);
+            
+            return {
+                metaTotal: metaTotalDiaria,
+                atingido: receitasHoje >= metaTotalDiaria,
+                recebidoHoje: receitasHoje
+            };
+        }
+
 
         // 3. ATUALIZAÇÃO DO DASHBOARD E RENDERIZAÇÃO
         // -------------------------------------------------------
 
         const atualizarDashboard = (transacoes, dividas) => {
-            const { totalReceitas, totalDividasPendentes, saldoPendenteTotal } = getTotais(transacoes, dividas);
+            const { totalReceitas, saldoPendenteTotal } = getTotais(transacoes, dividas);
 
             // Card 1: Saldo Acumulado (Entradas)
             document.getElementById('total-lancado').textContent = formatarMoeda(totalReceitas);
             
-            // Card 3: Saldo Pendente Total (CORREÇÃO DE REQUISITO)
+            // Card 3: Saldo Pendente Total
             saldoPendenteTotalEl.textContent = formatarMoeda(saldoPendenteTotal);
             
             // Card 2: Meta de Quitação
@@ -743,6 +789,23 @@
             const progressoPercentual = Math.min(100, (totalReceitas / META_FIXA) * 100);
             progressoBar.style.width = `${progressoPercentual}%`;
         };
+        
+        // NOVO: Renderiza o card da Meta Diária
+        const renderizarMetaDiaria = (transacoes) => {
+            const { metaTotal, atingido } = getMetaDiariaAtingidaHoje(transacoes);
+
+            metaDiariaTotalEl.textContent = formatarMoeda(metaTotal);
+
+            if (atingido) {
+                metaDiariaCard.classList.add('meta-diaria-concluida');
+                metaDiariaIncentivoEl.innerHTML = `<i class="fas fa-check-circle"></i> Parabéns! Meta Diária Concluída!`;
+                metaDiariaIncentivoEl.style.display = 'block';
+            } else {
+                metaDiariaCard.classList.remove('meta-diaria-concluida');
+                metaDiariaIncentivoEl.style.display = 'none';
+                metaDiariaIncentivoEl.innerHTML = '';
+            }
+        }
         
         const renderizarContasFixas = () => {
             listaContasFixasEl.innerHTML = '';
@@ -767,16 +830,19 @@
 
             // Tabela de Receitas (Entradas)
             const transacoesOrdenadas = transacoes.sort((a, b) => new Date(b.data) - new Date(a.data));
-            transacoesOrdenadas.forEach((t, index) => {
-                const row = listaEntradasBody.insertRow();
-                // A data e descrição são injetadas com valores padrão, pois o pop-up não as pede mais.
-                row.innerHTML = `
-                    <td>${t.descricao || 'Receita Lançada'}</td>
-                    <td class="valor-caixa">${formatarMoeda(t.valor)}</td>
-                    <td>${formatarData(t.data || new Date().toISOString().slice(0, 10))}</td>
-                    <td><button class="btn-acao-tabela deletar" data-index="${index}"><i class="fas fa-trash"></i></button></td>
-                `;
-            });
+            if (transacoesOrdenadas.length === 0) {
+                 listaEntradasBody.innerHTML = '<tr><td colspan="4" style="text-align: center; color: var(--cor-cinza-claro);">Nenhuma receita lançada ainda.</td></tr>';
+            } else {
+                transacoesOrdenadas.forEach((t, index) => {
+                    const row = listaEntradasBody.insertRow();
+                    row.innerHTML = `
+                        <td>${t.descricao || 'Lançamento Rápido'}</td>
+                        <td class="valor-caixa">${formatarMoeda(t.valor)}</td>
+                        <td>${formatarData(t.data)}</td>
+                        <td><button class="btn-acao-tabela deletar" data-index="${index}"><i class="fas fa-trash"></i></button></td>
+                    `;
+                });
+            }
             
             // Tabela de Dívidas (Quitação)
             const dividasAtivas = dividas.filter(d => d.valorAtual > 0).sort((a, b) => a.valorAtual - b.valorAtual);
@@ -816,9 +882,8 @@
             const novaTransacao = {
                 tipo: 'CAIXA',
                 valor: valor.toFixed(2), 
-                // Valores padrão para os campos removidos
                 descricao: 'Lançamento Rápido',
-                data: new Date().toISOString().slice(0, 10)
+                data: getHojeString() // Garante que a data é a de hoje
             };
 
             let transacoes = carregarTransacoes();
@@ -904,7 +969,6 @@
             const valorDiarioNecessario = valorMensalNecessario / 30; 
 
             if (!isInit) {
-                 // Lógica de renderização do plano (para manter a funcionalidade do botão)
                  let html = `<p style="color: var(--cor-azul);">Plano de ${meses} meses gerado. Aporte mensal de **${formatarMoeda(valorMensalNecessario)}**.</p>`;
                  document.getElementById('resultado-plano-ia').innerHTML = html;
             }
@@ -912,16 +976,8 @@
             return valorDiarioNecessario; 
         };
         
-        // 4.6. Função para calcular e exibir a Meta Diária Total
-        const atualizarMetaDiariaTotal = () => {
-            const metaFixa = META_DIARIA_FIXAS; 
-            const metaQuitacao = gerarPlanoQuitacaoIA(true); 
-            const metaTotal = metaFixa + metaQuitacao;
-            
-            metaDiariaTotalEl.textContent = formatarMoeda(metaTotal);
-        }
 
-        // 5. SEÇÕES OCULTÁVEIS
+        // 5. SEÇÕES OCULTÁVEIS E GERAIS
         // -----------------------------------------
 
         const fecharModal = (modalEl) => {
@@ -952,9 +1008,9 @@
             renderizarContasFixas(); 
             renderizarTabelas(transacoes, dividas);
             
-            // Inicia o plano e a Meta Diária Total
-            gerarPlanoQuitacaoIA();
-            atualizarMetaDiariaTotal();
+            // Inicia o plano e renderiza a Meta Diária Total com status de conclusão
+            gerarPlanoQuitacaoIA(true); 
+            renderizarMetaDiaria(transacoes); 
         };
 
         // LISTENERS
@@ -975,14 +1031,15 @@
         
         // Listener do botão "Gerar Plano" (Renderiza o plano e recalcula a meta)
         document.getElementById('btn-gerar-plano').addEventListener('click', () => {
-            gerarPlanoQuitacaoIA(); 
-            atualizarMetaDiariaTotal(); 
+            // Re-renderiza o plano e em seguida a meta diária (que depende do plano)
+            gerarPlanoQuitacaoIA(false); 
+            renderizarMetaDiaria(carregarTransacoes()); 
         });
 
-        // Toggle da seção de Dívidas (Requisito: Inicia fechada)
+        // Toggle da seção de Dívidas
         toggleDividasBtn.addEventListener('click', () => toggleSection(listaDividasQuitarContainer, toggleDividasBtn));
         
-        // Toggle da seção de Receitas (NOVO REQUISITO: Inicia fechada)
+        // Toggle da seção de Receitas
         toggleReceitasBtn.addEventListener('click', () => toggleSection(listaReceitasContainer, toggleReceitasBtn));
         
         // Delegação de evento (Deletar Receita e Iniciar Quitação)
