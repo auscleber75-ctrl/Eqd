@@ -69,7 +69,7 @@
         }
 
         /* =================================== */
-        /* 2. CARD META DIÁRIA TOTAL (NOVO)    */
+        /* 2. CARD META DIÁRIA TOTAL           */
         /* =================================== */
         .meta-diaria-total {
             background: linear-gradient(135deg, var(--cor-roxo), #9c27b0);
@@ -246,15 +246,15 @@
             color: var(--cor-vermelho);
         }
         
-        /* SEÇÃO DÍVIDAS OCULTÁVEL */
-        #dividas-container {
+        /* SEÇÃO OCULTÁVEL (Geral) */
+        .toggle-section {
             border: 1px solid var(--cor-borda);
             border-radius: 8px;
             margin-top: 30px;
         }
         
         .section-toggle {
-            background-color: #383838; /* Um cinza escuro para contraste */
+            background-color: #383838; 
             padding: 18px 20px;
             display: flex;
             justify-content: space-between;
@@ -271,6 +271,9 @@
             color: var(--cor-vermelho);
             font-size: 1.3em;
         }
+        .section-toggle.receitas h2 {
+            color: var(--cor-verde);
+        }
         .section-toggle i {
             transition: transform 0.3s;
         }
@@ -279,7 +282,7 @@
         }
 
         /* Conteúdo Ocultável */
-        #lista-dividas-quitar-container {
+        .lista-container-ocultavel {
             padding: 0 20px 20px 20px;
             background-color: var(--cor-fundo-card);
             border-bottom-left-radius: 8px;
@@ -317,7 +320,6 @@
             align-items: center;
         }
         
-        /* DESTAQUE PARA O VALOR DA DIÁRIA FIXA */
         .diaria-fixa-destaque {
             background-color: var(--cor-roxo);
             color: white !important;
@@ -344,7 +346,7 @@
              align-items: center; 
              gap: 15px; 
              margin-bottom: 25px;
-             flex-wrap: wrap; /* Para mobile */
+             flex-wrap: wrap; 
         }
         #meses-plano {
              width: 150px; 
@@ -363,7 +365,6 @@
         /* =================================== */
 
         .modal {
-            /* ... (Estilos de modal permanecem os mesmos, apenas cores ajustadas) ... */
             display: none; 
             position: fixed;
             z-index: 100; 
@@ -388,6 +389,21 @@
             border: 1px solid var(--cor-borda);
         }
         
+        .fechar-modal {
+            color: var(--cor-cinza-claro);
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 30px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .fechar-modal:hover {
+            color: var(--cor-texto-principal);
+        }
+        
         .btn-ok {
             background-color: var(--cor-verde);
             color: white;
@@ -404,40 +420,32 @@
         /* 7. RESPONSIVIDADE                   */
         /* =================================== */
         @media (max-width: 768px) {
-            
             .dashboard-header {
                 grid-template-columns: 1fr; 
                 gap: 15px;
             }
-
             .valor {
                 font-size: 2em; 
             }
-
             .container {
                 margin: 20px auto;
                 padding: 0 15px; 
             }
-
             .section-header {
                 flex-direction: column;
                 align-items: flex-start;
                 gap: 15px;
             }
-            
             .btn-principal {
                 width: 100%; 
             }
-
             .tabela-transacoes th:nth-child(3), 
             .tabela-transacoes td:nth-child(3) {
                 display: none; 
             }
-            
             .contas-fixas-container ul {
                 grid-template-columns: 1fr;
             }
-            
             #plano-ia-controls {
                 flex-direction: column;
                 align-items: stretch;
@@ -479,32 +487,39 @@
         </div>
         
         <div class="info-card">
-            <p class="rotulo"><i class="fas fa-hand-holding-dollar"></i> Saldo Devedor Pendente</p>
-            <span id="saldo-devedor-pendente" class="valor valor-divida">R$ 0,00</span>
+            <p class="rotulo"><i class="fas fa-balance-scale-right"></i> Saldo Pendente (A Pagar)</p>
+            <span id="saldo-pendente-total" class="valor valor-divida">R$ 0,00</span>
         </div>
     </header>
     
     <main class="container">
         
         <div class="section-header">
-            <h2><i class="fas fa-exchange-alt"></i> Lançamentos de Receita</h2>
-            <button id="abrir-cadastro-receita" class="btn-principal"> <i class="fas fa-plus"></i> Nova Receita</button>
+            <h2><i class="fas fa-money-check-dollar"></i> Controles de Caixa</h2>
+            <button id="abrir-cadastro-receita" class="btn-principal"> <i class="fas fa-plus"></i> Lançar Receita</button>
         </div>
 
         
-        <div class="transacoes-container">
-            <table class="tabela-transacoes">
-                <thead>
-                    <tr>
-                        <th>Descrição</th>
-                        <th>Valor</th>
-                        <th>Data</th>
-                        <th>Ação</th>
-                    </tr>
-                </thead>
-                <tbody id="lista-entradas">
-                    </tbody>
-            </table>
+        <div id="historico-receitas-container" class="toggle-section">
+            <div class="section-toggle receitas" id="toggle-receitas">
+                <h2><i class="fas fa-history"></i> Histórico de Receitas Lançadas</h2>
+                <i class="fas fa-chevron-down"></i>
+            </div>
+            
+            <div id="lista-receitas-container" class="lista-container-ocultavel" style="display: none;">
+                <table class="tabela-transacoes">
+                    <thead>
+                        <tr>
+                            <th>Descrição</th>
+                            <th>Valor</th>
+                            <th>Data</th>
+                            <th>Ação</th>
+                        </tr>
+                    </thead>
+                    <tbody id="lista-entradas">
+                        </tbody>
+                </table>
+            </div>
         </div>
         
         <div class="contas-fixas-container">
@@ -514,13 +529,13 @@
         </div>
 
         
-        <div id="dividas-container">
+        <div id="dividas-container" class="toggle-section">
             <div class="section-toggle" id="toggle-dividas">
                 <h2><i class="fas fa-exclamation-triangle"></i> Dívidas a Quitar</h2>
                 <i class="fas fa-chevron-down"></i>
             </div>
             
-            <div id="lista-dividas-quitar-container" style="display: none;">
+            <div id="lista-dividas-quitar-container" class="lista-container-ocultavel" style="display: none;">
                 <table class="tabela-transacoes">
                     <thead>
                         <tr>
@@ -563,20 +578,12 @@
         <div class="modal-content">
             <span class="fechar-modal" id="fechar-modal-receita">&times;</span>
             
-            <div id="passo-dados-receita">
-                <h3 id="titulo-dados-receita" style="color: var(--cor-verde);"><i class="fas fa-money-bill-transfer"></i> Cadastrar Nova Receita</h3>
-                
-                <label for="valor-input-receita">VALOR (R$)</label>
-                <input type="number" id="valor-input-receita" placeholder="0.00" min="0.01" step="0.01">
-                
-                <label for="descricao-input-receita">DESCRIÇÃO</label>
-                <input type="text" id="descricao-input-receita" placeholder="Ex: Salário, Venda Extra, Restituição">
-                
-                <label for="data-input-receita">DATA</label>
-                <input type="date" id="data-input-receita">
-                
-                <button class="btn-ok" id="btn-cadastrar-receita" style="background-color: var(--cor-verde);">Cadastrar <i class="fas fa-check"></i></button>
-            </div>
+            <h3 id="titulo-dados-receita" style="color: var(--cor-verde);"><i class="fas fa-money-bill-transfer"></i> Lançar Valor Recebido</h3>
+            
+            <label for="valor-input-receita">VALOR (R$)</label>
+            <input type="number" id="valor-input-receita" placeholder="0.00" min="0.01" step="0.01">
+            
+            <button class="btn-ok" id="btn-cadastrar-receita" style="background-color: var(--cor-verde);">Confirmar <i class="fas fa-check"></i></button>
         </div>
     </div>
     
@@ -614,14 +621,14 @@
             { nome: "Wifi", valor: 100.00 }
         ];
         
-        const SOMA_CONTAS_FIXAS = DADOS_CONTAS_FIXAS.reduce((sum, item) => sum + item.valor, 0); // R$ 3.120,00
+        const SOMA_CONTAS_FIXAS = DADOS_CONTAS_FIXAS.reduce((sum, item) => sum + item.valor, 0); 
         const DIAS_UTEIS_MES = 22; 
         const META_DIARIA_FIXAS = SOMA_CONTAS_FIXAS / DIAS_UTEIS_MES; 
 
         const SOMA_DIVIDAS_INICIAIS = 22681.64;
-        const META_FIXA = SOMA_DIVIDAS_INICIAIS + SOMA_CONTAS_FIXAS; // R$ 25.701,64
+        const META_FIXA = SOMA_DIVIDAS_INICIAIS + SOMA_CONTAS_FIXAS; 
 
-        // DÍVIDAS INICIAIS (Ajustadas)
+        // DÍVIDAS INICIAIS (para inicializar localStorage se estiver vazio)
         const DEBT_LIST_INITIAL = [
             { id: 1, credor: "Bruno Carro", valorInicial: 400.00, valorAtual: 400.00 },
             { id: 2, credor: "Itau visa", valorInicial: 200.00, valorAtual: 200.00 },
@@ -648,21 +655,24 @@
         
         let idDebtQuitting = null; 
 
-        // Elementos DOM (Apenas os relevantes para as correções)
+        // Elementos DOM para Meta Diária
+        const metaDiariaTotalEl = document.getElementById('meta-diaria-total-el');
+        const saldoPendenteTotalEl = document.getElementById('saldo-pendente-total');
+
+        // Elementos DOM para Modais
         const modalReceita = document.getElementById('modal-receita');
         const btnCadastrarReceita = document.getElementById('btn-cadastrar-receita');
         const valorInputReceita = document.getElementById('valor-input-receita');
-        const descricaoInputReceita = document.getElementById('descricao-input-receita');
-        const dataInputReceita = document.getElementById('data-input-receita');
-        
         const modalQuitacao = document.getElementById('modal-quitacao');
         const valorPagamentoInput = document.getElementById('valor-pagamento');
         const btnQuitarDivida = document.getElementById('btn-quitar-divida');
         
-        const mesesPlanoInput = document.getElementById('meses-plano');
-        const btnGerarPlano = document.getElementById('btn-gerar-plano');
+        // Elementos DOM para Seções Ocultáveis
+        const toggleDividasBtn = document.getElementById('toggle-dividas');
+        const listaDividasQuitarContainer = document.getElementById('lista-dividas-quitar-container');
+        const toggleReceitasBtn = document.getElementById('toggle-receitas');
+        const listaReceitasContainer = document.getElementById('lista-receitas-container');
         const listaContasFixasEl = document.getElementById('lista-contas-fixas');
-        const metaDiariaTotalEl = document.getElementById('meta-diaria-total-el');
 
 
         // 2. FUNÇÕES DE UTILIDADE (LOCAL STORAGE & FORMATO)
@@ -706,12 +716,34 @@
             let totalDividasPendentes = 0;
             dividas.filter(d => d.valorAtual > 0).forEach(d => totalDividasPendentes += parseFloat(d.valorAtual));
             
-            return { totalReceitas, totalDividasPendentes };
+            // NOVO CÁLCULO: Saldo Pendente Total (Valor de Dívidas - Receitas Acumuladas)
+            const saldoPendenteTotal = Math.max(0, totalDividasPendentes - totalReceitas);
+
+            return { totalReceitas, totalDividasPendentes, saldoPendenteTotal };
         }
 
-        // 3. RENDERIZAÇÃO DE TABELAS E SEÇÕES
+        // 3. ATUALIZAÇÃO DO DASHBOARD E RENDERIZAÇÃO
         // -------------------------------------------------------
 
+        const atualizarDashboard = (transacoes, dividas) => {
+            const { totalReceitas, totalDividasPendentes, saldoPendenteTotal } = getTotais(transacoes, dividas);
+
+            // Card 1: Saldo Acumulado (Entradas)
+            document.getElementById('total-lancado').textContent = formatarMoeda(totalReceitas);
+            
+            // Card 3: Saldo Pendente Total (CORREÇÃO DE REQUISITO)
+            saldoPendenteTotalEl.textContent = formatarMoeda(saldoPendenteTotal);
+            
+            // Card 2: Meta de Quitação
+            const valorFaltante = META_FIXA - totalReceitas;
+            document.getElementById('valor-faltante').textContent = formatarMoeda(Math.max(0, valorFaltante));
+
+            // Barra de Progresso
+            const progressoBar = document.getElementById('progresso-bar');
+            const progressoPercentual = Math.min(100, (totalReceitas / META_FIXA) * 100);
+            progressoBar.style.width = `${progressoPercentual}%`;
+        };
+        
         const renderizarContasFixas = () => {
             listaContasFixasEl.innerHTML = '';
             
@@ -727,7 +759,6 @@
         }
 
         const renderizarTabelas = (transacoes, dividas) => {
-            // ... (Lógica de renderização do Dashboard e tabelas)
             const listaEntradasBody = document.getElementById('lista-entradas');
             const listaDividasBody = document.getElementById('lista-dividas-quitar');
             
@@ -738,10 +769,11 @@
             const transacoesOrdenadas = transacoes.sort((a, b) => new Date(b.data) - new Date(a.data));
             transacoesOrdenadas.forEach((t, index) => {
                 const row = listaEntradasBody.insertRow();
+                // A data e descrição são injetadas com valores padrão, pois o pop-up não as pede mais.
                 row.innerHTML = `
-                    <td>${t.descricao}</td>
+                    <td>${t.descricao || 'Receita Lançada'}</td>
                     <td class="valor-caixa">${formatarMoeda(t.valor)}</td>
-                    <td>${formatarData(t.data)}</td>
+                    <td>${formatarData(t.data || new Date().toISOString().slice(0, 10))}</td>
                     <td><button class="btn-acao-tabela deletar" data-index="${index}"><i class="fas fa-trash"></i></button></td>
                 `;
             });
@@ -754,8 +786,6 @@
             } else {
                 dividasAtivas.forEach((d) => {
                     const row = listaDividasBody.insertRow();
-                    
-                    // CORREÇÃO: O id da dívida é inserido aqui para ser pego pelo listener
                     row.innerHTML = `
                         <td>${d.credor}</td>
                         <td>${formatarMoeda(d.valorInicial)}</td>
@@ -771,25 +801,24 @@
         };
 
 
-        // 4. LÓGICA DE AÇÃO (CORRIGIDA)
+        // 4. LÓGICA DE AÇÃO
         // -------------------------------------------------------
         
-        // 4.1. CORREÇÃO: Adicionar Receita
+        // 4.1. Adicionar Receita (SIMPLIFICADO)
         const adicionarReceita = () => {
             const valor = parseFloat(valorInputReceita.value);
-            const descricao = descricaoInputReceita.value.trim();
-            const data = dataInputReceita.value;
 
-            if (isNaN(valor) || valor <= 0 || descricao === "" || data === "") {
-                alert("Por favor, preencha todos os campos da receita corretamente.");
+            if (isNaN(valor) || valor <= 0) {
+                alert("Por favor, insira um valor positivo.");
                 return;
             }
 
             const novaTransacao = {
                 tipo: 'CAIXA',
                 valor: valor.toFixed(2), 
-                descricao: descricao,
-                data: data
+                // Valores padrão para os campos removidos
+                descricao: 'Lançamento Rápido',
+                data: new Date().toISOString().slice(0, 10)
             };
 
             let transacoes = carregarTransacoes();
@@ -800,10 +829,9 @@
             fecharModal(modalReceita);
         };
         
-        // 4.2. CORREÇÃO: Iniciar Quitação (Abre o modal)
+        // 4.2. Iniciar Quitação (Abre o modal)
         const iniciarQuitarDivida = (id) => {
             const dividas = carregarDividas();
-            // CORREÇÃO: Busca a dívida pelo ID
             const divida = dividas.find(d => d.id === id); 
             
             if (!divida || divida.valorAtual <= 0) {
@@ -820,7 +848,7 @@
             modalQuitacao.style.display = 'block';
         }
         
-        // 4.3. CORREÇÃO: Registrar Pagamento
+        // 4.3. Registrar Pagamento
         const registrarPagamento = () => {
             const valorPagamento = parseFloat(valorPagamentoInput.value);
             const dividas = carregarDividas();
@@ -840,7 +868,6 @@
             divida.valorAtual = Math.max(0, divida.valorAtual - valorPagamento);
             
             if (divida.valorAtual <= 0) {
-                // A dívida permanece no array, mas agora tem valorAtual = 0
                 alert(`🎉 Dívida ${divida.credor} quitada com sucesso!`);
             }
             
@@ -862,9 +889,9 @@
             initDashboard(); 
         };
 
-        // 4.5. Lógica do Plano IA (Apenas a função de cálculo é crítica para a Meta Diária)
+        // 4.5. Lógica do Plano IA (Retorna Meta Diária de Quitação)
         const gerarPlanoQuitacaoIA = (isInit = false) => {
-            const meses = parseInt(mesesPlanoInput.value);
+            const meses = parseInt(document.getElementById('meses-plano').value);
             
             if (isNaN(meses) || meses <= 0) return 0;
 
@@ -874,53 +901,58 @@
             if (totalDividasPendentes <= 0) return 0;
 
             const valorMensalNecessario = totalDividasPendentes / meses;
-            const valorDiarioNecessario = valorMensalNecessario / 30; // Baseado em 30 dias para a diária de quitação
+            const valorDiarioNecessario = valorMensalNecessario / 30; 
 
             if (!isInit) {
-                 // Lógica de renderização do HTML do plano (omito aqui por ser extenso, mas deve ser mantida)
-                 let html = ''; // ... (seu código de renderização do plano)
-                 // Se quiser uma renderização baseada no seu código anterior:
-                 // Substitua esta linha pela sua lógica completa de geração do plano em HTML
-                 html = `<p style="color: var(--cor-azul);">Plano de ${meses} meses gerado. Aporte mensal de **${formatarMoeda(valorMensalNecessario)}**.</p>`;
+                 // Lógica de renderização do plano (para manter a funcionalidade do botão)
+                 let html = `<p style="color: var(--cor-azul);">Plano de ${meses} meses gerado. Aporte mensal de **${formatarMoeda(valorMensalNecessario)}**.</p>`;
                  document.getElementById('resultado-plano-ia').innerHTML = html;
             }
             
             return valorDiarioNecessario; 
         };
         
-        // 4.6. NOVO: Função para calcular e exibir a Meta Diária Total
+        // 4.6. Função para calcular e exibir a Meta Diária Total
         const atualizarMetaDiariaTotal = () => {
             const metaFixa = META_DIARIA_FIXAS; 
             const metaQuitacao = gerarPlanoQuitacaoIA(true); 
             const metaTotal = metaFixa + metaQuitacao;
             
-            // Requisito: Exibe APENAS a soma total na abertura
             metaDiariaTotalEl.textContent = formatarMoeda(metaTotal);
         }
 
-        // 5. INICIALIZAÇÃO E LISTENERS
+        // 5. SEÇÕES OCULTÁVEIS
         // -----------------------------------------
 
         const fecharModal = (modalEl) => {
             modalEl.style.display = 'none';
         };
+        
+        const toggleSection = (container, button) => {
+            const isOculta = container.style.display === 'none';
+            
+            if (isOculta) {
+                container.style.display = 'block';
+                button.classList.add('aberto');
+            } else {
+                container.style.display = 'none';
+                button.classList.remove('aberto');
+            }
+        };
+
+
+        // 6. INICIALIZAÇÃO E LISTENERS
+        // -----------------------------------------
 
         const initDashboard = () => {
             const transacoes = carregarTransacoes();
             const dividas = carregarDividas();
             
-            document.getElementById('total-lancado').textContent = formatarMoeda(getTotais(transacoes, dividas).totalReceitas);
-            document.getElementById('saldo-devedor-pendente').textContent = formatarMoeda(getTotais(transacoes, dividas).totalDividasPendentes);
-            
-            const progressoBar = document.getElementById('progresso-bar');
-            const progressoPercentual = Math.min(100, (getTotais(transacoes, dividas).totalReceitas / META_FIXA) * 100);
-            progressoBar.style.width = `${progressoPercentual}%`;
-            document.getElementById('valor-faltante').textContent = formatarMoeda(Math.max(0, META_FIXA - getTotais(transacoes, dividas).totalReceitas));
-
+            atualizarDashboard(transacoes, dividas);
             renderizarContasFixas(); 
             renderizarTabelas(transacoes, dividas);
             
-            // Gera o plano IA e atualiza a Meta Diária Total (necessário para o cálculo)
+            // Inicia o plano e a Meta Diária Total
             gerarPlanoQuitacaoIA();
             atualizarMetaDiariaTotal();
         };
@@ -928,52 +960,40 @@
         // LISTENERS
         document.addEventListener('DOMContentLoaded', initDashboard);
 
-        // CORREÇÃO DE LISTENERS: Adicionar Receita
+        // Lançar Receita (SIMPLIFICADO)
         document.getElementById('abrir-cadastro-receita').addEventListener('click', () => {
-            document.getElementById('valor-input-receita').value = '';
-            document.getElementById('descricao-input-receita').value = '';
-            document.getElementById('data-input-receita').value = new Date().toISOString().slice(0, 10); 
+            valorInputReceita.value = '';
             modalReceita.style.display = 'block';
-            document.getElementById('valor-input-receita').focus();
+            valorInputReceita.focus();
         });
         document.getElementById('fechar-modal-receita').addEventListener('click', () => fecharModal(modalReceita));
-        btnCadastrarReceita.addEventListener('click', adicionarReceita); // CORRIGIDO: Liga a função correta
+        btnCadastrarReceita.addEventListener('click', adicionarReceita); 
         
         // Listeners de Quitação
         document.getElementById('fechar-modal-quitacao').addEventListener('click', () => fecharModal(modalQuitacao));
         btnQuitarDivida.addEventListener('click', registrarPagamento);
         
         // Listener do botão "Gerar Plano" (Renderiza o plano e recalcula a meta)
-        btnGerarPlano.addEventListener('click', () => {
+        document.getElementById('btn-gerar-plano').addEventListener('click', () => {
             gerarPlanoQuitacaoIA(); 
             atualizarMetaDiariaTotal(); 
         });
 
-        // Toggle da seção de dívidas
-        document.getElementById('toggle-dividas').addEventListener('click', () => {
-            const container = document.getElementById('lista-dividas-quitar-container');
-            const toggleBtn = document.getElementById('toggle-dividas');
-            
-            const isOculta = container.style.display === 'none';
-            
-            if (isOculta) {
-                container.style.display = 'block';
-                toggleBtn.classList.add('aberto');
-            } else {
-                container.style.display = 'none';
-                toggleBtn.classList.remove('aberto');
-            }
-        });
+        // Toggle da seção de Dívidas (Requisito: Inicia fechada)
+        toggleDividasBtn.addEventListener('click', () => toggleSection(listaDividasQuitarContainer, toggleDividasBtn));
+        
+        // Toggle da seção de Receitas (NOVO REQUISITO: Inicia fechada)
+        toggleReceitasBtn.addEventListener('click', () => toggleSection(listaReceitasContainer, toggleReceitasBtn));
         
         // Delegação de evento (Deletar Receita e Iniciar Quitação)
         document.addEventListener('click', (e) => {
-            // Deletar Receita (CORRIGIDO: Busca pelo data-index)
+            // Deletar Receita
             if (e.target.closest('.btn-acao-tabela.deletar')) {
                 const index = e.target.closest('.btn-acao-tabela.deletar').getAttribute('data-index');
                 deletarReceita(parseInt(index));
             }
             
-            // Iniciar Quitação (CORRIGIDO: Busca pelo data-id)
+            // Iniciar Quitação
             if (e.target.closest('.btn-acao-tabela.quitar')) {
                 const id = parseInt(e.target.closest('.btn-acao-tabela.quitar').getAttribute('data-id'));
                 iniciarQuitarDivida(id);
