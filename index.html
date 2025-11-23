@@ -90,6 +90,20 @@
              color: var(--cor-roxo-data);
              margin-right: 8px;
         }
+        
+        /* LOCALIZADOR DE DATA */
+        #data-atual-info {
+            background-color: #2D2D38;
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-align: right;
+            margin-bottom: 20px;
+            font-size: 0.9em;
+            font-weight: bold;
+            color: var(--cor-roxo-data);
+            border-right: 3px solid var(--cor-roxo-data);
+        }
+
 
         /* =================================== */
         /* 2. CARD META DIÁRIA TOTAL (DESTAQUE)*/
@@ -360,7 +374,7 @@
         }
         
         /* 5. Contas Fixas e Plano IA */
-        .contas-fixas-container, .plano-quitacao {
+        .contas-fixas-container, .plano-quitacao, #feedback-fixas-quitadas {
              background-color: var(--cor-fundo-card);
              padding: 30px;
              border-radius: 10px;
@@ -369,26 +383,22 @@
              box-shadow: var(--sombra-card);
              position: relative; 
         }
-        /* Notificação de Meta Batida (Contas Fixas) */
-        .contas-fixas-container.meta-batida::before {
-             content: '✅ PROTOCOL ESTABLISHED: Contas Fixas do Mês 100% Cobertas!';
-             position: absolute;
-             top: 0;
-             left: 0;
-             right: 0;
-             background-color: var(--cor-verde-neon);
-             color: var(--cor-fundo-principal);
-             padding: 8px 15px;
-             border-top-left-radius: 9px;
-             border-top-right-radius: 9px;
-             font-size: 0.9em;
-             font-weight: 700;
+        
+        /* FEEDBACK DE QUITAÇÃO DAS FIXAS */
+        #feedback-fixas-quitadas {
+             background: linear-gradient(135deg, #00300A, var(--cor-verde-neon));
              text-align: center;
-             letter-spacing: 1px;
-             box-shadow: 0 0 10px rgba(57, 255, 20, 0.7);
+             color: var(--cor-fundo-principal);
+             font-family: var(--fonte-titulo);
+             font-size: 1.3em;
+             font-weight: 800;
+             box-shadow: 0 0 20px rgba(57, 255, 20, 0.5);
         }
-        .contas-fixas-container.meta-batida {
-             padding-top: 45px; 
+        #feedback-fixas-quitadas p {
+             margin-top: 10px;
+             font-size: 0.8em;
+             font-family: var(--fonte-corpo);
+             font-weight: 400;
         }
 
 
@@ -645,6 +655,10 @@
     
     <h1><i class="fas fa-satellite-dish"></i> Debt-Zero Protocol</h1>
 
+    <div class="container" id="data-atual-info">
+        <i class="fas fa-calendar-alt"></i> Data do Sistema: <span id="data-atual"></span>
+    </div>
+
     <div class="motivacao-box container" id="motivacao-diaria">
         <i class="fas fa-terminal"></i>
         "EXECUTE COMMAND: DISCIPLINA. STATUS: LIBERDADE."
@@ -660,14 +674,14 @@
     <header class="dashboard-header container">
         
         <div class="info-card">
-            <p class="rotulo"><i class="fas fa-coins"></i> Saldo Acumulado (Inputs)</p>
+            <p class="rotulo"><i class="fas fa-coins"></i> Saldo Acumulado (Total)</p>
             <span id="total-lancado" class="valor valor-caixa">R$ 0,00</span>
         </div>
         
         <div class="progress-area" id="meta-area">
-            <p class="rotulo"><i class="fas fa-bullseye"></i> Quitação Total - Status</p>
-            <p style="margin-bottom: 5px; color: var(--cor-cinza-claro);">Total Dívidas Pendentes: <span id="total-dividas-pendentes" style="font-weight: bold; color: var(--cor-vermelho-alerta);">R$ 0,00</span></p>
-            <p>Aporte Restante para Dívidas: <span id="valor-faltante" style="font-weight: bold; color: var(--cor-vermelho-alerta);">R$ 0,00</span></p>
+            <p class="rotulo"><i class="fas fa-bullseye"></i> Quitação de Dívidas ÚNICAS - Status</p>
+            <p style="margin-bottom: 5px; color: var(--cor-cinza-claro);">Dívidas Únicas Pendentes: <span id="total-dividas-pendentes" style="font-weight: bold; color: var(--cor-vermelho-alerta);">R$ 0,00</span></p>
+            <p>Excedente de Aporte (Após Fixas): <span id="valor-excedente" style="font-weight: bold; color: var(--cor-verde-neon);">R$ 0,00</span></p>
             
             <div class="progresso-bar-container">
                 <div id="progresso-bar" class="progresso" style="width: 0%;"></div>
@@ -675,7 +689,7 @@
         </div>
         
         <div class="info-card">
-            <p class="rotulo"><i class="fas fa-balance-scale-right"></i> Saldo Pendente (Output)</p>
+            <p class="rotulo"><i class="fas fa-balance-scale-right"></i> Saldo Pendente (A Quitar)</p>
             <span id="saldo-pendente-total" class="valor valor-divida">R$ 0,00</span>
         </div>
     </header>
@@ -710,8 +724,14 @@
             </div>
         </div>
         
+        <div id="feedback-fixas-quitadas" style="display: none;">
+             <i class="fas fa-trophy"></i> META DE CONTAS FIXAS BATIDA! <i class="fas fa-trophy"></i>
+             <p>Protocolo de Contas Fixas Concluído para este ciclo. Foco total nas Dívidas Únicas!</p>
+        </div>
+
+        
         <div id="contas-fixas-card" class="contas-fixas-container">
-             <h3><i class="fas fa-calendar-check"></i> CONTAS FIXAS (ORÇAMENTO BASE)</h3>
+             <h3><i class="fas fa-calendar-check"></i> CONTAS FIXAS (R$ <span id="soma-fixas">0,00</span>)</h3>
              <ul id="lista-contas-fixas">
                  </ul>
         </div>
@@ -719,7 +739,7 @@
         
         <div id="dividas-container" class="toggle-section">
             <div class="section-toggle dividas" id="toggle-dividas">
-                <h2><i class="fas fa-exclamation-triangle"></i> DÍVIDAS A QUITAR (DEBT PROTOCOL)</h2>
+                <h2><i class="fas fa-exclamation-triangle"></i> DÍVIDAS ÚNICAS (DEBT PROTOCOL)</h2>
                 <i class="fas fa-chevron-down"></i>
             </div>
             
@@ -743,7 +763,7 @@
             <h3><i class="fas fa-robot"></i> PLANO DE QUITAÇÃO ESTRATÉGICO (AI)</h3>
             
             <div id="plano-ia-controls">
-                <label for="meses-plano">Meses para Quitar Dívidas:</label>
+                <label for="meses-plano">Meses para Quitar Dívidas ÚNICAS:</label>
                 <input type="number" id="meses-plano" value="5" min="1" max="60">
                 <button id="btn-gerar-plano" class="btn-principal">
                     <i class="fas fa-brain"></i> Recalcular Plano
@@ -838,17 +858,20 @@
         
         let idDebtQuitting = null; 
 
-        // Elementos DOM para Meta Diária
+        // Elementos DOM
+        const dataAtualEl = document.getElementById('data-atual');
         const metaDiariaCard = document.getElementById('meta-diaria-card');
         const metaDiariaTotalEl = document.getElementById('meta-diaria-total-el');
         const metaDiariaIncentivoEl = document.getElementById('meta-diaria-incentivo');
-        const saldoPendenteTotalEl = document.getElementById('saldo-pendente-total');
         const totalDividasPendentesEl = document.getElementById('total-dividas-pendentes'); 
-        const valorFaltanteEl = document.getElementById('valor-faltante'); 
-
-        // Elementos DOM para Contas Fixas
+        const valorExcedenteEl = document.getElementById('valor-excedente'); 
+        const saldoPendenteTotalEl = document.getElementById('saldo-pendente-total');
         const contasFixasCard = document.getElementById('contas-fixas-card');
-        
+        const feedbackFixasQuitadasEl = document.getElementById('feedback-fixas-quitadas');
+        const listaContasFixasEl = document.getElementById('lista-contas-fixas');
+        const somaFixasEl = document.getElementById('soma-fixas');
+
+
         // Elementos DOM para Modais
         const modalReceita = document.getElementById('modal-receita');
         const btnCadastrarReceita = document.getElementById('btn-cadastrar-receita');
@@ -862,7 +885,6 @@
         const listaDividasQuitarContainer = document.getElementById('lista-dividas-quitar-container');
         const toggleReceitasBtn = document.getElementById('toggle-receitas');
         const listaReceitasContainer = document.getElementById('lista-receitas-container');
-        const listaContasFixasEl = document.getElementById('lista-contas-fixas');
 
 
         // 2. FUNÇÕES DE UTILIDADE (LOCAL STORAGE & FORMATO)
@@ -904,6 +926,14 @@
             return new Date().toISOString().slice(0, 10);
         }
         
+        // Retorna o primeiro dia do mês atual (ex: 2025-11-01)
+        const getPrimeiroDiaDoMes = (data = new Date()) => {
+            return new Date(data.getFullYear(), data.getMonth(), 1).toISOString().slice(0, 10);
+        }
+
+        // ==========================================================
+        // PRINCIPAL LÓGICA: PRIORIDADE FIXAS -> DÍVIDAS ÚNICAS
+        // ==========================================================
         const getTotais = (transacoes, dividas) => {
             let totalReceitas = 0;
             transacoes.forEach(t => totalReceitas += parseFloat(t.valor));
@@ -911,16 +941,19 @@
             let totalDividasPendentes = 0;
             dividas.filter(d => d.valorAtual > 0.01).forEach(d => totalDividasPendentes += parseFloat(d.valorAtual));
             
-            // Saldo Pendente Total: Valor de Dívidas - Receitas Acumuladas
-            const saldoPendenteTotal = Math.max(0, totalDividasPendentes - totalReceitas);
+            // 1. O excedente é o que sobra APÓS pagar as Contas Fixas
+            const excedenteReceitas = Math.max(0, totalReceitas - SOMA_CONTAS_FIXAS); 
 
-            return { totalReceitas, totalDividasPendentes, saldoPendenteTotal };
+            // 2. O Saldo Pendente Total (Dívidas Únicas) é o que falta no excedente
+            const saldoPendenteTotal = Math.max(0, totalDividasPendentes - excedenteReceitas);
+
+            return { totalReceitas, totalDividasPendentes, excedenteReceitas, saldoPendenteTotal };
         }
         
-        // Calcula se a Meta Diária foi atingida HOJE
-        const getMetaDiariaAtingidaHoje = (transacoes) => {
-            // 1. Calcula a Meta Diária Total (Fixas + Quitação)
-            const metaQuitacaoDiaria = gerarPlanoQuitacaoIA(true); 
+        // Calcula se a Meta Diária (Fixas + Quitação) foi atingida HOJE
+        const getMetaDiariaAtingidaHoje = (transacoes, totalDividasPendentes) => {
+            // 1. Meta Quitação Diária SÓ PARA DÍVIDAS ÚNICAS
+            const metaQuitacaoDiaria = gerarPlanoQuitacaoIA(true, totalDividasPendentes); 
             const metaTotalDiaria = META_DIARIA_FIXAS + metaQuitacaoDiaria;
             
             // 2. Soma as receitas do dia
@@ -931,14 +964,45 @@
             
             return {
                 metaTotal: metaTotalDiaria,
-                atingido: receitasHoje >= metaTotalDiaria - 0.01, // 1 centavo de tolerância
+                atingido: receitasHoje >= metaTotalDiaria - 0.01,
                 recebidoHoje: receitasHoje
             };
         }
         
-        // Verifica se a meta de Contas Fixas foi atingida
-        const getMetaContasFixasAtingida = (totalReceitas) => {
-             return totalReceitas >= SOMA_CONTAS_FIXAS - 0.01;
+        // Verifica se a meta de Contas Fixas foi atingida e atualiza localStorage
+        const verificarEstadoContasFixas = (totalReceitas) => {
+             const hoje = getHojeString();
+             const primeiroDiaMes = getPrimeiroDiaDoMes();
+             const fixasQuitadasEm = localStorage.getItem('fixasQuitadasEm');
+             const metaFixasAtingida = totalReceitas >= SOMA_CONTAS_FIXAS - 0.01;
+             
+             let deveMostrar = true;
+             
+             // Se já quitou em uma data deste mês, oculta
+             if (fixasQuitadasEm && fixasQuitadasEm >= primeiroDiaMes) {
+                 deveMostrar = false;
+             } 
+             
+             // Se atingiu AGORA, salva a data de quitação e oculta
+             if (metaFixasAtingida && (!fixasQuitadasEm || fixasQuitadasEm < primeiroDiaMes)) {
+                 localStorage.setItem('fixasQuitadasEm', hoje);
+                 deveMostrar = false;
+             }
+             
+             // Se é o primeiro dia do mês e já quitou antes, a flag é resetada
+             if (hoje === primeiroDiaMes) {
+                  // Se o mês da quitação salva é diferente do mês atual, "reseta" (se o mês atual for maior)
+                 const mesAtual = new Date(hoje).getMonth();
+                 const mesQuited = fixasQuitadasEm ? new Date(fixasQuitadasEm).getMonth() : -1;
+                 
+                 if(mesQuited !== mesAtual && mesAtual > mesQuited) {
+                      localStorage.removeItem('fixasQuitadasEm'); // Reseta a flag para o novo ciclo
+                      deveMostrar = true; // Garante que a seção apareça no dia 1º
+                 }
+             }
+
+             contasFixasCard.style.display = deveMostrar ? 'block' : 'none';
+             feedbackFixasQuitadasEl.style.display = deveMostrar ? 'none' : 'block';
         }
 
 
@@ -946,36 +1010,35 @@
         // -------------------------------------------------------
 
         const atualizarDashboard = (transacoes, dividas) => {
-            const { totalReceitas, totalDividasPendentes, saldoPendenteTotal } = getTotais(transacoes, dividas);
+            const { totalReceitas, totalDividasPendentes, excedenteReceitas, saldoPendenteTotal } = getTotais(transacoes, dividas);
+
+            // Adiciona a data atual no Dashboard
+            dataAtualEl.textContent = new Date().toLocaleDateString('pt-BR');
+            somaFixasEl.textContent = formatarMoeda(SOMA_CONTAS_FIXAS).replace('R$', '').trim(); // Remove R$ para estilizar o valor
 
             // Card 1: Saldo Acumulado (Entradas)
             document.getElementById('total-lancado').textContent = formatarMoeda(totalReceitas);
             
-            // Card 3: Saldo Pendente Total
+            // Card 3: Saldo Pendente Total (Dívidas Únicas - Excedente)
             saldoPendenteTotalEl.textContent = formatarMoeda(saldoPendenteTotal);
             
             // Card 2: Progresso da Meta Total
             totalDividasPendentesEl.textContent = formatarMoeda(totalDividasPendentes);
-            const valorFaltante = totalDividasPendentes - totalReceitas;
-            valorFaltanteEl.textContent = formatarMoeda(Math.max(0, valorFaltante));
+            valorExcedenteEl.textContent = formatarMoeda(excedenteReceitas);
 
-            // Barra de Progresso (Progresso das Receitas em Relação às Dívidas Pendentes)
+            // Barra de Progresso (Excedente em Relação às Dívidas Pendentes Únicas)
             const progressoBar = document.getElementById('progresso-bar');
-            const progressoPercentual = totalDividasPendentes > 0.01 ? (totalReceitas / totalDividasPendentes) * 100 : (totalReceitas > 0 ? 100 : 0);
+            const progressoPercentual = totalDividasPendentes > 0.01 ? (excedenteReceitas / totalDividasPendentes) * 100 : (excedenteReceitas > 0 ? 100 : 0);
             progressoBar.style.width = `${Math.min(100, progressoPercentual)}%`;
             
-            // Notificação de Meta de Contas Fixas
-            if (getMetaContasFixasAtingida(totalReceitas)) {
-                contasFixasCard.classList.add('meta-batida');
-            } else {
-                 contasFixasCard.classList.remove('meta-batida');
-            }
+            // Lógica de Ocultação/Reexibição das Contas Fixas
+            verificarEstadoContasFixas(totalReceitas);
         };
         
         // Renderiza o card da Meta Diária
-        const renderizarMetaDiaria = (transacoes) => {
-            const { metaTotal, atingido } = getMetaDiariaAtingidaHoje(transacoes);
-            const { recebidoHoje } = getMetaDiariaAtingidaHoje(transacoes);
+        const renderizarMetaDiaria = (transacoes, totalDividasPendentes) => {
+            const { metaTotal, atingido } = getMetaDiariaAtingidaHoje(transacoes, totalDividasPendentes);
+            const { recebidoHoje } = getMetaDiariaAtingidaHoje(transacoes, totalDividasPendentes);
 
             metaDiariaTotalEl.textContent = formatarMoeda(metaTotal);
 
@@ -1056,10 +1119,8 @@
         // -------------------------------------------------------
         
         // 4.5. Lógica do Plano IA (Retorna Meta Diária de Quitação)
-        const gerarPlanoQuitacaoIA = (isInit = false) => {
+        const gerarPlanoQuitacaoIA = (isInit = false, totalDividasPendentes) => {
             const meses = parseInt(document.getElementById('meses-plano').value) || 5;
-            const dividas = carregarDividas();
-            const { totalDividasPendentes } = getTotais(carregarTransacoes(), dividas);
             
             if (totalDividasPendentes <= 0.01) {
                 if (!isInit) {
@@ -1236,14 +1297,15 @@
         const initDashboard = () => {
             const transacoes = carregarTransacoes();
             const dividas = carregarDividas();
+            const { totalDividasPendentes } = getTotais(transacoes, dividas);
             
             atualizarDashboard(transacoes, dividas);
             renderizarContasFixas(); 
             renderizarTabelas(transacoes, dividas);
             
             // Inicia o plano e renderiza a Meta Diária Total com status de conclusão
-            gerarPlanoQuitacaoIA(false); 
-            renderizarMetaDiaria(transacoes);
+            gerarPlanoQuitacaoIA(false, totalDividasPendentes); 
+            renderizarMetaDiaria(transacoes, totalDividasPendentes);
             
             // Renderiza as dicas de quitação
             renderizarDicasQuitacao(dividas); 
@@ -1267,9 +1329,10 @@
         
         // Listener do botão "Gerar Plano" (Renderiza o plano e recalcula a meta)
         document.getElementById('btn-gerar-plano').addEventListener('click', () => {
+            const { totalDividasPendentes } = getTotais(carregarTransacoes(), carregarDividas());
             // Re-renderiza o plano e em seguida a meta diária (que depende do plano)
-            gerarPlanoQuitacaoIA(false); 
-            renderizarMetaDiaria(carregarTransacoes()); 
+            gerarPlanoQuitacaoIA(false, totalDividasPendentes); 
+            renderizarMetaDiaria(carregarTransacoes(), totalDividasPendentes); 
         });
 
         // Toggle da seção de Dívidas
