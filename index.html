@@ -298,30 +298,6 @@
             color: var(--cor-alerta);
         }
         
-        /* NOVO: Botão de Excluir Conta no Modal de Perfil (O código original tinha um aqui, mas será movido) */
-        /* #btn-excluir-conta {
-             color: var(--cor-divida);
-             border-top: 1px solid var(--cor-borda);
-             margin-top: 10px;
-        }
-        #btn-excluir-conta:hover {
-             color: #FF7777;
-             background-color: rgba(239, 68, 68, 0.1);
-             border-left: 5px solid var(--cor-divida);
-        } */
-        
-        /* REMOVIDO: Botão de Resetar Dados (Removido do HTML) */
-        /* #btn-reset-data {
-             color: var(--cor-divida);
-             border-top: 1px solid var(--cor-borda);
-             margin-top: 10px;
-        }
-        #btn-reset-data:hover {
-             color: #FF7777;
-             background-color: rgba(239, 68, 68, 0.1);
-             border-left: 5px solid var(--cor-divida);
-        } */
-        
         /* Botão de Logout Simples */
         #btn-logout-only {
              color: var(--cor-alerta);
@@ -1116,30 +1092,6 @@
              sessionTimer = setTimeout(resetSession, SESSION_TIMEOUT_MS);
         };
         
-        // REMOVIDO: Função para RESETAR TODOS OS DADOS (função que foi removida da UI)
-        /*
-        const resetAllData = () => {
-             if (confirm('ATENÇÃO: Isso irá limpar todo o LOG de transações, Contas Fixas, Dívidas e te desconectar. Você confirma?')) {
-                 if (sessionTimer) clearTimeout(sessionTimer);
-                 
-                 // Mantém apenas o perfil
-                 const profile = localStorage.getItem('userProfile');
-                 const profilePic = localStorage.getItem('profilePic');
-    
-                 localStorage.clear(); 
-                 
-                 if (profile) localStorage.setItem('userProfile', profile);
-                 if (profilePic) localStorage.setItem('profilePic', profilePic);
-                 
-                 // Garante que as contas fixas iniciais sejam salvas para o próximo ciclo
-                 salvarContasFixas(CONTAS_FIXAS_INITIAL);
-                 salvarDividas([]); // Garante que as dívidas estão vazias
-                 
-                 window.location.reload(); 
-             }
-        };
-        */
-
 
         // ===========================================
         // FUNÇÕES DE PERFIL E SIDEBAR
@@ -1390,7 +1342,7 @@
         // ===========================================
         
         const initDashboard = () => {
-            const transacoes = carregarTransacoes();
+            const transacoes = checkAndCleanLog(); // ATUALIZADO: Chama a função de limpeza
             const dividas = carregarDividas();
             const fixas = checkAndResetContasFixas(); 
             
@@ -1404,6 +1356,26 @@
             verificarEstadoContasFixas(fixas, dividas); // Passando dívidas
         };
         
+        // --- FUNÇÃO ADICIONADA: Limpeza Diária do Log de Entradas ---
+        const checkAndCleanLog = () => {
+             const hoje = getHojeString();
+             const ultimaLimpeza = localStorage.getItem('lastLogCleanDate');
+             let transacoes = carregarTransacoes();
+             
+             if (ultimaLimpeza !== hoje) {
+                 // Limpa as transações de ENTRADA (valor > 0), mantendo as de saída (pagamentos)
+                 const transacoesFiltradas = transacoes.filter(t => parseFloat(t.valor) <= 0);
+                 
+                 salvarTransacoes(transacoesFiltradas);
+                 localStorage.setItem('lastLogCleanDate', hoje);
+                 
+                 console.log(`Log de entradas limpo. Última limpeza: ${ultimaLimpeza}.`);
+                 return transacoesFiltradas;
+             }
+             
+             return transacoes;
+        }
+
         // --- Funções de Contas Fixas ---
         const isHojePassouDiaQuinze = () => new Date().getDate() > 15;
         const checkAndResetContasFixas = () => {
@@ -1670,7 +1642,7 @@
                 ? (totalPagoDividas / totalDividasIniciais) * 100 
                 : (totalDividasPendentes === 0 ? 100 : 0);
                 
-            // CORREÇÃO 5: Saldo Pendente Total = Dívidas Pendentes + Contas Fixas Pendentes
+            // Saldo Pendente Total = Dívidas Pendentes + Contas Fixas Pendentes
             const somaFixasPendentes = fixas.filter(f => !f.pago).reduce((sum, item) => sum + item.valor, 0);
             const saldoPendenteTotal = totalDividasPendentes + somaFixasPendentes; 
 
@@ -2008,7 +1980,6 @@
              
              // NOVO: Botões de Logout/Reset
              document.getElementById('btn-logout-only').addEventListener('click', logoutOnly);
-             // REMOVIDO: document.getElementById('btn-reset-data').addEventListener('click', resetAllData);
              
              // MOVIDO: Botão de excluir conta agora está no modal de perfil
              document.getElementById('btn-excluir-conta-modal').addEventListener('click', excluirConta);
@@ -2040,9 +2011,6 @@
              });
              
              // Os listeners dos botões de fechar dos modais já devem funcionar com a correção acima
-             // document.getElementById('fechar-modal-relatorio').addEventListener('click', () => {
-             //     document.getElementById('modal-relatorio').style.display = 'none';
-             // });
 
              document.getElementById('abrir-cadastro-receita').addEventListener('click', () => document.getElementById('modal-receita').style.display = 'block');
              document.getElementById('btn-cadastrar-receita').addEventListener('click', cadastrarReceita);
