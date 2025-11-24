@@ -298,8 +298,8 @@
             color: var(--cor-alerta);
         }
         
-        /* Novo Botão de Excluir Conta */
-        #btn-excluir-conta {
+        /* NOVO: Botão de Excluir Conta no Modal de Perfil (O código original tinha um aqui, mas será movido) */
+        /* #btn-excluir-conta {
              color: var(--cor-divida);
              border-top: 1px solid var(--cor-borda);
              margin-top: 10px;
@@ -308,10 +308,10 @@
              color: #FF7777;
              background-color: rgba(239, 68, 68, 0.1);
              border-left: 5px solid var(--cor-divida);
-        }
+        } */
         
-        /* Novo Botão de Resetar Dados */
-        #btn-reset-data {
+        /* REMOVIDO: Botão de Resetar Dados (Removido do HTML) */
+        /* #btn-reset-data {
              color: var(--cor-divida);
              border-top: 1px solid var(--cor-borda);
              margin-top: 10px;
@@ -320,7 +320,7 @@
              color: #FF7777;
              background-color: rgba(239, 68, 68, 0.1);
              border-left: 5px solid var(--cor-divida);
-        }
+        } */
         
         /* Botão de Logout Simples */
         #btn-logout-only {
@@ -499,6 +499,18 @@
              text-align: left;
              font-weight: 600;
         }
+        
+        /* ESTILO NOVO: Botão Excluir Conta no Perfil */
+        #btn-excluir-conta-modal {
+             background-color: var(--cor-divida);
+             color: var(--cor-fundo-principal);
+             margin-top: 15px;
+             width: 100%;
+        }
+        #btn-excluir-conta-modal:hover {
+             background-color: #FF7777;
+             box-shadow: 0 0 8px rgba(239, 68, 68, 0.7);
+        }
 
         
         /* [DASHBOARD E CARDS] */
@@ -622,11 +634,9 @@
         </div>
         
         <a href="javascript:void(0)" id="menu-perfil"><i class="fas fa-id-badge"></i> Perfil</a>
-        <button id="btn-excluir-conta"><i class="fas fa-user-slash"></i> EXCLUIR CONTA</button>
         <a href="https://wa.me/5521967074896" target="_blank" id="menu-suporte"><i class="fab fa-whatsapp"></i> Suporte</a>
         <button id="btn-logout-only"><i class="fas fa-sign-out-alt"></i> SAIR (MANTER DADOS)</button>
-        <button id="btn-reset-data"><i class="fas fa-trash-restore"></i> RESETAR TUDO (APAGAR LOG)</button>
-    </div>
+        </div>
     
     <input type="file" id="photo-input" accept="image/*" style="display: none;">
 
@@ -964,6 +974,9 @@
                  <button id="btn-salvar-perfil" class="btn-principal" style="background-color: var(--cor-fixa);">
                      <i class="fas fa-save"></i> SALVAR ALTERAÇÕES
                  </button>
+                 <button id="btn-excluir-conta-modal" class="btn-principal">
+                      <i class="fas fa-user-slash"></i> EXCLUIR CONTA
+                 </button>
             </div>
         </div>
     </div>
@@ -1103,7 +1116,8 @@
              sessionTimer = setTimeout(resetSession, SESSION_TIMEOUT_MS);
         };
         
-        // NOVO: Função para RESETAR TODOS OS DADOS (excluindo perfil)
+        // REMOVIDO: Função para RESETAR TODOS OS DADOS (função que foi removida da UI)
+        /*
         const resetAllData = () => {
              if (confirm('ATENÇÃO: Isso irá limpar todo o LOG de transações, Contas Fixas, Dívidas e te desconectar. Você confirma?')) {
                  if (sessionTimer) clearTimeout(sessionTimer);
@@ -1124,6 +1138,8 @@
                  window.location.reload(); 
              }
         };
+        */
+
 
         // ===========================================
         // FUNÇÕES DE PERFIL E SIDEBAR
@@ -1400,6 +1416,7 @@
             }
             
             // Lógica de Reset mensal (após o dia 15)
+            // Mantida a lógica original, pois é um reset MENSAL das contas a pagar.
             if (isHojePassouDiaQuinze() && localStorage.getItem('fixasResetadas') !== getHojeString()) {
                 fixas = CONTAS_FIXAS_INITIAL.map(fixa => ({...fixa, pago: false}));
                 salvarContasFixas(fixas);
@@ -1449,7 +1466,8 @@
             if (dividas.length > 0 && totalDividasPendentes > 0.01) {
                  dividasContainer.style.display = 'block'; 
                  planoQuitacao.style.display = 'block'; 
-                 gerarPlanoQuitacaoIA(false, totalDividasPendentes);
+                 // Chamada sempre que o estado é verificado para manter o plano atualizado
+                 gerarPlanoQuitacaoIA(false, totalDividasPendentes); 
                  renderizarDicasQuitacao(dividas);
             } else {
                  dividasContainer.style.display = 'none'; 
@@ -1620,16 +1638,17 @@
         // --- Lógica de Negócio e Dashboard (Ajuste no getTotais) ---
         const getSomaFixas = (fixas) => fixas.filter(f => !f.pago).reduce((sum, item) => sum + item.valor, 0);
         const getMetaDiariaFixas = (somaFixas) => somaFixas / DIAS_UTEIS_MES;
-        const getReceitasPorDia = (transacoes) => {
-             const receitasDiarias = {};
-             transacoes.filter(t => parseFloat(t.valor) > 0).forEach(t => { 
-                 const data = t.data;
-                 receitasDiarias[data] = (receitasDiarias[data] || 0) + parseFloat(t.valor);
-             });
-             return receitasDiarias;
-        }
         
-        // NOVO: Função central de cálculo de totais (Recebe FIXAS para correção 5)
+        // ALTERAÇÃO DE LÓGICA: O aporte do dia deve considerar apenas transações com a data de hoje
+        const getReceitasPorDia = (transacoes, dataAlvo = getHojeString()) => {
+             let recebidoHoje = 0;
+             // Filtra as transações de ENTRADA (valor > 0) para a data alvo
+             transacoes.filter(t => parseFloat(t.valor) > 0 && t.data === dataAlvo).forEach(t => { 
+                 recebidoHoje += parseFloat(t.valor);
+             });
+             return recebidoHoje;
+        }
+
         const getTotais = (transacoes, dividas, fixas) => {
             let totalReceitas = transacoes.reduce((sum, t) => sum + parseFloat(t.valor), 0); 
             totalReceitas = Math.max(0, totalReceitas);
@@ -1684,25 +1703,33 @@
              }
              return valorDiarioNecessario; 
         };
+        
+        // FUNÇÃO AJUSTADA PARA REFLETIR O REINÍCIO DIÁRIO DA META
         const getMetaDiariaAtingida = (transacoes, dividas, fixas, dataAlvo = getHojeString()) => {
             const somaFixasPendentes = getSomaFixas(fixas);
             const metaDiariaFixas = somaFixasPendentes / DIAS_UTEIS_MES;
-            const receitasDiarias = getReceitasPorDia(transacoes);
+            
+            // RECEBIDO AGORA CHAMA A FUNÇÃO AJUSTADA QUE SÓ CONSIDERA O DIA ATUAL
+            const recebido = getReceitasPorDia(transacoes, dataAlvo); 
             
             // A meta de quitação diária só é calculada se houver dívidas pendentes
             const totalDividasPendentes = dividas.reduce((sum, d) => sum + d.valorAtual, 0);
             const metaQuitacaoDiaria = totalDividasPendentes > 0.01 ? gerarPlanoQuitacaoIA(true, totalDividasPendentes) : 0; 
 
             const metaTotalDiaria = metaDiariaFixas + metaQuitacaoDiaria;
-            const recebido = receitasDiarias[dataAlvo] || 0;
             const faltando = Math.max(0, metaTotalDiaria - recebido);
+            
+            // O atingido é baseado no aporte do dia contra a meta do dia
+            const atingido = recebido >= metaTotalDiaria - 0.009; 
+            
             return {
                 metaTotal: metaTotalDiaria,
-                atingido: recebido >= metaTotalDiaria - 0.009, 
+                atingido: atingido, 
                 recebido: recebido,
                 faltando: faltando
             };
         }
+        
         const atualizarDashboard = (transacoes, dividas, fixas) => {
             const { totalReceitas, totalDividasPendentes, progressoCapital, saldoPendenteTotal, somaFixasPendentes } = getTotais(transacoes, dividas, fixas); // FIX: Passa 'fixas'
             
@@ -1801,12 +1828,17 @@
              renderizarContasFixas(fixas);
              renderizarDívidas(dividas);
         }
+        
+        // FUNÇÃO AJUSTADA PARA REINÍCIO DIÁRIO
         const renderizarMetaDiaria = (transacoes, dividas, fixas) => {
              const { metaTotal, atingido, recebido, faltando } = getMetaDiariaAtingida(transacoes, dividas, fixas, getHojeString());
              const metaDiariaTotalEl = document.getElementById('meta-diaria-total-el');
              const metaDiariaCard = document.getElementById('meta-diaria-card');
              const metaDiariaIncentivoEl = document.getElementById('meta-diaria-incentivo');
+             
+             // O valor total da meta SEMPRE será recalculado
              metaDiariaTotalEl.textContent = formatarMoeda(metaTotal);
+             
              if (atingido) {
                  metaDiariaCard.classList.add('meta-batida');
                  metaDiariaTotalEl.style.color = 'var(--cor-sucesso)'; 
@@ -1860,27 +1892,44 @@
              div.innerHTML = html;
         }
         const calcularRelatorioDiario = (transacoes, dividas, fixas) => {
-            const receitasDiarias = getReceitasPorDia(transacoes);
+            // A função original estava retornando um objeto vazio para getReceitasPorDia(), alterado para a nova função
+            // que considera apenas a data atual. Para o relatório, precisamos iterar.
+            
+            // 1. Obter todas as datas com transações de entrada
+            const datasComReceitas = Array.from(new Set(
+                 transacoes.filter(t => parseFloat(t.valor) > 0).map(t => t.data)
+            ));
+
+            // 2. Mapear receitas por dia
+            const receitasDiarias = {};
+            transacoes.filter(t => parseFloat(t.valor) > 0).forEach(t => { 
+                 const data = t.data;
+                 receitasDiarias[data] = (receitasDiarias[data] || 0) + parseFloat(t.valor);
+            });
+            
+            // 3. Obter todas as datas únicas e adicionar a data de hoje, se não estiver inclusa
             const todasAsDatas = Array.from(new Set(Object.keys(receitasDiarias)));
-            
-            // Soma fixa de contas fixas
-            const somaFixas = CONTAS_FIXAS_INITIAL.reduce((sum, item) => sum + item.valor, 0);
-            const metaDiariaFixas = somaFixas / DIAS_UTEIS_MES;
-            
-            // Calcula a meta de quitação baseada no total inicial de todas as dívidas cadastradas (mesmo as quitadas)
-            const todasDividas = localStorage.getItem('dividas') ? JSON.parse(localStorage.getItem('dividas')) : [];
-            const totalDividasIniciais = todasDividas.reduce((sum, d) => sum + parseFloat(d.valorInicial), 0);
-            
-            const meses = parseInt(document.getElementById('meses-plano').value) || 5;
-            const metaQuitacaoDiaria = (totalDividasIniciais / meses) / DIAS_UTEIS_MES; 
-            const metaTotalDiaria = metaDiariaFixas + metaQuitacaoDiaria;
-            
             const hoje = getHojeString();
             if (!todasAsDatas.includes(hoje)) { todasAsDatas.push(hoje); }
             todasAsDatas.sort((a, b) => new Date(b) - new Date(a));
             
+            // 4. Calcular Meta Diária Fija (Contas Fixas)
+            const somaFixas = CONTAS_FIXAS_INITIAL.reduce((sum, item) => sum + item.valor, 0);
+            const metaDiariaFixas = somaFixas / DIAS_UTEIS_MES;
+            
+            // 5. Calcular Meta Diária de Quitação (Baseado no valor inicial TOTAL das dívidas)
+            const todasDividas = localStorage.getItem('dividas') ? JSON.parse(localStorage.getItem('dividas')) : [];
+            const totalDividasIniciais = todasDividas.reduce((sum, d) => sum + parseFloat(d.valorInicial), 0);
+            
+            const meses = parseInt(document.getElementById('meses-plano').value) || 5;
+            // Se não há dívidas iniciais, a meta de quitação é 0
+            const metaQuitacaoDiaria = totalDividasIniciais > 0.01 ? (totalDividasIniciais / meses) / DIAS_UTEIS_MES : 0; 
+            const metaTotalDiaria = metaDiariaFixas + metaQuitacaoDiaria;
+            
+            // 6. Gerar Relatório
             const relatorio = todasAsDatas.map(data => {
                 const recebido = receitasDiarias[data] || 0;
+                // A meta do relatório é baseada no cálculo FIXO, para fins de histórico
                 const atingido = recebido >= metaTotalDiaria - 0.009;
                 return {
                     data: data,
@@ -1959,8 +2008,10 @@
              
              // NOVO: Botões de Logout/Reset
              document.getElementById('btn-logout-only').addEventListener('click', logoutOnly);
-             document.getElementById('btn-reset-data').addEventListener('click', resetAllData);
-             document.getElementById('btn-excluir-conta').addEventListener('click', excluirConta);
+             // REMOVIDO: document.getElementById('btn-reset-data').addEventListener('click', resetAllData);
+             
+             // MOVIDO: Botão de excluir conta agora está no modal de perfil
+             document.getElementById('btn-excluir-conta-modal').addEventListener('click', excluirConta);
              
              // --- Opção de Perfil / Mudar Foto ---
              document.getElementById('menu-perfil').addEventListener('click', abrirModalPerfil);
@@ -2076,7 +2127,8 @@
                   gerarPlanoQuitacaoIA(false, totalDividasPendentes);
                   renderizarDicasQuitacao(dividas);
                   const fixas = carregarContasFixas();
-                  renderizarMetaDiaria(carregarTransacoes(), dividas, fixas);
+                  // Re-renderiza a meta diária após recalcular o plano da IA
+                  renderizarMetaDiaria(carregarTransacoes(), dividas, fixas); 
              });
 
              // --- Inicialização da Tela ---
