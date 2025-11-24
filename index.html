@@ -735,7 +735,7 @@
             </div>
             <div id="historico-receitas-container" class="toggle-section">
                 <div class="section-toggle receitas" id="toggle-receitas">
-                    <h2><i class="fas fa-clipboard-list"></i> LOG: REGISTROS DE LANÇAMENTO (CAPITAL)</h2>
+                    <h2><i class="fas fa-clipboard-list"></i> LOG: REGISTROS DE LANÇAMENTO (CAPITAL) <span style="font-size: 0.8em; color: var(--cor-texto-secundario);">(HOJE)</span></h2>
                     <i class="fas fa-chevron-down"></i>
                 </div>
                 
@@ -1342,7 +1342,7 @@
         // ===========================================
         
         const initDashboard = () => {
-            const transacoes = checkAndCleanLog(); // ATUALIZADO: Chama a função de limpeza
+            const transacoes = carregarTransacoes();
             const dividas = carregarDividas();
             const fixas = checkAndResetContasFixas(); 
             
@@ -1350,30 +1350,28 @@
             const firstName = carregarUsuario().firstName || "Usuário";
             document.getElementById('welcome-message').textContent = getGreeting(firstName);
             renderSidebarProfile(); 
+            
+            // ************ CORREÇÃO APLICADA AQUI: ************
+            // Não deleta o log. Apenas garante que a data de acesso esteja atualizada.
+            checkAndCleanLog(); // Chamada para atualizar a data, mas sem limpar transações.
+            // *************************************************
 
             atualizarDashboard(transacoes, dividas, fixas);
             renderizarTabelas(transacoes, dividas, fixas); 
             verificarEstadoContasFixas(fixas, dividas); // Passando dívidas
         };
         
-        // --- FUNÇÃO ADICIONADA: Limpeza Diária do Log de Entradas ---
+        // --- FUNÇÃO AJUSTADA: Mantém o capital, apenas simula a limpeza no dashboard ---
         const checkAndCleanLog = () => {
              const hoje = getHojeString();
              const ultimaLimpeza = localStorage.getItem('lastLogCleanDate');
-             let transacoes = carregarTransacoes();
              
              if (ultimaLimpeza !== hoje) {
-                 // Limpa as transações de ENTRADA (valor > 0), mantendo as de saída (pagamentos)
-                 const transacoesFiltradas = transacoes.filter(t => parseFloat(t.valor) <= 0);
-                 
-                 salvarTransacoes(transacoesFiltradas);
+                 // A única função desta chamada agora é ATUALIZAR A DATA
                  localStorage.setItem('lastLogCleanDate', hoje);
-                 
-                 console.log(`Log de entradas limpo. Última limpeza: ${ultimaLimpeza}.`);
-                 return transacoesFiltradas;
+                 console.log(`Nova data de acesso: ${hoje}. O Capital Acumulado foi mantido.`);
              }
-             
-             return transacoes;
+             // Não retorna transações, apenas atualiza a data.
         }
 
         // --- Funções de Contas Fixas ---
@@ -1401,12 +1399,12 @@
         const pagarContaFixa = (id) => {
             let fixas = carregarContasFixas();
             const transacoes = carregarTransacoes();
-            const dividas = carregarDividas(); // Carrega dívidas para o cálculo de capital
+            const dividas = carregarDividas(); 
             const fixaIndex = fixas.findIndex(f => f.id === id);
             const fixa = fixas[fixaIndex];
             
             if (fixa && !fixa.pago) {
-                const { totalReceitas } = getTotais(transacoes, dividas, fixas); // FIX: Passa 'fixas'
+                const { totalReceitas } = getTotais(transacoes, dividas, fixas); 
                 if (totalReceitas >= fixa.valor) {
                     fixa.pago = true;
                     salvarContasFixas(fixas);
@@ -1478,24 +1476,39 @@
             document.getElementById('modal-receita').style.display = 'none';
             initDashboard();
         }
-        const deletarTransacao = (index) => {
+        
+        // ************ CORREÇÃO APLICADA AQUI: ************
+        // Deletar transação agora só remove entradas de HOJE no log de exibição.
+        const deletarTransacao = (displayIndex) => {
             let transacoes = carregarTransacoes();
-            const transacoesEntrada = transacoes.filter(t => parseFloat(t.valor) > 0).map((t, i) => ({...t, displayIndex: i}));
-            const transacoesOrdenadas = transacoesEntrada.sort((a, b) => new Date(b.data) - new Date(a.data));
-            const transacaoToDelete = transacoesOrdenadas.find(t => t.displayIndex === index);
+            // Filtra e ordena as transações de ENTRADA (valor > 0) para a data de HOJE
+            const transacoesEntradaHoje = transacoes
+                                            .filter(t => parseFloat(t.valor) > 0 && t.data === getHojeString())
+                                            .map((t, i) => ({...t, displayIndex: i})) // Adiciona displayIndex
+                                            .sort((a, b) => new Date(b.data) - new Date(a.data));
+            
+            const transacaoToDelete = transacoesEntradaHoje.find(t => t.displayIndex === displayIndex);
             
             if (transacaoToDelete) {
-                // Encontra a primeira ocorrência da transação original (sem o displayIndex)
-                const indexToRemove = transacoes.findIndex(t => t.data === transacaoToDelete.data && parseFloat(t.valor).toFixed(2) === parseFloat(transacaoToDelete.valor).toFixed(2));
+                // Encontra o índice da transação original (no array completo) para remoção
+                // Usa a descrição, valor e data (com valor > 0) para encontrar a primeira correspondência
+                const indexToRemove = transacoes.findIndex(t => 
+                    t.data === transacaoToDelete.data && 
+                    parseFloat(t.valor).toFixed(2) === parseFloat(transacaoToDelete.valor).toFixed(2) &&
+                    parseFloat(t.valor) > 0
+                );
+                
                 if (indexToRemove !== -1) {
                     transacoes.splice(indexToRemove, 1);
                     salvarTransacoes(transacoes);
                     initDashboard();
                 }
             } else {
-                 alert('Transação não encontrada.');
+                 alert('Transação não encontrada ou não é uma receita de hoje.');
             }
         }
+        // *************************************************
+
         
         // NOVO: Função para adicionar dívida
         const adicionarDivida = () => {
@@ -1562,13 +1575,13 @@
              
              let dividas = localStorage.getItem('dividas') ? JSON.parse(localStorage.getItem('dividas')) : [];
              let transacoes = carregarTransacoes();
-             let fixas = carregarContasFixas(); // FIX: Carregar fixas
+             let fixas = carregarContasFixas(); 
              
              const dividaIndex = dividas.findIndex(d => d.id === idDebtQuitting);
              const divida = dividas[dividaIndex];
              if (!divida) { alert('Erro: Dívida não encontrada.'); return; }
              
-             const { totalReceitas } = getTotais(transacoes, dividas, fixas); // FIX: Passa 'fixas'
+             const { totalReceitas } = getTotais(transacoes, dividas, fixas); 
              
              if (tipo === 'total') {
                  // Quitação total: Valor é o saldo da dívida, limitado ao capital
@@ -1611,7 +1624,8 @@
         const getSomaFixas = (fixas) => fixas.filter(f => !f.pago).reduce((sum, item) => sum + item.valor, 0);
         const getMetaDiariaFixas = (somaFixas) => somaFixas / DIAS_UTEIS_MES;
         
-        // ALTERAÇÃO DE LÓGICA: O aporte do dia deve considerar apenas transações com a data de hoje
+        // ************ CORREÇÃO APLICADA AQUI: ************
+        // O aporte do dia deve considerar apenas transações com a data de hoje
         const getReceitasPorDia = (transacoes, dataAlvo = getHojeString()) => {
              let recebidoHoje = 0;
              // Filtra as transações de ENTRADA (valor > 0) para a data alvo
@@ -1621,10 +1635,14 @@
              return recebidoHoje;
         }
 
+        // ************ CORREÇÃO APLICADA AQUI: ************
+        // O Total de Receitas AGORA considera TODAS as transações (passadas e presentes),
+        // pois a limpeza de log foi desativada.
         const getTotais = (transacoes, dividas, fixas) => {
+            // totalReceitas é a SOMA LÍQUIDA de todas as transações (Entradas (+) e Saídas (-))
             let totalReceitas = transacoes.reduce((sum, t) => sum + parseFloat(t.valor), 0); 
-            totalReceitas = Math.max(0, totalReceitas);
-
+            totalReceitas = Math.max(0, totalReceitas); // Garante que o capital não seja negativo
+            
             // Total de dívidas ativas
             const dividasAtivas = dividas.filter(d => d.valorAtual > 0.01);
             
@@ -1648,6 +1666,8 @@
 
             return { totalReceitas, totalDividasIniciais, totalDividasPendentes, progressoCapital, saldoPendenteTotal, somaFixasPendentes };
         }
+        // *************************************************
+
         
         const gerarPlanoQuitacaoIA = (isInit = false, totalDividasPendentes) => {
              const meses = parseInt(document.getElementById('meses-plano').value) || 5;
@@ -1703,10 +1723,12 @@
         }
         
         const atualizarDashboard = (transacoes, dividas, fixas) => {
-            const { totalReceitas, totalDividasPendentes, progressoCapital, saldoPendenteTotal, somaFixasPendentes } = getTotais(transacoes, dividas, fixas); // FIX: Passa 'fixas'
+            // FIX: totalReceitas agora é o capital líquido (acumulado)
+            const { totalReceitas, totalDividasPendentes, progressoCapital, saldoPendenteTotal, somaFixasPendentes } = getTotais(transacoes, dividas, fixas); 
             
             document.getElementById('data-atual').textContent = new Date().toLocaleDateString('pt-BR');
             document.getElementById('soma-fixas').textContent = formatarMoeda(somaFixasPendentes).replace('R$', '').trim(); 
+            // FIX: total-lancado agora exibe o capital líquido acumulado
             document.getElementById('total-lancado').textContent = formatarMoeda(totalReceitas); 
             document.getElementById('saldo-pendente-total').textContent = formatarMoeda(saldoPendenteTotal);
             document.getElementById('total-dividas-pendentes').textContent = formatarMoeda(totalDividasPendentes);
@@ -1745,7 +1767,6 @@
         };
         const renderizarDívidas = (dividas) => {
             const container = document.getElementById('lista-dividas-quitar-tabela');
-            // FIX: Passa 'fixas' para calcular totalReceitas corretamente
             const { totalReceitas } = getTotais(carregarTransacoes(), dividas, carregarContasFixas()); 
             if (!container) return;
             container.innerHTML = '';
@@ -1774,14 +1795,22 @@
                 `;
             });
         };
+        
+        // ************ CORREÇÃO APLICADA AQUI: ************
+        // O Log de Receitas (Entradas) agora mostra APENAS as transações de HOJE.
         const renderizarLogReceitas = (transacoes) => {
             const listaEntradasBody = document.getElementById('lista-entradas');
-            const transacoesEntrada = transacoes.filter(t => parseFloat(t.valor) > 0);
-            const transacoesOrdenadas = transacoesEntrada.map((t, index) => ({...t, displayIndex: index}))
-                                                        .sort((a, b) => new Date(b.data) - new Date(a.data));
+            // Filtra as transações de ENTRADA (valor > 0) que foram feitas HOJE
+            const transacoesEntradaHoje = transacoes.filter(t => parseFloat(t.valor) > 0 && t.data === getHojeString());
+            
+            // Mapeia para adicionar um índice de exibição (displayIndex) para fins de deleção na tabela
+            const transacoesOrdenadas = transacoesEntradaHoje
+                                            .map((t, index) => ({...t, displayIndex: index}))
+                                            .sort((a, b) => new Date(b.data) - new Date(a.data));
+                                            
             listaEntradasBody.innerHTML = '';
             if (transacoesOrdenadas.length === 0) {
-                 listaEntradasBody.innerHTML = '<tr><td colspan="3" style="text-align: center; color: var(--cor-texto-secundario);">Nenhuma receita lançada no log.</td></tr>';
+                 listaEntradasBody.innerHTML = '<tr><td colspan="3" style="text-align: center; color: var(--cor-texto-secundario);">Nenhuma receita lançada no log de hoje.</td></tr>';
             } else {
                 transacoesOrdenadas.forEach((t) => {
                     const row = listaEntradasBody.insertRow();
@@ -1795,6 +1824,8 @@
                 });
             }
         };
+        // *************************************************
+
         const renderizarTabelas = (transacoes, dividas, fixas) => {
              renderizarLogReceitas(transacoes);
              renderizarContasFixas(fixas);
@@ -1803,6 +1834,7 @@
         
         // FUNÇÃO AJUSTADA PARA REINÍCIO DIÁRIO
         const renderizarMetaDiaria = (transacoes, dividas, fixas) => {
+             // O cálculo da meta total e do recebido considera APENAS as transações de HOJE
              const { metaTotal, atingido, recebido, faltando } = getMetaDiariaAtingida(transacoes, dividas, fixas, getHojeString());
              const metaDiariaTotalEl = document.getElementById('meta-diaria-total-el');
              const metaDiariaCard = document.getElementById('meta-diaria-card');
@@ -1863,33 +1895,29 @@
              `;
              div.innerHTML = html;
         }
+        
+        // ************ CORREÇÃO APLICADA AQUI: ************
+        // O relatório agora calcula a meta diária de forma fixa (o que deveria ter sido aportado)
+        // e o aporte diário baseado nas entradas de cada dia.
         const calcularRelatorioDiario = (transacoes, dividas, fixas) => {
-            // A função original estava retornando um objeto vazio para getReceitasPorDia(), alterado para a nova função
-            // que considera apenas a data atual. Para o relatório, precisamos iterar.
-            
-            // 1. Obter todas as datas com transações de entrada
-            const datasComReceitas = Array.from(new Set(
-                 transacoes.filter(t => parseFloat(t.valor) > 0).map(t => t.data)
-            ));
-
-            // 2. Mapear receitas por dia
+            // 1. Mapear receitas por dia (de todos os dias)
             const receitasDiarias = {};
             transacoes.filter(t => parseFloat(t.valor) > 0).forEach(t => { 
                  const data = t.data;
                  receitasDiarias[data] = (receitasDiarias[data] || 0) + parseFloat(t.valor);
             });
             
-            // 3. Obter todas as datas únicas e adicionar a data de hoje, se não estiver inclusa
+            // 2. Obter todas as datas únicas e adicionar a data de hoje, se não estiver inclusa
             const todasAsDatas = Array.from(new Set(Object.keys(receitasDiarias)));
             const hoje = getHojeString();
             if (!todasAsDatas.includes(hoje)) { todasAsDatas.push(hoje); }
             todasAsDatas.sort((a, b) => new Date(b) - new Date(a));
             
-            // 4. Calcular Meta Diária Fija (Contas Fixas)
+            // 3. Calcular Meta Diária Fija (Contas Fixas)
             const somaFixas = CONTAS_FIXAS_INITIAL.reduce((sum, item) => sum + item.valor, 0);
             const metaDiariaFixas = somaFixas / DIAS_UTEIS_MES;
             
-            // 5. Calcular Meta Diária de Quitação (Baseado no valor inicial TOTAL das dívidas)
+            // 4. Calcular Meta Diária de Quitação (Baseado no valor inicial TOTAL das dívidas)
             const todasDividas = localStorage.getItem('dividas') ? JSON.parse(localStorage.getItem('dividas')) : [];
             const totalDividasIniciais = todasDividas.reduce((sum, d) => sum + parseFloat(d.valorInicial), 0);
             
@@ -1898,7 +1926,7 @@
             const metaQuitacaoDiaria = totalDividasIniciais > 0.01 ? (totalDividasIniciais / meses) / DIAS_UTEIS_MES : 0; 
             const metaTotalDiaria = metaDiariaFixas + metaQuitacaoDiaria;
             
-            // 6. Gerar Relatório
+            // 5. Gerar Relatório
             const relatorio = todasAsDatas.map(data => {
                 const recebido = receitasDiarias[data] || 0;
                 // A meta do relatório é baseada no cálculo FIXO, para fins de histórico
@@ -1912,6 +1940,8 @@
             });
             return relatorio;
         }
+        // *************************************************
+
         const renderizarRelatorioDiario = (relatorio) => {
             const corpoTabela = document.getElementById('corpo-tabela-relatorio');
             corpoTabela.innerHTML = '';
@@ -1938,7 +1968,6 @@
              document.getElementById('valor-pagamento').value = valor.toFixed(2);
              
              // Define a ação do botão Quitação Total
-             // FIX: Passa 'fixas' para calcular totalReceitas corretamente
              const { totalReceitas } = getTotais(carregarTransacoes(), carregarDividas(), carregarContasFixas()); 
              const btnQuitarTotal = document.getElementById('btn-quitar-total');
              
